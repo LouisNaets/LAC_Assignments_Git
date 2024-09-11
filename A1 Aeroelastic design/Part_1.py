@@ -18,6 +18,7 @@ def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
     colors = cm.viridis(np.linspace(0, 1, total_lines))  # Gradual colormap
     ax.plot(x, y, label=label, color=colors[idx], linestyle='-') 
 
+# Create subplots
 fig, axes = plt.subplots(3, 2, figsize=(18, 12))
 
 # Plot for TSR range (Chord Distribution and Twist Distribution)
