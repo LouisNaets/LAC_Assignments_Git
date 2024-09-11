@@ -7,9 +7,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
-IND_DIR = (r'C:\Users\rink\git\G-teaching\lac-course-private\dtu-10mw'
+IND_DIR = (r'C:\git\LAC_Assignments_Git\hawc_files\dtu_10mw\res_hawc2s'
            + r'\res_hawc2s_multitsr')  # directory with induction files
 FILENAME_BASE = 'dtu_10mw_hawc2s_multitsr_u'  # beginning of the .ind files we want
+
 SKIP_FILES = 3  # I calculated for a lot of TSRs, so I want to skip some of them for a clean plot
 XLIM = [0, 87]  # hard-code my x-limits
 SAVE_FIG = True  # save the figure as a png?

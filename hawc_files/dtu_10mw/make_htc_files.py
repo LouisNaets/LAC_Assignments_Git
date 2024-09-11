@@ -6,7 +6,7 @@ from myteampack import MyHTC
 
 
 if __name__ == '__main__':
-    ORIG_PATH = './_master/dtu_10mw.htc'
+    ORIG_PATH = 'hawc_files\\dtu_10mw\\_master\\dtu_10mw.htc'
     SAVE_HAWC2S_DIR = '.'
 
     # make rigid hawc2s file for single-wsp opt file
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
                     append='_hawc2s_1wsp',
-                    opt_path='./data/dtu_10mw_1wsp.opt',
+                    opt_path='.\\data\\dtu_10mw_multitsr.opt',
                     compute_steady_states=True,
                     save_power=True)
 
