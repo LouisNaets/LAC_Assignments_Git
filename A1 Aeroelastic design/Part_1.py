@@ -83,3 +83,5 @@ axes[2, 1].legend()
 
 plt.tight_layout()
 plt.show()
+
+#...........
