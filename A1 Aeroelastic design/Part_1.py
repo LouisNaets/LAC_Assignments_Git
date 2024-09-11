@@ -77,3 +77,17 @@ axs[2, 1].legend()
 
 fig.tight_layout()
 plt.show()
+
+phi = np.rad2deg(2/3*(1/TSR_ref*1/r_R))
+
+fig2 = plt.figure(1, figsize=(6, 4), dpi = 100)
+plt2 = fig2.add_subplot()
+plt2.plot(r_R, phi)
+plt2.grid()
+
+#plt2.set_title('Inflow angle')
+plt2.set_xlabel('r/R [-]')
+plt2.set_ylabel('Inflow angle [°]')
+
+fig2.tight_layout()
+plt.show()
