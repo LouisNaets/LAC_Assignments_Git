@@ -1,55 +1,79 @@
 import numpy as np
 import math as m
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
+alpha_ref = 5 #[deg]
+TSR_ref = 8 #[-]
+B_ref = 3 #[-]
 
 alpha_vary = np.arange(3, 7.1, 0.5) #[deg]
-alpha = np.deg2rad(5) #[rad]
-
 TSR_vary = np.arange(6, 10.1, 0.5) #[-]
-TSR = 8 #[-]
-
 B_vary = np.arange(2, 5.1, 1) #[-]
-B = 3 #[-]
 
 r_R = np.arange(0.1, 1.01, 0.01)
 
-c_R_list = []
-theta_R_list = []
-for alpha_deg in alpha_vary:
-    alpha_rad = np.deg2rad(alpha_deg)
+# Function to plot with color map and dotted lines
+def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
+    colors = cm.viridis(np.linspace(0, 1, total_lines))  # Gradual colormap
+    ax.plot(x, y, label=label, color=colors[idx], linestyle='-') 
 
-    Cl_design = (2*m.pi)**2/360 * alpha_rad + 0.452
+fig, axs = plt.subplots(3, 2, figsize=(18, 12), dpi = 100)
 
-    c_R_list.append((16*m.pi/9) * (1 / (Cl_design * TSR**2 * B)) * 1/r_R)
-    theta_R_list.append(2/3 * (1/TSR * 1/r_R) - alpha_rad) # [rad]
+for idx, alpha in enumerate(alpha_vary):
+    r_R = np.arange(0.1, 1.01, 0.01)
+    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha) + 0.452
+    c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR_ref ** 2 * B_ref)) * 1 / r_R
+    theta_R = 2 / 3 * (1 / TSR_ref * 1 / r_R) - np.deg2rad(alpha)  # [rad]
 
-plt.style.use("seaborn-v0_8-whitegrid")
-plt.rc('legend', fontsize=14)
-plt.rc('axes', labelsize=16)
-plt.rc('xtick', labelsize=14)
-plt.rc('ytick', labelsize=14)
+    plot_with_colormap(axs[0, 0], r_R, c_R, label=f'α = {alpha}°', cmap=cm.viridis, idx=idx, total_lines=len(alpha_vary))
+    plot_with_colormap(axs[0, 1], r_R, np.rad2deg(theta_R), label=f'α = {alpha}°', cmap=cm.viridis, idx=idx, total_lines=len(alpha_vary))
 
-fig, axs = plt.subplots(1, 2, figsize=(6.4, 7), dpi=100)
+axs[0, 0].set_title("Chord distribution")
+axs[0, 0].set_ylabel('c/R [-]')
+axs[0, 0].grid(True, linestyle=':', linewidth=0.5)
+axs[0, 0].legend()
 
-labels = ["%1.2f"%val for val in alpha_vary]
+axs[0, 1].set_title("Twist distribution")
+axs[0, 1].set_ylabel('Twist [°]')
+axs[0, 1].grid(True, linestyle=':', linewidth=0.5)
+axs[0, 1].legend()
 
-# Plot c/R vs r/R
-for i, c_R in enumerate(c_R_list):
-    axs[0].plot(r_R, c_R, label=f"α = {labels[i]}°")
+for idx, TSR in enumerate(TSR_vary):
+    r_R = np.arange(0.1, 1.01, 0.01)
+    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha_ref) + 0.452
+    c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR ** 2 * B_ref)) * 1 / r_R
+    theta_R = 2 / 3 * (1 / TSR * 1 / r_R) - np.deg2rad(alpha_ref)  # [rad]
 
-axs[0].set_ylabel("c/R [-]")
-axs[0].set_xlabel("r/R [-]")
-axs[0].set_title("Chord distribution")
-axs[0].legend()
+    plot_with_colormap(axs[1, 0], r_R, c_R, label=f'λ = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_vary))
+    plot_with_colormap(axs[1, 1], r_R, np.rad2deg(theta_R), label=f'λ = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_vary))
 
-# Plot θ/R vs r/R
-for i, theta_R in enumerate(theta_R_list):
-    axs[1].plot(r_R, np.rad2deg(theta_R), label=f"α = {labels[i]}°")
+axs[1, 0].set_ylabel('c/R [-]')
+axs[1, 0].grid(True, linestyle=':', linewidth=0.5)
+axs[1, 0].legend()
 
-axs[1].set_ylabel("Twist [deg]")
-axs[1].set_xlabel("r/R [-]")
-axs[1].set_title("Twist distribution")
-axs[1].legend()
+axs[1, 1].set_ylabel('Twist [°]')
+axs[1, 1].grid(True, linestyle=':', linewidth=0.5)
+axs[1, 1].legend()
+
+for idx, B in enumerate(B_vary):
+    r_R = np.arange(0.1, 1.01, 0.01)
+    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha_ref) + 0.452
+    c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR_ref ** 2 * B)) * 1 / r_R
+    theta_R = 2 / 3 * (1 / TSR_ref * 1 / r_R) - np.deg2rad(alpha_ref)  # [rad]
+
+    plot_with_colormap(axs[2, 0], r_R, c_R, label=f'B = {B}', cmap=cm.viridis, idx=idx, total_lines=len(B_vary))
+    plot_with_colormap(axs[2, 1], r_R, np.rad2deg(theta_R), label=f'B = {B}', cmap=cm.viridis, idx=idx, total_lines=len(B_vary))
+
+axs[2, 0].set_xlabel('r/R [-]')
+axs[2, 0].set_ylabel('c/R [-]')
+axs[2, 0].grid(True, linestyle=':', linewidth=0.5)
+axs[2, 0].legend()
+
+axs[2, 1].set_xlabel('r/R [-]')
+axs[2, 1].set_ylabel('Twist [°]')
+axs[2, 1].grid(True, linestyle=':', linewidth=0.5)
+axs[2, 1].legend()
 
 fig.tight_layout()
 plt.show()
