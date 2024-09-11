@@ -2,13 +2,13 @@ import numpy as np
 import math as m
 import matplotlib.pyplot as plt
 
-alpha_vary = np.arange(3, 7.1, 0.5)
+alpha_vary = np.arange(3, 7.1, 0.5) #[deg]
 alpha = np.deg2rad(5) #[rad]
 
 TSR_vary = np.arange(6, 10.1, 0.5) #[-]
 TSR = 8 #[-]
 
-B = np.arange(2, 5.1, 1) #[-]
+B_vary = np.arange(2, 5.1, 1) #[-]
 B = 3 #[-]
 
 r_R = np.arange(0.1, 1.01, 0.01)
