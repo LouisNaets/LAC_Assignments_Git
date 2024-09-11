@@ -22,7 +22,7 @@ fig, axs = plt.subplots(3, 2, figsize=(18, 12), dpi = 100)
 
 for idx, alpha in enumerate(alpha_vary):
     r_R = np.arange(0.1, 1.01, 0.01)
-    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha) + 0.452
+    Cl_design = (2 * m.pi) ** 2 / 360 * alpha + 0.452
     c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR_ref ** 2 * B_ref)) * 1 / r_R
     theta_R = 2 / 3 * (1 / TSR_ref * 1 / r_R) - np.deg2rad(alpha)  # [rad]
 
@@ -41,7 +41,7 @@ axs[0, 1].legend()
 
 for idx, TSR in enumerate(TSR_vary):
     r_R = np.arange(0.1, 1.01, 0.01)
-    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha_ref) + 0.452
+    Cl_design = (2 * m.pi) ** 2 / 360 * alpha_ref + 0.452
     c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR ** 2 * B_ref)) * 1 / r_R
     theta_R = 2 / 3 * (1 / TSR * 1 / r_R) - np.deg2rad(alpha_ref)  # [rad]
 
@@ -58,7 +58,7 @@ axs[1, 1].legend()
 
 for idx, B in enumerate(B_vary):
     r_R = np.arange(0.1, 1.01, 0.01)
-    Cl_design = (2 * m.pi) ** 2 / 360 * np.deg2rad(alpha_ref) + 0.452
+    Cl_design = (2 * m.pi) ** 2 / 360 * alpha_ref + 0.452
     c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR_ref ** 2 * B)) * 1 / r_R
     theta_R = 2 / 3 * (1 / TSR_ref * 1 / r_R) - np.deg2rad(alpha_ref)  # [rad]
 
