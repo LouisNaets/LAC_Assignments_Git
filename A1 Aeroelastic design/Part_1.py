@@ -18,7 +18,7 @@ def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
     colors = cm.viridis(np.linspace(0, 1, total_lines))  # Gradual colormap
     ax.plot(x, y, label=label, color=colors[idx], linestyle='-') 
 
-fig, axs = plt.subplots(3, 2, figsize=(18, 12), dpi = 100)
+fig, axs = plt.subplots(3, 2, figsize=(12, 9), dpi = 500)
 
 for idx, alpha in enumerate(alpha_vary):
     r_R = np.arange(0.1, 1.01, 0.01)
@@ -76,18 +76,23 @@ axs[2, 1].grid(True, linestyle=':', linewidth=0.5)
 axs[2, 1].legend()
 
 fig.tight_layout()
-plt.show()
+#plt.show()
+plt.savefig("Figure_1.png")
+plt.savefig("Figure_1.svg")
+plt.close(fig)
 
 phi = np.rad2deg(2/3*(1/TSR_ref*1/r_R))
 
-fig2 = plt.figure(1, figsize=(6, 4), dpi = 100)
-plt2 = fig2.add_subplot()
-plt2.plot(r_R, phi)
-plt2.grid()
+plt.figure(1, figsize=(6, 4), dpi = 500)
+#plt2 = fig2.add_subplot()
+plt.plot(r_R, phi)
+plt.grid()
 
-#plt2.set_title('Inflow angle')
-plt2.set_xlabel('r/R [-]')
-plt2.set_ylabel('Inflow angle [°]')
+#plt.title('Inflow angle')
+plt.xlabel('r/R [-]')
+plt.ylabel('Inflow angle [°]')
 
-fig2.tight_layout()
-plt.show()
+plt.tight_layout()
+#plt.show()
+plt.savefig("Figure_2.png")
+plt.savefig("Figure_2.svg")
