@@ -22,14 +22,14 @@ def thickness(r, chord_root):
 
 
 # %% Inputs
-R = 35  # Rotor radius [m]
+R = 92.4  # Rotor radius [m]
 tsr = 9.0  # Tip-Speed-Ratio [-]
 # A decrease in TSR will cause lower CT and CP and slight changes in planform
-r_hub = 1.0  # Hub radius [m]
-r = np.linspace(r_hub, R - 0.1, 40)  # Rotor span [m]
-chord_max = 3.0  # Maximum chord size [m]
-chord_root = 2.7  # Chord size at the root [m]
-t = thickness(r, chord_root)  # Absolute thickness [m]
+r_hub = R/35*1.0  # Hub radius [m]
+r = np.linspace(r_hub, R - 0.1, 100)  # Rotor span [m]
+chord_max = R/35*3.0  # Maximum chord size [m]
+chord_root = R/35*2.7  # Chord size at the root [m]
+t = R/35*thickness(r, chord_root)  # Absolute thickness [m]
 # A decrease in t will cause higher CT and CP (and no apparent changes in planform?)
 B = 3  # Number of blades [#]
 # Aero dynamic polar design functions and the values (t/c vs. cl, cd, aoa)
