@@ -382,3 +382,15 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 
 
 # %%
+# --------Calculations for PART 3-------
+
+#interpolate twist values from our design to the htcfile
+print(IA.twist)
+print(np.size(IA.twist))
+old_twist = [-14.5, -14.5, -14.4851, -14.461, -14.3388, -14.0201, -13.3904, 
+             -12.9371, -11.9445, -9.98243, -8.45147, -7.46417, -6.72916, 
+             -6.08842, -5.49322, -4.39222, -3.09315, -1.75629, -0.50065, 
+             0.60196, 1.5556, 2.51935, 2.7295, 2.93201, 3.11874, 3.28847, 3.42796]
+new_twist_interpolated = np.interp(np.arange(0,27), np.arange(0,len(IA.twist)), IA.twist)
+
+print(new_twist_interpolated)
