@@ -21,7 +21,7 @@ class IA:
     I = 0.18 # Turbulence Intensity[-]
     V_rated = 11.4 # m/s 
     r_hub = 2.8  # Hub radius [m]
-    R = 89.15 - r_hub # Rotor diameter (excl hub) [m]
+    R = 89.15 # Rotor diameter (excl hub) [m]
     chord_max = 6.20  # Maximum chord size [m]
     chord_root = 5.38  # Chord size at the root [m]
 
@@ -104,10 +104,6 @@ titles = ['tc_241_data', 'tc_301_data', 'tc_360_data', 'tc_480_data']
 Cl_points = [1.3, 1.23, 1.37, 0.54]
 Cd_points = [0.013, 0.014, 0.021, 0.032]
 Cl_Cd_points = np.array(Cl_points)/np.array(Cd_points)
-#Cl_Cd_points = []
-#for i in range(0,len(Cl_points)):
-#    Cl_Cd_points.append(Cl_points[i]/Cd_points[i])
-
 alpha_points = [8.1, 7.5, 5.8, 1.8]
 t_c_points = [24.1, 30.1, 36.0, 48.0]
 
@@ -305,7 +301,7 @@ i_design = 3
 Step 7: Find the design with tip-speed-ratio that maximizes CP
 '''
 
-tsr_range = np.arange(6, 12, 1)
+tsr_range = np.arange(6, 12, 0.5)
 IA.CP_store = np.zeros(len(tsr_range))
 IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(3)
 
@@ -327,21 +323,21 @@ plt.grid(True, linestyle = ':')
 plt.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
 
-# TSR 7 is chosen
-tsr = 7
+# TSR 7.5 is chosen
+tsr = 7.5
 
 '''
 Step 8: Present your final chord, twist, and relative thickness distributions and compare to the original DTU 10MW rotor. 
 '''
 
-# Final designs for chosen TSR = 7 and design function 3
+# Final designs for chosen TSR = 7.5 and design function 3
 # IA class
 IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
 IA.chord, IA.tc, IA.twist, IA.cl, IA.cd, IA.aoa, IA.a, IA.CLT, IA.CLP, IA.CT, IA.CP = single_point_design(
     IA.r, IA.t, tsr, IA.R, IA.cl_des, IA.cd_des, IA.aoa_des, IA.chord_root, IA.chord_max, B)
 
-# IIB class
+# IIIB class
 IIIB.r = np.linspace(IIIB.r_hub, IIIB.R - 0.1, 40)
 IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.tc_vals, IIIB.cl_vals, IIIB.cd_vals, IIIB.aoa_vals = get_design_functions(i_design)
 
@@ -365,10 +361,10 @@ axs[1].set_ylabel(r"Twist [°]")
 # axs[1].legend()
 axs[1].grid(True, linestyle = ':')
 
-# Absolute thickness
-axs[2].plot(IA.r, IA.t, label='DTU 10MW Class IA')
-axs[2].plot(IIIB.r, IIIB.t, label='DTU 10MW Class IIIB')
-axs[2].set_ylabel("Absolute Thickness [m]")
+# Relative thickness
+axs[2].plot(IA.r, IA.t/max(IA.t), label='DTU 10MW Class IA')
+axs[2].plot(IIIB.r, IIIB.t/max(IIIB.t), label='DTU 10MW Class IIIB')
+axs[2].set_ylabel("Relative Thickness [-]")
 axs[2].set_xlabel("Blade Span [m]")
 # axs[2].legend()
 axs[2].grid(True, linestyle = ':')
@@ -382,3 +378,46 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 
 
 # %%
+
+IA.htc_main_z = [4.44089E-16,
+              3.00000E+00,
+              6.00000E+00,
+              7.00004E+00,
+              8.70051E+00,
+              1.04020E+01,
+              1.22046E+01,
+              1.32065E+01,
+              1.50100E+01,
+              1.82151E+01,
+              2.14178E+01,
+              2.46189E+01,
+              2.78193E+01,
+              3.10194E+01,
+              3.42197E+01,
+              4.02204E+01,
+              4.66217E+01,
+              5.30232E+01,
+              5.94245E+01,
+              6.58255E+01,
+              7.22261E+01,
+              7.90266E+01,
+              8.05267E+01,
+              8.20271E+01,
+              8.35274E+01,
+              8.50277E+01,
+              8.63655E+01]
+
+#These are used to udpate the htc main file:
+
+IIIB.htc_main_z = np.array(IA.htc_main_z)*SF
+IIIB.htc_main_twist = np.interp(IIIB.htc_main_z, IIIB.r, IIIB.twist)
+
+print(IIIB.htc_main_z)
+print(IIIB.htc_main_twist)
+
+for i in range(0,len(IIIB.r)):
+    #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
+    if i == 0:
+        print('0\t' + str(round(IIIB.chord[i], 7)) + '\t1\t1\t;')
+    else:
+        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/max(IIIB.t), 7)) + '\t1\t;')
