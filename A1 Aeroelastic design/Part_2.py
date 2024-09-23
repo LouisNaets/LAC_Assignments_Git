@@ -103,6 +103,11 @@ titles = ['tc_241_data', 'tc_301_data', 'tc_360_data', 'tc_480_data']
 # Chosen design points for each airfoil
 Cl_points = [1.3, 1.23, 1.37, 0.54]
 Cd_points = [0.013, 0.014, 0.021, 0.032]
+Cl_Cd_points = np.array(Cl_points)/np.array(Cd_points)
+#Cl_Cd_points = []
+#for i in range(0,len(Cl_points)):
+#    Cl_Cd_points.append(Cl_points[i]/Cd_points[i])
+
 alpha_points = [8.1, 7.5, 5.8, 1.8]
 t_c_points = [24.1, 30.1, 36.0, 48.0]
 
@@ -178,10 +183,10 @@ for i_design in i:
     axs1[0].legend()
     axs1[0].grid(True, linestyle = ':')
 
-    axs1[1].plot(tc_plot, IA.cd_des(tc_plot), color = colors[i_design-1])
-    axs1[1].plot(IA.tc_vals, IA.cd_vals, "o", color = colors[i_design-1])
-    axs1[1].plot(t_c_points, Cd_points, 'xk')
-    axs1[1].set_ylabel("$C_d$ [-]")
+    axs1[1].plot(tc_plot, IA.cl_des(tc_plot)/IA.cd_des(tc_plot), color = colors[i_design-1])
+    axs1[1].plot(IA.tc_vals, np.array(IA.cl_vals)/np.array(IA.cd_vals), "o", color = colors[i_design-1])
+    axs1[1].plot(t_c_points, Cl_Cd_points, 'xk')
+    axs1[1].set_ylabel("$C_l/C_d$ [-]")
     axs1[1].set_xlim(0, 100)
     # axs1[1].legend()
     axs1[1].grid(True, linestyle = ':')
@@ -287,8 +292,8 @@ fig1.tight_layout()
 fig2.tight_layout()
 fig3.tight_layout()
 fig4.tight_layout()
-
-fig1.savefig('A1 Aeroelastic design/Figures/design_functions.svg', format='svg')
+fig1.savefig('A1 Aeroelastic design/Figures/design_functions_clcd.png', format='png')
+fig1.savefig('A1 Aeroelastic design/Figures/design_functions_clcd.svg', format='svg')
 fig2.savefig('A1 Aeroelastic design/Figures/chord_twist_thickness.svg', format='svg')
 fig3.savefig('A1 Aeroelastic design/Figures/aoa_cl_cd.svg', format='svg')
 fig4.savefig('A1 Aeroelastic design/Figures/CLT_CLP_a.svg', format='svg')
@@ -377,7 +382,3 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 
 
 # %%
-print(IA.r)
-print(IA.tc/max(IA.tc))
-print(IA.chord)
-#print(IIIB.chord)

@@ -6,7 +6,7 @@ from aero_design_functions import get_design_functions_1MW, single_point_design,
 
 # We're going from a class 1a to 3b
 V_R_1a = 11.4
-R_1a = 89.15
+R_1a = 89.15 - 2.8
 I_1a = 0.18
 I_3b = 0.16
 
