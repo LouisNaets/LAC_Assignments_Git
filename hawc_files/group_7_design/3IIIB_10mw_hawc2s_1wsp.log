@@ -13,7 +13,7 @@
  ***********************************************************************
 ________________________________________________________________________
   Log file output
-                                                       Time : 16:45:00
+                                                       Time : 17:12:40
                                                        Date : 24:09.2024
 ________________________________________________________________________
  Opening main command file: 3IIIB_10mw_hawc2s_1wsp.htc
@@ -79,4 +79,50 @@ Created folder: 'res_hawc2s'
  Initialization of structure
  Initializing of aero rotor...
  Initialization of rotor aerodynamics
-*** ERROR *** Error opening AE data file ./data/DTU_10MW_RWT_ae.dat
+ Succes opening ./data/DTU_10MW_RWT_ae.dat
+ Succes opening ./data/DTU_10MW_RWT_pc.dat
+ Initialization of rotor induction
+ Initialization of wind
+ Creating link between structure and aerodynamics
+The operational data file ./data/dtu_10mw_1wsp.opt does not exist.
+Error in opening the operational data file. 
+******************* HAWCStab2 output *******************
+WARNING! Missing wind input block. Setting air density to 1.225km/m3.
+ Shaft bearing: shaft_rot
+ Pitch bearing: pitch1
+
+nblades:                3
+nblades3:               3
+ndofs:                580
+ndofs3:               580
+ndofs_n:              580
+nesys:                  0
+ndofs_esys:             0
+nfree_bearings:         1
+nbearings:              4
+nbearings_n:            4
+naerostates_ds_bld:   192
+naerostates_ds:       576
+naerostates_ds_n:     576
+naeroforces_bld:      144
+naeroforces:          432
+naeroforces_n:        432
+naerosections:         48
+nphis:                292
+nphis3:               292
+nphis_n:              292
+phi_per_node:           3
+ndim_y:                 0
+ndim_u:                 0
+********************* Initiating dynamic stall model *********************
+Warning: Zero lift aoa not between -15 and 15 deg at sect  5. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect  6. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect  7. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect  8. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect  9. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect 10. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect 11. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect 12. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect 13. Treated as fully separated.
+Warning: Zero lift aoa not between -15 and 15 deg at sect 14. Treated as fully separated.
+Error!! Cannot compute steady state without operational data file.
