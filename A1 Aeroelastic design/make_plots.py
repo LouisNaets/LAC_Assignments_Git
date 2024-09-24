@@ -6,19 +6,49 @@ import numpy as np
 #Binary variables for including different parts of the script:
 TSR_calc = 0
 
-Step1_plot = 0
+wsp1_plot = 0
 Step2_1_plot = 1
 Step2_2_plot = 0
 
 if TSR_calc:
-    TSRs = [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0]
+    TSR_range = np.arange(6, 10.1, 0.5)
     R = 88.93 #m
     v_o = 8 #m/s
     for TSR in TSRs:
         omega = TSR*v_o/R * (60/(2*np.pi))
         print(omega)
 
-if Step1_plot:
+
+# Function to plot with color map and dotted lines
+def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
+    colors = cm.viridis(np.linspace(0, 1, total_lines))  # Gradual colormap
+    ax.plot(x, y, label=label, color=colors[idx], linestyle='-') 
+
+fig, axes = plt.subplots(3, 2, figsize=(18, 12))
+
+# Plot for TSR range (Chord Distribution and Twist Distribution)
+for idx, TSR in enumerate(TSR_range):
+    r_R = np.arange(0.1, 1.01, 0.01)
+    Cl_design = (2 * m.pi) ** 2 / 360 * aoa_design_ref + 0.452
+    c_R = (16 * m.pi / 9) * (1 / (Cl_design * TSR ** 2 * B_ref)) * 1 / r_R
+    theta_R = 2 / 3 * (1 / TSR * 1 / r_R) - aoa_design_ref  # [rad]
+
+    plot_with_colormap(axes[0, 0], r_R, c_R, label=f'TSR = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_range))
+    plot_with_colormap(axes[0, 1], r_R, np.rad2deg(theta_R), label=f'TSR = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_range))
+
+# axes[0, 0].set_xlabel('r/R [-]')
+axes[0, 0].set_ylabel('c/R [-]')
+axes[0, 0].set_title('Chord Distribution')
+axes[0, 0].grid(True, linestyle=':', linewidth=0.5)
+axes[0, 0].legend()
+
+# axes[0, 1].set_xlabel('r/R [-]')
+axes[0, 1].set_ylabel('Twist [°]')
+axes[0, 1].set_title('Twist Distribution')
+axes[0, 1].grid(True, linestyle=':', linewidth=0.5)
+axes[0, 1].legend()
+
+if wsp1_plot:
     # Path for the file
     ind_path = "./res_hawc2s/dtu_10mw_hawc2s_1wsp_u8000.ind"
     # Load the data

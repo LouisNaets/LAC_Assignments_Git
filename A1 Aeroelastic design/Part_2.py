@@ -4,6 +4,7 @@ import numpy as np
 from aero_design_functions import get_design_functions, single_point_design
 from sympy import symbols, Eq, solve
 from matplotlib import cm
+from lacbox.io import load_pwr, load_ind, load_inds
 
 """
 Assignment 1: Aeroelastic Design part 2
@@ -407,7 +408,7 @@ IIIB.htc_main_twist = np.interp(IIIB.htc_main_z, IIIB.r, IIIB.twist)
 
 print('Input for the htc main file:')
 for i in range(0, 27):
-    print('sec\t' + str(i+1) + '\t' + str(round(IIIB.htc_main_x[i], 7)) + '\t' + str(round(IIIB.htc_main_y[i], 7)) + '\t' + str(round(IIIB.htc_main_z[i], 7)) + '\t' + str(round(IIIB.htc_main_twist[i], 7)) + '\t;')
+    print('sec\t' + str(i+1) + '\t' + str(round(IIIB.htc_main_x[i], 7)) + '\t' + str(round(IIIB.htc_main_y[i], 7)) + '\t' + str(round(IIIB.htc_main_z[i], 7)) + '\t' + str(round(-IIIB.htc_main_twist[i], 7)) + '\t;')
 
 print('Input for the ae.dat file:')
 for i in range(0,len(IIIB.r)):
@@ -415,9 +416,60 @@ for i in range(0,len(IIIB.r)):
     if i == 0:
         print('0\t' + str(round(IIIB.chord[i], 7)) + '\t1\t1\t;')
     else:
-        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/max(IIIB.t), 7)) + '\t1\t;')
+        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1], 7)) + '\t1\t;')
 
 print('Omegas for the opt files')
 for tsr_opt in np.arange(6, 10.1, 0.5):
     omega = tsr_opt*V_0/IIIB.R * (60/(2*np.pi))
     print('TSR: ' + str(tsr_opt) + '-> omega: ' + str(round(omega,7)) + ' RPM')
+
+
+
+#Part 3 plots 1 and 2:
+
+# Function to plot with color map and dotted lines
+def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
+    colors = cm.viridis(np.linspace(0, 1, total_lines))  # Gradual colormap
+    ax.plot(x, y, label=label, color=colors[idx], linestyle='-') 
+
+#plot_with_colormap(axes[0, 0], r_R, c_R, label=f'TSR = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_range))
+#plot_with_colormap(axes[0, 1], r_R, np.rad2deg(theta_R), label=f'TSR = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_range))
+
+
+
+
+# Path for the file
+ind_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_1wsp_u8000.ind"
+# Load the data
+ind_data = load_ind(ind_path)
+
+IIIB.relative_t = np.array(IIIB.t/IIIB.chord)*100
+IIIB.relative_t_ind = np.interp(ind_data["s_m"], IIIB.r, IIIB.relative_t)
+print(tc_plot)
+print(IIIB.relative_t)
+print(ind_data["s_m"])
+print(IIIB.relative_t_ind)
+fig5, axes5 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
+
+axes5[0,0].plot(tc_plot, IIIB.cl_des(tc_plot), color = colors[0], label='Design func 3 $C_l$')
+axes5[0,0].plot(IIIB.relative_t_ind, ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
+axes5[0,0].set_ylabel("$C_l$ [-]")
+axes5[0,0].set_xlim(0, 100)
+axes5[0,0].legend()
+axes5[0,0].grid(True, linestyle = ':')
+
+axes5[1,0].plot(tc_plot, IIIB.cl_des(tc_plot)/IIIB.cd_des(tc_plot), color = colors[0], label='Design func 3 $C_l/C_d$')
+axes5[1,0].plot(IIIB.relative_t_ind, ind_data["Cl"]/ind_data["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$')
+axes5[1,0].set_ylabel("$C_l/C_d$ [-]")
+axes5[1,0].set_xlim(0, 100)
+#axes5[1,0].legend()
+axes5[1,0].grid(True, linestyle = ':')
+
+axes5[2,0].plot(tc_plot, IIIB.aoa_des(tc_plot), color = colors[0], label=r'Design func 3 $\alpha$')
+axes5[2,0].plot(IIIB.relative_t_ind, np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
+axes5[2,0].set_ylabel(r"$\alpha$ [°]")
+axes5[2,0].set_xlabel(r"$t/c$ [-]")
+axes5[2,0].set_xlim(0, 100)
+#axes5[2,0].legend()
+axes5[2,0].grid(True, linestyle = ':')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
