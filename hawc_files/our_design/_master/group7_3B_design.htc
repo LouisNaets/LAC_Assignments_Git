@@ -699,7 +699,7 @@ begin hawcstab2;  commands for hawc2s/hawcstab2
   ; settings for compute_optimal_pitch_angle
   begin operational_data ;  
     windspeed 4 25 22 ; cut-in [m/s], cut-out [m/s], points [-] -- used if operational_data_file_wind is 0
-    genspeed 300 480 ; min, max generator speed [rpm]
+    genspeed 300 480 ; min, max generator speed [rpm] !! UPDATE !!
     gearratio 50.0 ; gear ratio [-]
     minpitch 0.0 ; min. pitch angle [deg]
     opt_lambda 7.5 ; optimal TSR [-] !! UPDATED !!

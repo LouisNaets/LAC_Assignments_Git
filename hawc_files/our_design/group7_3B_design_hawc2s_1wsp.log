@@ -1,0 +1,123 @@
+ ***********************************************************************
+ *  Build information for HAWCStab2
+ *  Aeroservoelastic stability tool for wind turbines
+ *  Intel, version         2021 ,     20201112
+ *  WINDOWS 64-bit
+ ***********************************************************************
+ *  GIT-TAG        = v2.16.4
+ *  GIT-BRANCH     = 
+ *  BUILD_TYPE     = Windows64 RELEASE
+ *  BUILDER        = ContainerAdministrator
+ *  COMPUTER_NAME  = RUNNER-CWSASYZT
+ *  BUILD_DATE     = Tue 08/13/2024
+ ***********************************************************************
+________________________________________________________________________
+  Log file output
+                                                       Time : 15:23:18
+                                                       Date : 24:09.2024
+________________________________________________________________________
+ Opening main command file: .\group7_3B_design_hawc2s_1wsp.htc
+ Current directory is C:\LAC_git\LAC_Assignments_Git\hawc_files\our_design
+ Reading data of main body : tower
+ Succes opening ./data/DTU_10MW_RWT_Tower_st.dat
+ timoschenko input commands read with succes
+ topologi_c2def_inputs read with succes
+ Topologi main body tower commands read with succes
+ Reading data of main body : towertop
+ Succes opening ./data/DTU_10MW_RWT_Towertop_st.dat
+ timoschenko input commands read with succes
+ topologi_c2def_inputs read with succes
+ Topologi main body towertop commands read with succes
+ Reading data of main body : shaft
+ Succes opening ./data/DTU_10MW_RWT_Shaft_st.dat
+ timoschenko input commands read with succes
+ topologi_c2def_inputs read with succes
+ Topologi main body shaft commands read with succes
+ Reading data of main body : hub1
+ Succes opening ./data/DTU_10MW_RWT_Hub_st.dat
+ timoschenko input commands read with succes
+ topologi_c2def_inputs read with succes
+ Topologi main body hub1 commands read with succes
+ Reading data of main body : hub2
+ Topologi main body hub2 commands read with succes
+ Reading data of main body : hub3
+ Topologi main body hub3 commands read with succes
+ Reading data of main body : blade1
+ Succes opening ./data/DTU_10MW_RWT_Blade_st.dat
+ timoschenko input commands read with succes
+ topologi_c2def_inputs read with succes
+ Topologi main body blade1 commands read with succes
+ Reading data of main body : blade2
+ Topologi main body blade2 commands read with succes
+ Reading data of main body : blade3
+ Topologi main body blade3 commands read with succes
+ Base orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ relative orientation input commands read with succes
+ Orientation input commands read with succes
+ Fix0 constraint input commands read with succes
+ Fix1 constraint input commands read with succes
+ Bearing1 constraint input commands read with succes
+ Fix1 constraint input commands read with succes
+ Fix1 constraint input commands read with succes
+ Fix1 constraint input commands read with succes
+ bearing2 constraint input commands read with succes
+ bearing2 constraint input commands read with succes
+ bearing2 constraint input commands read with succes
+ constraint input commands read with succes
+ Topologi commands read with succes
+ Aerodynamic commands read with succes
+Creating file folder res_hawc2s
+Created folder: 'res_hawc2s'
+ HAWCStab2 commands read with succes
+ Initialization of structure
+ Initializing of aero rotor...
+ Initialization of rotor aerodynamics
+ Succes opening ./data/group7_3B_design_ae.dat
+ Succes opening ./data/DTU_10MW_RWT_pc.dat
+ Initialization of rotor induction
+ Initialization of wind
+ Creating link between structure and aerodynamics
+******************* HAWCStab2 output *******************
+WARNING! Missing wind input block. Setting air density to 1.225km/m3.
+ Shaft bearing: shaft_rot
+ Pitch bearing: pitch1
+
+nblades:                3
+nblades3:               3
+ndofs:                580
+ndofs3:               580
+ndofs_n:              580
+nesys:                  0
+ndofs_esys:             0
+nfree_bearings:         1
+nbearings:              4
+nbearings_n:            4
+naerostates_ds_bld:   192
+naerostates_ds:       576
+naerostates_ds_n:     576
+naeroforces_bld:      144
+naeroforces:          432
+naeroforces_n:        432
+naerosections:         48
+nphis:                292
+nphis3:               292
+nphis_n:              292
+phi_per_node:           3
+ndim_y:                 0
+ndim_u:                 0
+********************* Initiating dynamic stall model *********************
+********************* Computing steady state *********************
+ Incl. torsional deform:  F
+ Incl. tip correction  :  T
+ Incl. induction       :  T
+ Comp. gradients       :  F
+Processing computation no.  1 of  1
+ ...done
+ Continue log

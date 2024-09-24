@@ -14,16 +14,17 @@ if __name__ == '__main__':
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
                     append='_hawc2s_1wsp',
-                    opt_path='./hawc_files/our_design/data/dtu_10mw_1wsp.opt',
+                    opt_path='./data/group7_3B_design_1wsp.opt',
                     compute_steady_states=True,
-                    save_power=True)
+                    save_power=True,
+                    save_induction=True)
 
     # make rigid hawc2s file for multi-tsr opt file
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
                     append='_hawc2s_multitsr',
-                    opt_path='./data/dtu_10mw_multitsr.opt',
+                    opt_path='./data/group7_3B_design_multitsr.opt',
                     compute_steady_states=True,
                     save_power=True,
                     save_induction=True)

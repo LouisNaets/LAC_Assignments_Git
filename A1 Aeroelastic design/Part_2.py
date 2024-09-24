@@ -15,6 +15,7 @@ rho = 1.225 # Air Density [kg/m^3]
 P_rated = 10e6 # Rated Power [W]
 tsr = 9.0 # Tip-Speed-Ratio [-]
 B = 3  # Number of blades [#]
+V_0 = 8 # Incoming wind speed [m/s]
 
 # IEC 61400-1 Classes
 class IA:
@@ -379,6 +380,8 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 
 # %%
 
+#Part 3
+
 IA.htc_main_z = [4.44089E-16, 3.00000E+00, 6.00000E+00, 7.00004E+00, 8.70051E+00,
 1.04020E+01, 1.22046E+01, 1.32065E+01, 1.50100E+01, 1.82151E+01, 2.14178E+01,
 2.46189E+01, 2.78193E+01, 3.10194E+01, 3.42197E+01, 4.02204E+01, 4.66217E+01,
@@ -413,3 +416,8 @@ for i in range(0,len(IIIB.r)):
         print('0\t' + str(round(IIIB.chord[i], 7)) + '\t1\t1\t;')
     else:
         print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/max(IIIB.t), 7)) + '\t1\t;')
+
+print('Omegas for the opt files')
+for tsr_opt in np.arange(6, 10.1, 0.5):
+    omega = tsr_opt*V_0/IIIB.R * (60/(2*np.pi))
+    print('TSR: ' + str(tsr_opt) + '-> omega: ' + str(round(omega,7)) + ' RPM')

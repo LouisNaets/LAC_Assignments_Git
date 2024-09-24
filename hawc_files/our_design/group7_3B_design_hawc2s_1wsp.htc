@@ -308,7 +308,7 @@
     end rotating_threebladed_substructure;
 ;
 ; path to opt file, used for all commands EXCEPT compute_optimal_pitch_angle
-    operational_data_filename	./hawc_files/our_design/data/dtu_10mw_1wsp.opt;	
+    operational_data_filename	./data/group7_3B_design_1wsp.opt;	
 ;
 ; settings for compute_optimal_pitch_angle
     begin operational_data;
@@ -329,7 +329,7 @@
     ;compute_optimal_pitch_angle	use_operational_data;	re-calculate and save opt file (pitch/rotor speed curve)
     compute_steady_states	nobladedeform tipcorrect induction nogradients;	compute steady states -- needed for aeroelastic calculations
     save_power	;	save steady-state values to .pwr
-    ;save_induction	;	save steady-state spanwise values to .ind files, 3 for each wind speed
+    save_induction	;	save steady-state spanwise values to .ind files, 3 for each wind speed
     ;compute_stability_analysis	windturbine 12;	compute/save aeroelastic campbell diagram (.cmb), XX modes
     ;save_modal_amplitude	;	save modal amplitudes and phrases to .amb file
     ;compute_controller_input	;	calculate/save controller parameters (reqs. steady_states)
