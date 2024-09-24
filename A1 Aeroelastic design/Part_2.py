@@ -379,42 +379,34 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 
 # %%
 
-IA.htc_main_z = [4.44089E-16,
-              3.00000E+00,
-              6.00000E+00,
-              7.00004E+00,
-              8.70051E+00,
-              1.04020E+01,
-              1.22046E+01,
-              1.32065E+01,
-              1.50100E+01,
-              1.82151E+01,
-              2.14178E+01,
-              2.46189E+01,
-              2.78193E+01,
-              3.10194E+01,
-              3.42197E+01,
-              4.02204E+01,
-              4.66217E+01,
-              5.30232E+01,
-              5.94245E+01,
-              6.58255E+01,
-              7.22261E+01,
-              7.90266E+01,
-              8.05267E+01,
-              8.20271E+01,
-              8.35274E+01,
-              8.50277E+01,
-              8.63655E+01]
+IA.htc_main_z = [4.44089E-16, 3.00000E+00, 6.00000E+00, 7.00004E+00, 8.70051E+00,
+1.04020E+01, 1.22046E+01, 1.32065E+01, 1.50100E+01, 1.82151E+01, 2.14178E+01,
+2.46189E+01, 2.78193E+01, 3.10194E+01, 3.42197E+01, 4.02204E+01, 4.66217E+01,
+5.30232E+01, 5.94245E+01, 6.58255E+01, 7.22261E+01, 7.90266E+01, 8.05267E+01,
+8.20271E+01, 8.35274E+01, 8.50277E+01, 8.63655E+01]
+
+IIIB.htc_main_x = [0.00000E+00, -2.06477E-05, -7.28810E-03, -1.89235E-02, -5.41282E-02,
+-1.26633E-01, -2.25666E-01, -2.88563E-01, -3.99194E-01, -5.76634E-01, -7.07136E-01,
+-7.91081E-01, -8.37195E-01,	-8.53948E-01, -8.49367E-01,	-7.93920E-01, -7.16284E-01,
+-6.34358E-01, -5.53179E-01,	-4.75422E-01, -4.03180E-01,	-3.30085E-01, -3.10140E-01,
+-2.86719E-01, -2.55823E-01,	-2.07891E-01, -8.98940E-02]
+
+IIIB.htc_main_y = [7.00600E-05, -1.22119E-02, -2.49251E-02, -2.73351E-02, -2.82163E-02,
+-2.13210E-02, -1.28378E-02, -7.70659E-03, -4.88317E-03, -1.80296E-02, -5.01772E-02,
+-9.41228E-02, -1.48880E-01,	-2.14514E-01, -2.90618E-01,	-4.62574E-01, -6.88437E-01,
+-9.60017E-01, -1.28424E+00,	-1.66402E+00, -2.10743E+00,	-2.65630E+00, -2.78882E+00,
+-2.92517E+00, -3.06577E+00, -3.20952E+00, -3.33685E+00]
 
 #These are used to udpate the htc main file:
 
 IIIB.htc_main_z = np.array(IA.htc_main_z)*SF
 IIIB.htc_main_twist = np.interp(IIIB.htc_main_z, IIIB.r, IIIB.twist)
 
-print(IIIB.htc_main_z)
-print(IIIB.htc_main_twist)
+print('Input for the htc main file:')
+for i in range(0, 27):
+    print('sec\t' + str(i+1) + '\t' + str(round(IIIB.htc_main_x[i], 7)) + '\t' + str(round(IIIB.htc_main_y[i], 7)) + '\t' + str(round(IIIB.htc_main_z[i], 7)) + '\t' + str(round(IIIB.htc_main_twist[i], 7)) + '\t;')
 
+print('Input for the ae.dat file:')
 for i in range(0,len(IIIB.r)):
     #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
     if i == 0:
