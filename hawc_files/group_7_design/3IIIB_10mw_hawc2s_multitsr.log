@@ -13,10 +13,10 @@
  ***********************************************************************
 ________________________________________________________________________
   Log file output
-                                                       Time : 17:16:33
+                                                       Time : 17:17:12
                                                        Date : 24:09.2024
 ________________________________________________________________________
- Opening main command file: 3IIIB_10mw_hawc2s_1wsp.htc
+ Opening main command file: 3IIIB_10mw_hawc2s_multitsr.htc
  Current directory is C:\git\LAC_Assignments_Git\hawc_files\group_7_design
  Reading data of main body : tower
  Succes opening ./data/DTU_10MW_RWT_Tower_st.dat
@@ -128,6 +128,12 @@ Warning: Zero lift aoa not between -15 and 15 deg at sect 14. Treated as fully s
  Incl. tip correction  :  T
  Incl. induction       :  T
  Comp. gradients       :  F
-Processing computation no.  1 of  1
+Processing computation no.  1 of  7
+Processing computation no.  2 of  7
+Processing computation no.  3 of  7
+Processing computation no.  4 of  7
+Processing computation no.  5 of  7
+Processing computation no.  6 of  7
+Processing computation no.  7 of  7
  ...done
  Continue log
