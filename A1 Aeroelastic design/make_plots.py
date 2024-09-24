@@ -25,36 +25,30 @@ if Step1_plot:
     ind_data = load_ind(ind_path)
     # Print the names in the dict
     print(ind_data.keys())
+    #load design data
+    design_data = np.load('3IIIB_design_data.npz',allow_pickle=True)
+    # Access each array by its name
+    r_des = design_data['r_des']
+    cl_des = design_data['cl_des']
+    cd_des = design_data['cd_des']
+    aoa_des = design_data['aoa_des']
 
-    fig, axs = plt.subplots(4, 2)
+    fig, axs = plt.subplots(3, 1)
 
-    # inflow angle
-    axs[0, 0].plot(ind_data["s_m"], ind_data["flow_angle_rad"])
-    axs[0, 0].set_ylabel("Inflow angle [rad]")
-    # aoa
-    axs[0, 1].plot(ind_data["s_m"], ind_data["aoa_rad"])
-    axs[0, 1].set_ylabel("Angle of attack [rad]")
-    # axial induction factor
-    axs[1, 0].plot(ind_data["s_m"], ind_data["a"])
-    axs[1, 0].set_ylabel("ax.-ind. ($a$) [-]")
-    # tangential induction factor
-    axs[1, 1].plot(ind_data["s_m"], ind_data["ap"])
-    axs[1, 1].set_ylabel("tan.-ind. ($a_p$) [-]")
     # Cl
-    axs[2, 0].plot(ind_data["s_m"], ind_data["Cl"])
-    axs[2, 0].set_ylabel("$C_l$ [-]")
-    # Cd
-    axs[2, 1].plot(ind_data["s_m"], ind_data["Cd"])
-    axs[2, 1].set_ylabel("$C_d$ [-]")
-    # CP
-    axs[3, 0].plot(ind_data["s_m"], ind_data["CP"])
-    axs[3, 0].set_ylabel("Blade-span ($s$) [m]")
-    axs[3, 0].set_ylabel("local-$C_P$ [-]")
-    # CT
-    axs[3, 1].plot(ind_data["s_m"], ind_data["CT"])
-    axs[3, 1].set_ylabel("Blade-span ($s$) [m]")
-    axs[3, 1].set_ylabel("local-$C_T$ [-]")
-
+    axs[0].plot(ind_data["s_m"], ind_data["Cl"], label='HAWC2S $C_l$')
+    axs[0].plot(r_des, cl_des, label='Design $C_l$')
+    axs[0].set_ylabel("$C_l$ [-]")
+    axs[0].legend()
+    # CL/Cd
+    axs[1].plot(ind_data["s_m"], ind_data["Cl"]/ind_data["Cd"])
+    axs[1].plot(r_des, cl_des/cd_des)
+    axs[1].set_ylabel("$C_l/C_d$ [-]")
+    # aoa
+    axs[2].plot(ind_data["s_m"], ind_data["aoa_rad"])
+    axs[2].plot(r_des, aoa_des)
+    axs[2].set_ylabel("Angle of attack [rad]")
+    # Cl
     fig.tight_layout()
     plt.show()
 

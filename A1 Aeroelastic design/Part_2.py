@@ -394,3 +394,8 @@ old_twist = [-14.5, -14.5, -14.4851, -14.461, -14.3388, -14.0201, -13.3904,
 new_twist_interpolated = np.interp(np.arange(0,27), np.arange(0,len(IA.twist)), IA.twist)
 
 print(new_twist_interpolated)
+
+
+# save data from design part to file
+# Save the arrays to a file in the current directory
+np.savez('3IIIB_design_data.npz', r_des=IIIB.r, cl_des=IIIB.cl_des(IIIB.r), cd_des=IIIB.cd_des(IIIB.r), aoa_des=IIIB.aoa_des(IIIB.r))
