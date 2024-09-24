@@ -1,0 +1,23 @@
+ ***********************************************************************
+ *  Build information for HAWCStab2
+ *  Aeroservoelastic stability tool for wind turbines
+ *  Intel, version         2021 ,     20201112
+ *  WINDOWS 64-bit
+ ***********************************************************************
+ *  GIT-TAG        = v2.16.4
+ *  GIT-BRANCH     = 
+ *  BUILD_TYPE     = Windows64 RELEASE
+ *  BUILDER        = ContainerAdministrator
+ *  COMPUTER_NAME  = RUNNER-CWSASYZT
+ *  BUILD_DATE     = Tue 08/13/2024
+ ***********************************************************************
+________________________________________________________________________
+  Log file output
+                                                       Time : 16:36:47
+                                                       Date : 24:09.2024
+________________________________________________________________________
+ Opening main command file: hawc_files\group_7_design\group7_10mw.htc
+ Current directory is C:\git\LAC_Assignments_Git
+ Reading data of main body : tower
+ *** ERROR ***  opening timoschenko data file ./data/DTU_10MW_RWT_Tower_st.dat
+  - ERROR
