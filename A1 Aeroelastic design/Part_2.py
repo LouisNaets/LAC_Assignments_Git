@@ -305,7 +305,7 @@ Step 7: Find the design with tip-speed-ratio that maximizes CP
 
 tsr_range = np.arange(6, 12, 0.5)
 IA.CP_store = np.zeros(len(tsr_range))
-IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(3)
+IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
 for i, tsr in enumerate(tsr_range):
     IA.chord, IA.tc, IA.twist, IA.cl, IA.cd, IA.aoa, IA.a, IA.CLT, IA.CLP, IA.CT, IA.CP = single_point_design(
@@ -414,9 +414,9 @@ print('Input for the ae.dat file:')
 for i in range(0,len(IIIB.r)):
     #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
     if i == 0:
-        print('0\t' + str(round(IIIB.chord[i], 7)) + '\t1\t1\t;')
+        print('0\t' + str(round(IIIB.chord[i], 7)) + '\t100\t1\t;')
     else:
-        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1], 7)) + '\t1\t;')
+        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1]*100, 7)) + '\t1\t;')
 
 print('Omegas for the opt files')
 for tsr_opt in np.arange(6, 10.1, 0.5):
@@ -445,31 +445,59 @@ ind_data = load_ind(ind_path)
 
 IIIB.relative_t = np.array(IIIB.t/IIIB.chord)*100
 IIIB.relative_t_ind = np.interp(ind_data["s_m"], IIIB.r, IIIB.relative_t)
-print(tc_plot)
-print(IIIB.relative_t)
-print(ind_data["s_m"])
-print(IIIB.relative_t_ind)
+
+tc_plot_r = np.interp(tc_plot, IIIB.relative_t_ind, ind_data["s_m"]) #this is not correct yet
+
+#print(tc_plot_r)
+
+#print(tc_plot)
+#print(IIIB.relative_t)
+#print(ind_data["s_m"])
+#print(IIIB.relative_t_ind)
 fig5, axes5 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
 
-axes5[0,0].plot(tc_plot, IIIB.cl_des(tc_plot), color = colors[0], label='Design func 3 $C_l$')
+axes5[0,0].plot(IIIB.tc, IIIB.cl, color = colors[0], label='Design $C_l$')
 axes5[0,0].plot(IIIB.relative_t_ind, ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
 axes5[0,0].set_ylabel("$C_l$ [-]")
 axes5[0,0].set_xlim(0, 100)
 axes5[0,0].legend()
 axes5[0,0].grid(True, linestyle = ':')
 
-axes5[1,0].plot(tc_plot, IIIB.cl_des(tc_plot)/IIIB.cd_des(tc_plot), color = colors[0], label='Design func 3 $C_l/C_d$')
+axes5[1,0].plot(IIIB.tc, IIIB.cl/IIIB.cd, color = colors[0], label='Design $C_l/C_d$')
 axes5[1,0].plot(IIIB.relative_t_ind, ind_data["Cl"]/ind_data["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$')
 axes5[1,0].set_ylabel("$C_l/C_d$ [-]")
 axes5[1,0].set_xlim(0, 100)
-#axes5[1,0].legend()
+axes5[1,0].legend()
 axes5[1,0].grid(True, linestyle = ':')
 
-axes5[2,0].plot(tc_plot, IIIB.aoa_des(tc_plot), color = colors[0], label=r'Design func 3 $\alpha$')
+axes5[2,0].plot(IIIB.tc, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
 axes5[2,0].plot(IIIB.relative_t_ind, np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
 axes5[2,0].set_ylabel(r"$\alpha$ [°]")
 axes5[2,0].set_xlabel(r"$t/c$ [-]")
 axes5[2,0].set_xlim(0, 100)
-#axes5[2,0].legend()
+axes5[2,0].legend()
 axes5[2,0].grid(True, linestyle = ':')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
+
+axes5[0,1].plot(IIIB.r, IIIB.cl, color = colors[0], label='Design $C_l$')
+axes5[0,1].plot(ind_data["s_m"], ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
+axes5[0,1].set_ylabel("$a$ [-]")
+axes5[0,1].set_xlim(0, 100)
+axes5[0,1].legend()
+axes5[0,1].grid(True, linestyle = ':')
+
+axes5[1,1].plot(IIIB.r, IIIB.cl/IIIB.cd, color = colors[0], label='Design $C_l/C_d$')
+axes5[1,1].plot(ind_data["s_m"], ind_data["Cl"]/ind_data["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$')
+axes5[1,1].set_ylabel("$C_l/C_d$ [-]")
+axes5[1,1].set_xlim(0, 100)
+axes5[1,1].legend()
+axes5[1,1].grid(True, linestyle = ':')
+
+axes5[2,1].plot(IIIB.r, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
+axes5[2,1].plot(ind_data["s_m"], np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
+axes5[2,1].set_ylabel(r"$\alpha$ [°]")
+axes5[2,1].set_xlabel(r"Curvelinear Radius [m]")
+axes5[2,1].set_xlim(0, 100)
+axes5[2,1].legend()
+axes5[2,1].grid(True, linestyle = ':')
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')

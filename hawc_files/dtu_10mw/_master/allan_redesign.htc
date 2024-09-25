@@ -119,38 +119,37 @@ begin new_htc_structure;  material properties, orientations and constraints of b
     begin timoschenko_input ;
       filename ./data/DTU_10MW_RWT_Blade_st.dat;
       set 1 1 ;  1 1=flexibe, 1 2=stiff 
-    end timoschenko_input;
-    begin c2_def;  definition of centerline in main_body coordinates
-    ; !! UPDATED !! scale [4] with SF and update [5] to match twist (interpolate to match the z-values)
-		nsec 27 ;
-      sec     1       0.0             7.01e-05        4.4409E-16      -20.0   ;
-      sec     2       -2.06e-05       -0.0122119      3.1094189       -20.0   ;
-      sec     3       -0.0072881      -0.0249251      6.2188377       -20.0   ;
-      sec     4       -0.0189235      -0.0273351      7.2553521       -20.0   ;
-      sec     5       -0.0541282      -0.0282163      9.0178433       -20.0   ;
-      sec     6       -0.126633       -0.021321       10.7813916      -20.0   ;
-      sec     7       -0.225666       -0.0128378      12.6497378      -20.0   ;
-      sec     8       -0.288563       -0.0077066      13.68818        -20.0   ;
-      sec     9       -0.399194       -0.0048832      15.557459       -20.0   ;
-      sec     10      -0.576634       -0.0180296      18.8794584      -20.0   ;
-      sec     11      -0.707136       -0.0501772      22.1989704      -18.2078566     ;
-      sec     12      -0.791081       -0.0941228      25.5168239      -15.4905782     ;
-      sec     13      -0.837195       -0.14888        28.833952       -12.9526623     ;
-      sec     14      -0.853948       -0.214514       32.150769       -10.2862504     ;
-      sec     15      -0.849367       -0.290618       35.4677934      -8.026125       ;
-      sec     16      -0.79392        -0.462574       41.6873567      -4.4848613      ;
-      sec     17      -0.716284       -0.688437       48.322131       -1.9041256      ;
-      sec     18      -0.634358       -0.960017       54.9571126      -0.4179626      ;
-      sec     19      -0.553179       -1.28424        61.5918869      0.6449545       ;
-      sec     20      -0.475422       -1.66402        68.2263502      1.389492        ;
-      sec     21      -0.40318        -2.10743        74.860399       1.9816301       ;
-      sec     22      -0.330085       -2.6563         81.9089333      2.5083077       ;
-      sec     23      -0.31014        -2.78882        83.4637464      2.6133281       ;
-      sec     24      -0.286719       -2.92517        85.0188704      2.7139878       ;
-      sec     25      -0.255823       -3.06577        86.5738907      2.8108387       ;
-      sec     26      -0.207891       -3.20952        88.1289111      2.9050854       ;
-      sec     27      -0.089894       -3.33685        89.5155046      2.9860022       ;
-     end c2_def ;                                 
+  end timoschenko_input;
+    begin c2_def;
+    nsec 27;
+      sec  1    0.00000e+00    7.00600e-05    4.61320e-16   -1.45000e+01 ;
+      sec  2   -2.06477e-05   -1.22119e-02    3.11640e+00   -1.45000e+01 ;
+      sec  3   -7.28810e-03   -2.49251e-02    6.23280e+00   -1.44851e+01 ;
+      sec  4   -1.89235e-02   -2.73351e-02    7.27164e+00   -1.44610e+01 ;
+      sec  5   -5.41282e-02   -2.82163e-02    9.03809e+00   -1.43388e+01 ;
+      sec  6   -1.26633e-01   -2.13210e-02    1.08056e+01   -1.40201e+01 ;
+      sec  7   -2.25666e-01   -1.28378e-02    1.26781e+01   -1.33904e+01 ;
+      sec  8   -2.88563e-01   -7.70659e-03    1.37189e+01   -1.29371e+01 ;
+      sec  9   -3.99194e-01   -4.88317e-03    1.55924e+01   -1.19445e+01 ;
+      sec 10   -5.76634e-01   -1.80296e-02    1.89218e+01   -9.98243e+00 ;
+      sec 11   -7.07136e-01   -5.01772e-02    2.22488e+01   -8.45147e+00 ;
+      sec 12   -7.91081e-01   -9.41228e-02    2.55741e+01   -7.46417e+00 ;
+      sec 13   -8.37195e-01   -1.48880e-01    2.88987e+01   -6.72916e+00 ;
+      sec 14   -8.53948e-01   -2.14514e-01    3.22230e+01   -6.08842e+00 ;
+      sec 15   -8.49367e-01   -2.90618e-01    3.55474e+01   -5.49322e+00 ;
+      sec 16   -7.93920e-01   -4.62574e-01    4.17810e+01   -4.39222e+00 ;
+      sec 17   -7.16284e-01   -6.88437e-01    4.84306e+01   -3.09315e+00 ;
+      sec 18   -6.34358e-01   -9.60017e-01    5.50805e+01   -1.75629e+00 ;
+      sec 19   -5.53179e-01   -1.28424e+00    6.17302e+01   -5.00650e-01 ;
+      sec 20   -4.75422e-01   -1.66402e+00    6.83795e+01    6.01964e-01 ;
+      sec 21   -4.03180e-01   -2.10743e+00    7.50285e+01    1.55560e+00 ;
+      sec 22   -3.30085e-01   -2.65630e+00    8.20928e+01    2.51935e+00 ;
+      sec 23   -3.10140e-01   -2.78882e+00    8.36511e+01    2.72950e+00 ;
+      sec 24   -2.86719e-01   -2.92517e+00    8.52098e+01    2.93201e+00 ;
+      sec 25   -2.55823e-01   -3.06577e+00    8.67683e+01    3.11874e+00 ;
+      sec 26   -2.07891e-01   -3.20952e+00    8.83268e+01    3.28847e+00 ;
+      sec 27   -8.98940e-02   -3.33685e+00    8.97165e+01    3.42796e+00 ;
+    end c2_def;                              
    end main_body;
 ;
   begin main_body;  blade2
@@ -333,7 +332,7 @@ begin aero ;  aerodynamic forces
   link 1 mbdy_c2_def blade1;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
-  ae_filename        ./data/group7_3B_design_ae.dat ; !! UPDATED !!
+  ae_filename        ./data/DTU_10MW_RWT_ae.dat ;
   pc_filename        ./data/DTU_10MW_RWT_pc.dat ;
   induction_method   1 ;     0=none, 1=normal
   aerocalc_method    1 ;     0=no aero calculations, 1=with aero calculations
@@ -699,10 +698,10 @@ begin hawcstab2;  commands for hawc2s/hawcstab2
   ; settings for compute_optimal_pitch_angle
   begin operational_data ;  
     windspeed 4 25 22 ; cut-in [m/s], cut-out [m/s], points [-] -- used if operational_data_file_wind is 0
-    genspeed 0 431 ; min, max generator speed [rpm] !! UPDATED !!
+    genspeed 300 480 ; min, max generator speed [rpm]
     gearratio 50.0 ; gear ratio [-]
     minpitch 0.0 ; min. pitch angle [deg]
-    opt_lambda 7.5 ; optimal TSR [-] !! UPDATED !!
+    opt_lambda 8.0 ; optimal TSR [-]
     maxpow 10638.3 ; rated aerodynamic power [kW]
     prvs_turbine 1 ; 1=pitch-regulated, variable-speed turbine
 	operational_data_file_wind 1;  0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above
