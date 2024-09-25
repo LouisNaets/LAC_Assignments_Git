@@ -38,4 +38,15 @@ if __name__ == '__main__':
                     minpitch = 0,
                     opt_lambda = 7.5,
                     genspeed = (0, 431))
+    
+    # make flexible hawc2s file for rigid opt file
+    htc = MyHTC(ORIG_PATH)
+    htc.make_hawc2s(SAVE_HAWC2S_DIR,
+                    rigid=True,
+                    append='_compute_flex_opt',
+                    opt_path='./data/dtu_10mw_rigid_.opt',
+                    compute_optimal_pitch_angle=True,
+                    minpitch = 0,
+                    opt_lambda = 7.5,
+                    genspeed = (0, 431))
 
