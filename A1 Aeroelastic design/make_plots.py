@@ -28,7 +28,7 @@ if Step1_plot:
     #load design data
     design_data = np.load('3IIIB_design_data.npz',allow_pickle=True)
     # Access each array by its name
-    r_des = design_data['r_des']
+    r_des = design_data['r']
     cl_des = design_data['cl']
     cd_des = design_data['cd']
     aoa_des = design_data['aoa']

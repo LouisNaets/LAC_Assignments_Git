@@ -410,4 +410,4 @@ print(f"Max generator speed given a gear ratio of 50: {RPM*50}")
 
 # save data from design part to file
 # Save the arrays to a file in the current directory
-np.savez('3IIIB_design_data.npz', r=IIIB.r, cl=IIIB.cl(IIIB.r), cd=IIIB.cd(IIIB.r), aoa=IIIB.aoa(IIIB.r))
+np.savez('3IIIB_design_data.npz', r=IIIB.r, cl=IIIB.cl, cd=IIIB.cd, aoa=IIIB.aoa)
