@@ -4,7 +4,8 @@ import numpy as np
 from aero_design_functions import get_design_functions, single_point_design
 from sympy import symbols, Eq, solve
 from matplotlib import cm
-from lacbox.io import load_pwr, load_ind, load_inds
+from lacbox.io import load_pwr, load_ind, load_inds, load_st, save_st
+from structural_scaling_example import scale_ST_data
 
 """
 Assignment 1: Aeroelastic Design part 2
@@ -501,3 +502,16 @@ axes5[2,1].set_xlim(0, 100)
 axes5[2,1].legend()
 axes5[2,1].grid(True, linestyle = ':')
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
+
+
+
+'''
+PART 4
+'''
+
+path_st_file_DTU10MW = "./hawc_files/our_design/data/DTU_10MW_RWT_Blade_st.dat"
+st_data_DTU10MW = load_st(path_st_file_DTU10MW, 0, 0)  # Baseline data
+
+new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
+
+save_st("./hawc_files/our_design/data/group7_3B_design_Blade_st.dat", new_ST_data)

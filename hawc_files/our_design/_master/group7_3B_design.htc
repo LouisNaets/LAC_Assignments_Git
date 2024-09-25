@@ -117,7 +117,7 @@ begin new_htc_structure;  material properties, orientations and constraints of b
     node_distribution    c2_def;
 	damping_posdef   0.0 0.0 0.0 1.53e-3 2.55e-3 3.3e-4 ;  3% damping tuned by tkim 23/03/13, unable to fit 3rd and higher mode
     begin timoschenko_input ;
-      filename ./data/DTU_10MW_RWT_Blade_st.dat;
+      filename ./data/group7_3B_design_Blade_st.dat;
       set 1 1 ;  1 1=flexibe, 1 2=stiff 
     end timoschenko_input;
     begin c2_def;  definition of centerline in main_body coordinates
