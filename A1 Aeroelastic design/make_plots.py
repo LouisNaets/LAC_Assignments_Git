@@ -20,7 +20,7 @@ if TSR_calc:
 
 if Step1_plot:
     # Path for the file
-    ind_path = "./hawc_files/group_7_design/res_hawc2s/3IIIB_10mw_hawc2s_1wsp_u8000.ind"
+    ind_path = "./hawc_files/group_7_design/res_hawc2s/group7_10mw_hawc2s_1wsp_u8000.ind"
     # Load the data
     ind_data = load_ind(ind_path)
     # Print the names in the dict
@@ -29,9 +29,9 @@ if Step1_plot:
     design_data = np.load('3IIIB_design_data.npz',allow_pickle=True)
     # Access each array by its name
     r_des = design_data['r_des']
-    cl_des = design_data['cl_des']
-    cd_des = design_data['cd_des']
-    aoa_des = design_data['aoa_des']
+    cl_des = design_data['cl']
+    cd_des = design_data['cd']
+    aoa_des = design_data['aoa']
 
     fig, axs = plt.subplots(3, 1)
 

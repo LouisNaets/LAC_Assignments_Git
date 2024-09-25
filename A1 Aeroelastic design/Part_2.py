@@ -73,6 +73,8 @@ IIIB.t = SF*IA.t # Absolute Thickness [m]
 
 print(f"Chord size at the root for IIIB class: {IIIB.chord_root:.2f} m")
 print(f"Maximum chord size for IIIB class: {IIIB.chord_max:.2f} m")
+print(f"Maximum blade radius for IIIB class: {IIIB.r[-1]:.2f} m")
+
 
 # Plot absolute thickness distributions
 fig, ax = plt.subplots(1, 1)
@@ -395,7 +397,17 @@ new_twist_interpolated = np.interp(np.arange(0,27), np.arange(0,len(IA.twist)), 
 
 print(new_twist_interpolated)
 
+TSR = 7.5  # Tip speed ratio
+R = 89.5  # Radius in meters
+v = 11.13  # Wind speed in meters per second
+# Calculate angular velocity (omega) in rad/s
+omega = TSR * v / R
+# Convert angular velocity to RPM
+RPM = (omega * 60) / (2 * np.pi)
+
+print(f"Max RPM: {RPM}")
+print(f"Max generator speed given a gear ratio of 50: {RPM*50}")
 
 # save data from design part to file
 # Save the arrays to a file in the current directory
-np.savez('3IIIB_design_data.npz', r_des=IIIB.r, cl_des=IIIB.cl_des(IIIB.r), cd_des=IIIB.cd_des(IIIB.r), aoa_des=IIIB.aoa_des(IIIB.r))
+np.savez('3IIIB_design_data.npz', r=IIIB.r, cl=IIIB.cl(IIIB.r), cd=IIIB.cd(IIIB.r), aoa=IIIB.aoa(IIIB.r))
