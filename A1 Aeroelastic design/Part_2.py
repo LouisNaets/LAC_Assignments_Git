@@ -712,7 +712,7 @@ new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
 
 save_st("./hawc_files/our_design/data/group7_3B_design_Blade_st.dat", new_ST_data)
 
-opt_path = './hawc_files/our_design/data/group7_3B_design_rigid.opt'
+opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
 flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class f_opt:
@@ -727,3 +727,112 @@ class f_opt:
 for i in range(0,len(f_opt.V_o)):
     f_opt.C_p.append(f_opt.P[i]*1000/(0.5*rho*area*f_opt.V_o[i]**3))
     f_opt.C_T.append(f_opt.T[i]*1000/(0.5*rho*area*f_opt.V_o[i]**2))
+
+Blade_flex_st_path = './hawc_files/our_design/data/group7_3B_design_Blade_st.dat'
+Blade_flex_st_data = np.loadtxt(Blade_flex_st_path, skiprows=3)
+
+class blade_st_dat:
+    def __init__(self, Blade_flex_st_data):
+        self.r = Blade_flex_st_data[:, 0]  # radius
+        self.distMass = Blade_flex_st_data[:, 1]  # distributed mass [kg/m]
+        self.I_x = Blade_flex_st_data[:, 10]  # area moment of inertia about x-axis
+        self.I_y = Blade_flex_st_data[:, 11]  # area moment of inertia about y-axis
+        self.crossArea = Blade_flex_st_data[:, 15]  # cross-sectional area [m^2]
+        
+        # Calculate mass moment of inertia
+        self.I_x_mass = self.calculate_mass_moments(self.I_x)
+        self.I_y_mass = self.calculate_mass_moments(self.I_y)
+    
+    def calculate_mass_moments(self, I_area):
+        # Assuming uniform segment length (change this if necessary)
+        segment_length = np.diff(self.r)
+        distMassAve = (self.distMass[:-1] + self.distMass[1:]) / 2
+        masses = distMassAve * segment_length  # Total mass in each segment
+        
+        # Calculate mass moments of inertia
+        I_area_ave = (I_area[:-1] + I_area[1:]) / 2
+
+        I_mass = I_area_ave * masses  # Convert area moments to mass moments
+        return I_mass
+
+flex_blade_st_dat = blade_st_dat(Blade_flex_st_data)
+
+'''FIGURE 4.1'''
+
+# Set up a 1x2 grid layout
+fig10, axes10 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+axes10[0].plot(flex_blade_st_dat.r, flex_blade_st_dat.distMass, color = colors[0])
+axes10[0].set_ylabel(r"Distributed mass [kg/m]")
+axes10[0].set_xlabel(r"Curvelinear radius [m]")
+axes10[0].grid(True, linestyle = ':')
+
+axes10[1].plot(flex_blade_st_dat.r[1:], flex_blade_st_dat.I_x_mass, color = colors[0], label = r'$I_x$')
+axes10[1].plot(flex_blade_st_dat.r[1:], flex_blade_st_dat.I_y_mass, color = colors[1], label = r'$I_y$')
+axes10[1].set_ylabel(r"Moment of inertia [kg$\cdot$m$^2$]")
+axes10[1].set_xlabel(r"Curvelinear radius [m]")
+axes10[1].legend()
+axes10[1].grid(True, linestyle = ':')
+
+# Save the figure
+fig10.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.svg', format='svg')
+
+
+
+'''FIGURE 4.2'''
+
+# Set up a 1x2 grid layout
+fig11, axes11 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+axes11[0].plot(r_opt.V_o, r_opt.C_p, color = colors[0], label='Rigid')
+axes11[0].plot(f_opt.V_o, f_opt.C_p, color = colors[1], linestyle='--', label='Flexible')
+axes11[0].set_ylabel(r"Power coefficient [-]")
+axes11[0].set_xlabel(r"Wind speed [m/s]")
+axes11[0].legend()
+axes11[0].grid(True, linestyle = ':')
+
+axes11[1].plot(r_opt.V_o, r_opt.C_T, color = colors[0], label='Rigid')
+axes11[1].plot(f_opt.V_o, f_opt.C_T, color = colors[1], linestyle='--', label='Flexible')
+axes11[1].set_ylabel(r"Thrust coefficient [-]")
+axes11[1].set_xlabel(r"Wind speed [m/s]")
+axes11[1].legend()
+axes11[1].grid(True, linestyle = ':')
+
+# Save the figure
+fig11.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.2.svg', format='svg')
+
+
+
+'''FIGURE 4.3'''
+
+DTU10MW_flex_path = './hawc_files/our_design/data/dtu_10mw_hawc2s_flex.pwr'
+DTU10MW_flex_data = np.loadtxt(DTU10MW_flex_path, skiprows=1)
+
+class DTU10MW_f_opt:
+    V_o = DTU10MW_flex_data[:, 0]
+    P = DTU10MW_flex_data[:, 1]
+    T = DTU10MW_flex_data[:, 2]
+
+
+# Set up a 1x2 grid layout
+fig12, axes12 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+axes12[0].plot(DTU10MW_f_opt.V_o, DTU10MW_f_opt.P, color = colors[0], label='DTU 10MW (flexible) rotor')
+axes12[0].plot(f_opt.V_o, f_opt.P, color = colors[1], linestyle='--', label='New IIIB (flexible) design')
+axes12[0].set_ylabel(r"Power [kW]")
+axes12[0].set_xlabel(r"Wind speed [m/s]")
+axes12[0].legend()
+axes12[0].grid(True, linestyle = ':')
+
+axes12[1].plot(DTU10MW_f_opt.V_o, DTU10MW_f_opt.T, color = colors[0], label='DTU 10MW (flexible) rotor')
+axes12[1].plot(f_opt.V_o, f_opt.T, color = colors[1], linestyle='--', label='New IIIB (flexible) design')
+axes12[1].set_ylabel(r"Thrust [kN]")
+axes12[1].set_xlabel(r"Wind speed [m/s]")
+axes12[1].legend()
+axes12[1].grid(True, linestyle = ':')
+
+# Save the figure
+fig12.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.svg', format='svg')
