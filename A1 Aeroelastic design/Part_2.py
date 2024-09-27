@@ -35,6 +35,8 @@ class IIIB:
 Step 2: Rotor radius and rated wind speed for IIIB class
 '''
 
+plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 12})  # Affects both X and Y labels
+
 # System of equations solver for IIIB class R and V_rated
 IIIB_R, IIIB_V_rated = symbols('IIIB_R IIIB_V_rated')
 eq1 = ((IA.V_rated * (1 + 2 * IA.I)) / (IIIB_V_rated * (1 + 2*IIIB.I)))**(2/3) * IA.R - IIIB_R
@@ -79,10 +81,10 @@ print(f"Maximum chord size for IIIB class: {IIIB.chord_max:.2f} m")
 
 # Plot absolute thickness distributions
 fig, ax = plt.subplots(1, 1)
-ax.plot(IA.r, IA.t, label='DTU 10MW Class IA')
-ax.plot(IIIB.r, IIIB.t, label='DTU 10MW Class IIIB')
-ax.set_xlabel('Blade Span [m]')
-ax.set_ylabel('Absolute Thickness [m]')
+ax.plot(IA.r, IA.t, label='DTU 10MW rotor')
+ax.plot(IIIB.r, IIIB.t, label='New IIIB design')
+ax.set_xlabel('Blade span [m]')
+ax.set_ylabel('Absolute thickness [m]')
 ax.grid(True, linestyle = ':')
 ax.legend()
 fig.tight_layout()
@@ -122,30 +124,30 @@ for i, tc_data in enumerate(tc_datasets):
     
     # Plot 1: C_l vs C_d
     axs[0].plot(c_d, c_l, 'o-', color='tab:blue')
-    axs[0].set_title(f'C_l vs C_d')
-    axs[0].set_xlabel('C_d')
-    axs[0].set_ylabel('C_l')
+    #axs[0].set_title(f'C_l vs C_d')
+    axs[0].set_xlabel(r'$C_d$ [-]', fontsize=16)
+    axs[0].set_ylabel(r'$C_l$ [-]', fontsize=16)
     axs[0].grid(True, linestyle=':')
-    axs[0].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen Cl={Cl_points[i]}')
-    axs[0].legend()
+    axs[0].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen $C_l$={Cl_points[i]}')
+    axs[0].legend(fontsize=14)
 
     # Plot 2: C_l vs Alpha
     axs[1].plot(alpha, c_l, 'o-', color='tab:orange')
-    axs[1].set_title(f'C_l vs Alpha')
-    axs[1].set_xlabel('Alpha [°]')
-    axs[1].set_ylabel('C_l')
+    #axs[1].set_title(f'C_l vs Alpha')
+    axs[1].set_xlabel(r'$\alpha$ [°]', fontsize=16)
+    axs[1].set_ylabel(r'$C_l$ [-]', fontsize=16)
     axs[1].grid(True, linestyle=':')
-    axs[1].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen Cl={Cl_points[i]}')
-    axs[1].legend()
+    axs[1].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen $C_l$={Cl_points[i]}')
+    axs[1].legend(fontsize=14)
 
     # Plot 3: C_l vs C_l/C_d
     axs[2].plot(c_l_c_d, c_l, 'o-', color='tab:green')
-    axs[2].set_title(f'C_l vs C_l/C_d')
-    axs[2].set_xlabel('C_l/C_d')
-    axs[2].set_ylabel('C_l')
+    #axs[2].set_title(f'C_l vs C_l/C_d')
+    axs[2].set_xlabel(r'$C_l$/$C_d$ [-]', fontsize=16)
+    axs[2].set_ylabel(r'$C_l$ [-]', fontsize=16)
     axs[2].grid(True, linestyle=':')
-    axs[2].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen Cl={Cl_points[i]}')
-    axs[2].legend()
+    axs[2].axhline(y=Cl_points[i], color='k', linestyle='--', label=f'Chosen $C_l$={Cl_points[i]}')
+    axs[2].legend(fontsize=14)
 
     # Adjust layout and display the plots
     plt.tight_layout()
@@ -194,7 +196,7 @@ for i_design in i:
     axs1[2].plot(IA.tc_vals, IA.aoa_vals, "o", color = colors[i_design-1])
     axs1[2].plot(t_c_points, alpha_points, 'xk')
     axs1[2].set_ylabel(r"$\alpha$ [°]")
-    axs1[2].set_xlabel(r"$t/c$ [-]")
+    axs1[2].set_xlabel(r"Relative thickness [%]")
     axs1[2].set_xlim(0, 100)
     # axs1[2].legend()
     axs1[2].grid(True, linestyle = ':')
@@ -216,7 +218,7 @@ for i_design in i:
 
     # t/c
     axs2[2].plot(IA.r, IA.tc)
-    axs2[2].set_ylabel("Rel. thickness [%]")
+    axs2[2].set_ylabel("Relative thickness [%]")
     axs2[2].set_xlabel("Rotor span [m]")
     axs2[2].set_xlim(0, max(IA.R, IA.R))
     # axs2[2].legend()
@@ -225,7 +227,7 @@ for i_design in i:
     # Plot r vs. t/c, aoa, cl, cd
     # t/c
     axs3[0, 0].plot(IA.r, IA.tc, label=f'Design f {i_design}')
-    axs3[0, 0].set_ylabel("t/c [%]")
+    axs3[0, 0].set_ylabel("Relative thickness [%]")
     axs3[0, 0].set_xlim(0, max(IA.R, IA.R))
     axs3[0, 0].legend()
     axs3[0, 0].grid(True, linestyle = ':')
@@ -320,8 +322,8 @@ plt.figure()
 plt.plot(tsr_range, IA.CP_store, linestyle = '-', marker = 'o')
 plt.axhline(y=max(IA.CP_store), color='grey', linestyle='--')
 plt.axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--')
-plt.xlabel("Tip-Speed-Ratio [-]")
-plt.ylabel("Power Coefficient [-]")
+plt.xlabel("Tip-speed ratio (TSR) [-]")
+plt.ylabel(r"$C_p$ [-]")
 plt.grid(True, linestyle = ':')
 plt.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
@@ -334,11 +336,24 @@ Step 8: Present your final chord, twist, and relative thickness distributions an
 '''
 
 # Final designs for chosen TSR = 7.5 and design function 3
-# IA class
-IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
-IA.chord, IA.tc, IA.twist, IA.cl, IA.cd, IA.aoa, IA.a, IA.CLT, IA.CLP, IA.CT, IA.CP = single_point_design(
-    IA.r, IA.t, tsr, IA.R, IA.cl_des, IA.cd_des, IA.aoa_des, IA.chord_root, IA.chord_max, B)
+# !!! This wasn't actually required we just needed the original values for the DTU 10MW reference turbine
+# IA class 
+#IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
+
+#IA.chord, IA.tc, IA.twist, IA.cl, IA.cd, IA.aoa, IA.a, IA.CLT, IA.CLP, IA.CT, IA.CP = single_point_design(
+#    IA.r, IA.t, tsr, IA.R, IA.cl_des, IA.cd_des, IA.aoa_des, IA.chord_root, IA.chord_max, B)
+
+
+#From DTU 10MW master htc file
+IA.twist_r = [4.44089E-16,3.00000E+00,6.00000E+00,7.00004E+00,8.70051E+00,1.04020E+01,1.22046E+01,1.32065E+01,
+            1.50100E+01,1.82151E+01,2.14178E+01,2.46189E+01,2.78193E+01,3.10194E+01,3.42197E+01,4.02204E+01,
+            4.66217E+01,5.30232E+01,5.94245E+01,6.58255E+01,7.22261E+01,7.90266E+01,8.05267E+01,8.20271E+01,
+            8.35274E+01,8.50277E+01,8.63655E+01]
+IA.twist = -1*np.array([-1.45000E+01,-1.45000E+01,-1.44851E+01,-1.44610E+01,-1.43388E+01,-1.40201E+01,-1.33904E+01,
+              -1.29371E+01,-1.19445E+01,-9.98243E+00,-8.45147E+00,-7.46417E+00,-6.72916E+00,-6.08842E+00,
+              -5.49322E+00,-4.39222E+00,-3.09315E+00,-1.75629E+00,-5.00650E-01,6.01964E-01,1.55560E+00,
+              2.51935E+00,2.72950E+00,2.93201E+00,3.11874E+00,3.28847E+00,3.42796E+00])
 
 # IIIB class
 IIIB.r = np.linspace(IIIB.r_hub, IIIB.R - 0.1, 40)
@@ -347,32 +362,41 @@ IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.tc_vals, IIIB.cl_vals, IIIB.cd_vals
 IIIB.chord, IIIB.tc, IIIB.twist, IIIB.cl, IIIB.cd, IIIB.aoa, IIIB.a, IIIB.CLT, IIIB.CLP, IIIB.CT, IIIB.CP = single_point_design(
         IIIB.r, IIIB.t, tsr, IIIB.R, IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.chord_root, IIIB.chord_max, B)
 
-# Plot the chord, twist and relative-thickness of the IA and IIIB classes
+# Plot the chord, twist and relative-thickness of the DTU 10MW reference turbine and new IIIB design
+# Determine chord and thickness for IA class from the _ae file
+file_path = r'hawc_files\dtu_10mw\data\DTU_10MW_RWT_ae.dat'
+data = np.loadtxt(file_path, skiprows=2, usecols=(0, 1, 2))
+IA.r = data[:, 0]  # Blade span [m]
+IA.chord = data[:, 1]  # Chord length [m]
+IA.tc = data[:, 2]  # Thickness-to-chord ratio [-]
+IA.t = IA.tc/100 * IA.chord  # Absolute Thickness [m]
+
 fig, axs = plt.subplots(3, 1, figsize=(10, 8))
 
 # Chord
-axs[0].plot(IA.r, IA.chord, label='DTU 10MW Class IA')
-axs[0].plot(IIIB.r, IIIB.chord, label='DTU 10MW Class IIIB')
+axs[0].plot(IA.r, IA.chord, label='DTU 10MW rotor')
+axs[0].plot(IIIB.r, IIIB.chord, label='New IIIB design')
 axs[0].set_ylabel("Chord [m]")
 axs[0].legend()
 axs[0].grid(True, linestyle = ':')
 
 # Twist
-axs[1].plot(IA.r, IA.twist, label='DTU 10MW Class IA')
-axs[1].plot(IIIB.r, IIIB.twist, label='DTU 10MW Class IIIB')
+axs[1].plot(IA.twist_r, IA.twist, label='DTU 10MW rotor')
+axs[1].plot(IIIB.r, IIIB.twist, label='New IIIB design')
 axs[1].set_ylabel(r"Twist [°]")
 # axs[1].legend()
 axs[1].grid(True, linestyle = ':')
 
 # Relative thickness
-axs[2].plot(IA.r, IA.t/max(IA.t), label='DTU 10MW Class IA')
-axs[2].plot(IIIB.r, IIIB.t/max(IIIB.t), label='DTU 10MW Class IIIB')
-axs[2].set_ylabel("Relative Thickness [-]")
-axs[2].set_xlabel("Blade Span [m]")
+axs[2].plot(IA.r, IA.tc, label='DTU 10MW rotor')
+axs[2].plot(IIIB.r, IIIB.tc, label='New IIIB design')
+axs[2].set_ylabel("Relative thickness [%]")
+axs[2].set_xlabel("Blade span [m]")
 # axs[2].legend()
 axs[2].grid(True, linestyle = ':')
 
 plt.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.png', format='png')
 plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', format='svg')
 
 
@@ -407,23 +431,24 @@ IIIB.htc_main_y = [7.00600E-05, -1.22119E-02, -2.49251E-02, -2.73351E-02, -2.821
 IIIB.htc_main_z = np.array(IA.htc_main_z)*SF
 IIIB.htc_main_twist = np.interp(IIIB.htc_main_z, IIIB.r, IIIB.twist)
 
-print('Input for the htc main file:')
-for i in range(0, 27):
-    print('sec\t' + str(i+1) + '\t' + str(round(IIIB.htc_main_x[i], 7)) + '\t' + str(round(IIIB.htc_main_y[i], 7)) + '\t' + str(round(IIIB.htc_main_z[i], 7)) + '\t' + str(round(-IIIB.htc_main_twist[i], 7)) + '\t;')
+print_extra = 0
+if print_extra:
+    print('Input for the htc main file:')
+    for i in range(0, 27):
+        print('sec\t' + str(i+1) + '\t' + str(round(IIIB.htc_main_x[i], 7)) + '\t' + str(round(IIIB.htc_main_y[i], 7)) + '\t' + str(round(IIIB.htc_main_z[i], 7)) + '\t' + str(round(-IIIB.htc_main_twist[i], 7)) + '\t;')
 
-print('Input for the ae.dat file:')
-for i in range(0,len(IIIB.r)):
-    #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
-    if i == 0:
-        print('0\t' + str(round(IIIB.chord[i], 7)) + '\t100\t1\t;')
-    else:
-        print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1]*100, 7)) + '\t1\t;')
+    print('Input for the ae.dat file:')
+    for i in range(0,len(IIIB.r)):
+        #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
+        if i == 0:
+            print('0\t' + str(round(IIIB.chord[i], 7)) + '\t100\t1\t;')
+        else:
+            print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1]*100, 7)) + '\t1\t;')
 
 print('Omegas for the opt files')
 for tsr_opt in np.arange(6, 10.1, 0.5):
     omega = tsr_opt*V_0/IIIB.R * (60/(2*np.pi))
     print('TSR: ' + str(tsr_opt) + '-> omega: ' + str(round(omega,7)) + ' RPM')
-
 
 
 #Part 3 plots 1 and 2:
@@ -455,6 +480,9 @@ tc_plot_r = np.interp(tc_plot, IIIB.relative_t_ind, ind_data["s_m"]) #this is no
 #print(IIIB.relative_t)
 #print(ind_data["s_m"])
 #print(IIIB.relative_t_ind)
+
+'''FIGURE 3.1'''
+
 fig5, axes5 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
 
 axes5[0,0].plot(IIIB.tc, IIIB.cl, color = colors[0], label='Design $C_l$')
@@ -474,11 +502,10 @@ axes5[1,0].grid(True, linestyle = ':')
 axes5[2,0].plot(IIIB.tc, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
 axes5[2,0].plot(IIIB.relative_t_ind, np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
 axes5[2,0].set_ylabel(r"$\alpha$ [°]")
-axes5[2,0].set_xlabel(r"$t/c$ [-]")
+axes5[2,0].set_xlabel(r"Relative thickness [%]")
 axes5[2,0].set_xlim(0, 100)
 axes5[2,0].legend()
 axes5[2,0].grid(True, linestyle = ':')
-plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
 
 axes5[0,1].plot(IIIB.r, IIIB.cl, color = colors[0], label='Design $C_l$')
 axes5[0,1].plot(ind_data["s_m"], ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
@@ -497,13 +524,182 @@ axes5[1,1].grid(True, linestyle = ':')
 axes5[2,1].plot(IIIB.r, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
 axes5[2,1].plot(ind_data["s_m"], np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
 axes5[2,1].set_ylabel(r"$\alpha$ [°]")
-axes5[2,1].set_xlabel(r"Curvelinear Radius [m]")
+axes5[2,1].set_xlabel(r"Curvelinear radius [m]")
 axes5[2,1].set_xlim(0, 100)
 axes5[2,1].legend()
 axes5[2,1].grid(True, linestyle = ':')
-plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
+fig5.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.svg', format='svg')
+
+# Path for the file
+inds_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_multitsr_u8003.ind"
+# Load the data
+inds_data = load_ind(inds_path)
+
+# Path for the file
+pwr_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_multitsr.pwr"
+# Load the data
+pwr_data = load_pwr(pwr_path)
 
 
+
+'''FIGURE 3.2'''
+
+# Set up a 3x2 grid layout
+fig6, axes6 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
+
+axes6[0,0].plot(inds_data["s_m"], inds_data["Cl"], color = colors[0])
+axes6[0,0].set_ylabel("$C_l$ [-]")
+axes6[0,0].grid(True, linestyle = ':')
+
+axes6[0,1].plot(inds_data["s_m"], inds_data["Cl"]/inds_data["Cd"], color = colors[0])
+axes6[0,1].set_ylabel("$C_l$/$C_d$ [-]")
+axes6[0,1].grid(True, linestyle = ':')
+
+axes6[1,0].plot(inds_data["s_m"], np.rad2deg(inds_data["aoa_rad"]), color = colors[0])
+axes6[1,0].set_ylabel(r"$\alpha$ [°]")
+axes6[1,0].grid(True, linestyle = ':')
+
+axes6[1,1].plot(inds_data["s_m"], np.rad2deg(inds_data["a"]), color = colors[0])
+axes6[1,1].set_ylabel(r"Axial induction [-]")
+axes6[1,1].grid(True, linestyle = ':')
+
+axes6[2,0].plot(inds_data["s_m"], inds_data["CP"], color = colors[0])
+axes6[2,0].set_ylabel(r"Local $C_p$ [-]")
+axes6[2,0].set_xlabel(r"Curvelinear radius [m]")
+axes6[2,0].grid(True, linestyle = ':')
+
+axes6[2,1].plot(inds_data["s_m"], inds_data["CT"], color = colors[0])
+axes6[2,1].set_ylabel(r"Local $C_T$ [-]")
+axes6[2,1].set_xlabel(r"Curvelinear radius [m]")
+axes6[2,1].grid(True, linestyle = ':')
+
+# Save the figure
+fig6.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.2.svg', format='svg')
+
+
+
+'''FIGURE 3.3'''
+
+# Set up a 1x2 grid layout
+tsrs = np.arange(6, 10.1, 0.5)
+
+fig7, axes7 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+axes7[0].plot(tsrs, pwr_data["Cp"], color = colors[0])
+axes7[0].set_ylabel(r"$C_p$ [-]")
+axes7[0].set_xlabel(r"Tip-speed ratio [-]")
+axes7[0].grid(True, linestyle = ':')
+
+axes7[1].plot(tsrs, pwr_data["Ct"], color = colors[0])
+axes7[1].set_ylabel(r"$C_T$ [-]")
+axes7[1].set_xlabel(r"Tip-speed ratio [-]")
+axes7[1].grid(True, linestyle = ':')
+
+# Save the figure
+fig7.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.3.svg', format='svg')
+
+'''FIGURE 3.4'''
+
+opt_path = './hawc_files/our_design/data/group7_3B_design_rigid.opt'
+rigid_opt_data = np.loadtxt(opt_path, skiprows=1)
+
+class r_opt:
+    V_o = rigid_opt_data[:, 0]
+    pitch = rigid_opt_data[:, 1]
+    omega = rigid_opt_data[:, 2]
+    P = rigid_opt_data[:, 3]
+    T = rigid_opt_data[:, 4]
+    C_p = []
+    C_T = []
+
+# Set up a 1x2 grid layout
+fig8, axes8 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+axes8[0].plot(r_opt.V_o, r_opt.omega, color = colors[0])
+axes8[0].axvline(x=IIIB.V_rated, color='black', linestyle='--', label='Rated wind speed')
+axes8[0].set_ylabel(r"$\omega$ [RPM]")
+axes8[0].set_xlabel(r"Wind speed [m/s]")
+axes8[0].grid(True, linestyle = ':')
+axes8[0].legend()
+
+axes8[1].plot(r_opt.V_o, r_opt.pitch, color = colors[0])
+axes8[1].axvline(x=IIIB.V_rated, color='black', linestyle='--', label='Rated wind speed')
+axes8[1].set_ylabel(r"$\theta_p$ [°]")
+axes8[1].set_xlabel(r"Wind speed [m/s]")
+axes8[1].grid(True, linestyle = ':')
+axes8[1].legend()
+
+# Save the figure
+fig8.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.4.svg', format='svg')
+
+
+
+'''FIGURE 3.5'''
+
+rho = 1.225 #kg/m3
+area = IIIB.R**2*np.pi
+for i in range(0,len(r_opt.V_o)):
+    r_opt.C_p.append(r_opt.P[i]*1000/(0.5*rho*area*r_opt.V_o[i]**3))
+    r_opt.C_T.append(r_opt.T[i]*1000/(0.5*rho*area*r_opt.V_o[i]**2))
+
+
+# Set up a 1x2 grid layout
+fig9, axes9 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
+
+# Combined plot for Power and Thrust
+ax1 = axes9[0]
+
+# Plot Power
+power_line = ax1.plot(r_opt.V_o, r_opt.P, color=colors[0], label='Aerodynamic power')[0]
+#ax1.axvline(x=IIIB.V_rated, color='black', linestyle='--', label='Rated wind speed')
+
+# Create a twin axis for Thrust
+ax2 = ax1.twinx()
+thrust_line = ax2.plot(r_opt.V_o, r_opt.T, color=colors[1], label='Thrust')[0]
+
+# Set labels
+ax1.set_ylabel(r"Power [kW]", color=colors[0])
+ax1.set_xlabel(r"Wind speed [m/s]")
+ax1.grid(True, linestyle=':')
+ax1.tick_params(axis='y', labelcolor=colors[0])
+ax2.set_ylabel(r"Thrust [kN]", color=colors[1])
+ax2.tick_params(axis='y', labelcolor=colors[1])
+
+# Combine legends for Power and Thrust
+ax1.legend(handles=[power_line, thrust_line])
+
+# Plot for C_p and C_T
+ax3 = axes9[1]
+
+# Plot C_p
+cp_line = ax3.plot(r_opt.V_o, r_opt.C_p, color=colors[0], label=r'$C_p$')[0]
+#ax3.axvline(x=IIIB.V_rated, color='black', linestyle='--', label='Rated wind speed')
+
+# Create a twin axis for C_T
+ax4 = ax3.twinx()
+ct_line = ax4.plot(r_opt.V_o, r_opt.C_T, color=colors[1], label=r'$C_T$')[0]
+
+# Set labels
+ax3.set_ylabel(r"Power coefficient [-]", color=colors[0])
+ax3.set_xlabel(r"Wind speed [m/s]")
+ax3.grid(True, linestyle=':')
+ax3.tick_params(axis='y', labelcolor=colors[0])
+ax4.set_ylabel(r"Thrust coefficient [-]", color=colors[1])
+ax4.tick_params(axis='y', labelcolor=colors[1])
+
+ax3.set_ylim(0, 0.85)
+ax4.set_ylim(0, 0.85)
+
+# Combine legends for C_p and C_T
+ax3.legend(handles=[cp_line, ct_line])
+
+# Adjust layout and save the figure
+fig9.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.5.svg', format='svg')
 
 '''
 PART 4
@@ -515,3 +711,19 @@ st_data_DTU10MW = load_st(path_st_file_DTU10MW, 0, 0)  # Baseline data
 new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
 
 save_st("./hawc_files/our_design/data/group7_3B_design_Blade_st.dat", new_ST_data)
+
+opt_path = './hawc_files/our_design/data/group7_3B_design_rigid.opt'
+flex_opt_data = np.loadtxt(opt_path, skiprows=1)
+
+class f_opt:
+    V_o = flex_opt_data[:, 0]
+    pitch = flex_opt_data[:, 1]
+    omega = flex_opt_data[:, 2]
+    P = flex_opt_data[:, 3]
+    T = flex_opt_data[:, 4]
+    C_p = []
+    C_T = []
+
+for i in range(0,len(f_opt.V_o)):
+    f_opt.C_p.append(f_opt.P[i]*1000/(0.5*rho*area*f_opt.V_o[i]**3))
+    f_opt.C_T.append(f_opt.T[i]*1000/(0.5*rho*area*f_opt.V_o[i]**2))
