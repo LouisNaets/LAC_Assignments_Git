@@ -483,6 +483,8 @@ tc_plot_r = np.interp(tc_plot, IIIB.relative_t_ind, ind_data["s_m"]) #this is no
 
 '''FIGURE 3.1'''
 
+plt.rcParams.update({'axes.labelsize': 18, 'xtick.labelsize': 18, 'ytick.labelsize': 18, 'legend.fontsize': 15})
+
 fig5, axes5 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
 
 axes5[0,0].plot(IIIB.tc, IIIB.cl, color = colors[0], label='Design $C_l$')
@@ -578,7 +580,7 @@ axes6[2,1].grid(True, linestyle = ':')
 fig6.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.2.svg', format='svg')
 
-
+plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 12})
 
 '''FIGURE 3.3'''
 
@@ -751,8 +753,9 @@ class blade_st_dat:
         
         # Calculate mass moments of inertia
         I_area_ave = (I_area[:-1] + I_area[1:]) / 2
+        crossArea_ave = (self.crossArea[:-1] + self.crossArea[1:]) / 2
 
-        I_mass = I_area_ave * masses  # Convert area moments to mass moments
+        I_mass = I_area_ave * masses  / crossArea_ave# Convert area moments to mass moments
         return I_mass
 
 flex_blade_st_dat = blade_st_dat(Blade_flex_st_data)

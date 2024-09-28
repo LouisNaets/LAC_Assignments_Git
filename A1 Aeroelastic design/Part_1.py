@@ -7,6 +7,8 @@ alpha_ref = 5 #[deg]
 TSR_ref = 8 #[-]
 B_ref = 3 #[-]
 
+plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 10})  # Affects both X and Y labels
+
 alpha_vary = np.arange(3, 7.1, 0.5) #[deg]
 TSR_vary = np.arange(6, 10.1, 0.5) #[-]
 B_vary = np.arange(2, 5.1, 1) #[-]
@@ -29,12 +31,12 @@ for idx, alpha in enumerate(alpha_vary):
     plot_with_colormap(axs[0, 0], r_R, c_R, label=f'α = {alpha}°', cmap=cm.viridis, idx=idx, total_lines=len(alpha_vary))
     plot_with_colormap(axs[0, 1], r_R, np.rad2deg(theta_R), label=f'α = {alpha}°', cmap=cm.viridis, idx=idx, total_lines=len(alpha_vary))
 
-axs[0, 0].set_title("Chord distribution")
+#axs[0, 0].set_title("Chord distribution")
 axs[0, 0].set_ylabel('c/R [-]')
 axs[0, 0].grid(True, linestyle=':', linewidth=0.5)
 axs[0, 0].legend()
 
-axs[0, 1].set_title("Twist distribution")
+#axs[0, 1].set_title("Twist distribution")
 axs[0, 1].set_ylabel('Twist [°]')
 axs[0, 1].grid(True, linestyle=':', linewidth=0.5)
 axs[0, 1].legend()
