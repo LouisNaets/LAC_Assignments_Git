@@ -562,14 +562,18 @@ axes6[1,0].plot(inds_data["s_m"], np.rad2deg(inds_data["aoa_rad"]), color = colo
 axes6[1,0].set_ylabel(r"$\alpha$ [°]")
 axes6[1,0].grid(True, linestyle = ':')
 
-axes6[1,1].plot(inds_data["s_m"], np.rad2deg(inds_data["a"]), color = colors[0])
+axes6[1,1].plot(inds_data["s_m"], inds_data["a"], color = colors[0])
+axes6[1,1].axhline(y=1/3, color='black', linestyle='--', label='Optimum $a$')
 axes6[1,1].set_ylabel(r"Axial induction [-]")
 axes6[1,1].grid(True, linestyle = ':')
+axes6[1,1].legend()
 
 axes6[2,0].plot(inds_data["s_m"], inds_data["CP"], color = colors[0])
+axes6[2,0].axhline(y=16/27, color='black', linestyle='--', label='Betz limit')
 axes6[2,0].set_ylabel(r"Local $C_p$ [-]")
 axes6[2,0].set_xlabel(r"Curvelinear radius [m]")
 axes6[2,0].grid(True, linestyle = ':')
+axes6[2,0].legend()
 
 axes6[2,1].plot(inds_data["s_m"], inds_data["CT"], color = colors[0])
 axes6[2,1].set_ylabel(r"Local $C_T$ [-]")
