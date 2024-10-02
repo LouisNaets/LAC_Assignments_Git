@@ -60,7 +60,7 @@ SF = IIIB.R / IA.R # Scaling factor Assuming linear scaling
 IIIB.r_hub = SF * IA.r_hub  # Hub radius [m]
 # IIIB.r = np.linspace(IIIB.r_hub, IIIB.R - 0.1, 40)  # Rotor span [m]
 IIIB.chord_max = SF * IA.chord_max  # Maximum chord size [m]
-IIIB.chord_root = SF * IA.chord_root  # Chord size at the root [m]
+IIIB.chord_root = IA.chord_root  # !! shouldn't be scaled !!
 
 # Determine chord and thickness for IA class from the _ae file
 file_path = r'hawc_files\dtu_10mw\data\DTU_10MW_RWT_ae.dat'
@@ -73,8 +73,8 @@ IA.t = IA.tc * IA.chord  # Absolute Thickness [m]
 # Upscale to IIIB class
 IIIB.r = SF * IA.r
 IIIB.chord = SF * IA.chord
-IIIB.tc = SF * IA.tc
-IIIB.t = SF*IA.t # Absolute Thickness [m]
+#IIIB.tc = SF * IA.tc
+IIIB.t = IA.t # Absolute Thickness [m] !!! should only be scaled in the x-direction, so the change in radius should just be adjusted instead of using SF here !!!
 
 print(f"Chord size at the root for IIIB class: {IIIB.chord_root:.2f} m")
 print(f"Maximum chord size for IIIB class: {IIIB.chord_max:.2f} m")
@@ -89,6 +89,7 @@ ax.grid(True, linestyle = ':')
 ax.legend()
 fig.tight_layout()
 fig.savefig('A1 Aeroelastic design/Figures/absolute_thickness.svg', format='svg')
+fig.savefig('A1 Aeroelastic design/Figures/absolute_thickness.png', format='png')
 
 '''
 Step 6: Choice of design lift and airfoils for 3 different airfoils
@@ -337,7 +338,7 @@ Step 8: Present your final chord, twist, and relative thickness distributions an
 
 # Final designs for chosen TSR = 7.5 and design function 3
 
-# !!! This wasn't actually required we just needed the original values for the DTU 10MW reference turbine
+# !! This wasn't actually required we just needed the original values for the DTU 10MW reference turbine
 # IA class 
 #IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
@@ -364,9 +365,9 @@ IIIB.chord, IIIB.tc, IIIB.twist, IIIB.cl, IIIB.cd, IIIB.aoa, IIIB.a, IIIB.CLT, I
 
 # Plot the chord, twist and relative-thickness of the DTU 10MW reference turbine and new IIIB design
 # Determine chord and thickness for IA class from the _ae file
-file_path = r'hawc_files\dtu_10mw\data\DTU_10MW_RWT_ae.dat'
+file_path = r'hawc_files\dtu_10mw\data\DTU_10MW_RWT_ae.dat' 
 data = np.loadtxt(file_path, skiprows=2, usecols=(0, 1, 2))
-IA.r = data[:, 0]  # Blade span [m]
+IA.r = data[:, 0]  # Blade span [m] - please note: the ae file starts after the hub
 IA.chord = data[:, 1]  # Chord length [m]
 IA.tc = data[:, 2]  # Thickness-to-chord ratio [-]
 IA.t = IA.tc/100 * IA.chord  # Absolute Thickness [m]
@@ -375,21 +376,21 @@ fig, axs = plt.subplots(3, 1, figsize=(10, 8))
 
 # Chord
 axs[0].plot(IA.r, IA.chord, label='DTU 10MW rotor')
-axs[0].plot(IIIB.r, IIIB.chord, label='New IIIB design')
+axs[0].plot(IIIB.r-IIIB.r_hub, IIIB.chord, label='New IIIB design')
 axs[0].set_ylabel("Chord [m]")
 axs[0].legend()
 axs[0].grid(True, linestyle = ':')
 
 # Twist
 axs[1].plot(IA.twist_r, IA.twist, label='DTU 10MW rotor')
-axs[1].plot(IIIB.r, IIIB.twist, label='New IIIB design')
+axs[1].plot(IIIB.r-IIIB.r_hub, IIIB.twist, label='New IIIB design')
 axs[1].set_ylabel(r"Twist [°]")
 # axs[1].legend()
 axs[1].grid(True, linestyle = ':')
 
 # Relative thickness
 axs[2].plot(IA.r, IA.tc, label='DTU 10MW rotor')
-axs[2].plot(IIIB.r, IIIB.tc, label='New IIIB design')
+axs[2].plot(IIIB.r-IIIB.r_hub, IIIB.tc, label='New IIIB design')
 axs[2].set_ylabel("Relative thickness [%]")
 axs[2].set_xlabel("Blade span [m]")
 # axs[2].legend()
@@ -398,10 +399,7 @@ axs[2].grid(True, linestyle = ':')
 plt.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.png', format='png')
 plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', format='svg')
-
-
-
-# plt.show()
+#plt.show()
 
 
 # %%
@@ -431,7 +429,9 @@ IIIB.htc_main_y = [7.00600E-05, -1.22119E-02, -2.49251E-02, -2.73351E-02, -2.821
 IIIB.htc_main_z = np.array(IA.htc_main_z)*SF
 IIIB.htc_main_twist = np.interp(IIIB.htc_main_z, IIIB.r, IIIB.twist)
 
-print_extra = 0
+#!!! haven't updated past this point after presentation !!!
+
+print_extra = 1
 if print_extra:
     print('Input for the htc main file:')
     for i in range(0, 27):
@@ -511,7 +511,7 @@ axes5[2,0].grid(True, linestyle = ':')
 
 axes5[0,1].plot(IIIB.r, IIIB.cl, color = colors[0], label='Design $C_l$')
 axes5[0,1].plot(ind_data["s_m"], ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
-axes5[0,1].set_ylabel("$a$ [-]")
+axes5[0,1].set_ylabel("$C_l$ [-]")
 axes5[0,1].set_xlim(0, 100)
 axes5[0,1].legend()
 axes5[0,1].grid(True, linestyle = ':')
@@ -776,14 +776,14 @@ axes10[0].grid(True, linestyle = ':')
 
 axes10[1].plot(flex_blade_st_dat.r[1:], flex_blade_st_dat.I_x_mass, color = colors[0], label = r'$I_x$')
 axes10[1].plot(flex_blade_st_dat.r[1:], flex_blade_st_dat.I_y_mass, color = colors[1], label = r'$I_y$')
-axes10[1].set_ylabel(r"Moment of inertia [kg$\cdot$m$^2$]")
+axes10[1].set_ylabel(r"Mass moment of inertia [kg$\cdot$m$^2$]")
 axes10[1].set_xlabel(r"Curvelinear radius [m]")
 axes10[1].legend()
 axes10[1].grid(True, linestyle = ':')
 
 # Save the figure
 fig10.tight_layout()
-plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.png', format='png')
 
 
 

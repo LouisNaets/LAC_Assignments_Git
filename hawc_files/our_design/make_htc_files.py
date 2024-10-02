@@ -49,3 +49,12 @@ if __name__ == '__main__':
                     minpitch=0,
                     opt_lambda=7.5,
                     genspeed=(0, 431.35))
+    # make flexible hawc2s file
+    htc = MyHTC(ORIG_PATH)
+    htc.make_hawc2s(SAVE_HAWC2S_DIR,
+                    rigid=False,
+                    append='_flex',
+                    opt_path='./data/group7_3B_design_flex.opt',
+                    minpitch=0,
+                    opt_lambda=7.5,
+                    genspeed=(0, 431.35))
