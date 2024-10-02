@@ -5,13 +5,13 @@ Requires myteampack (which requires lacbox).
 from myteampack import MyHTC
 
 if __name__ == '__main__':
-    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design_old_st.htc'
+    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design_old_st_AFTER_PRESENTATION.htc'
     SAVE_HAWC2S_DIR = './hawc_files/our_design'
     # make rigid hawc2s file for single-wsp opt file
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
-                    append='_hawc2s_1wsp',
+                    append='_hawc2s_1wsp_AFTER_PRESENTATION',
                     opt_path='./data/group7_3B_design_1wsp.opt',
                     compute_steady_states=True,
                     save_power=True,
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
-                    append='_hawc2s_multitsr',
+                    append='_hawc2s_multitsr_AFTER_PRESENTATION',
                     opt_path='./data/group7_3B_design_multitsr.opt',
                     compute_steady_states=True,
                     save_power=True,
@@ -31,19 +31,19 @@ if __name__ == '__main__':
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=True,
-                    append='_compute_rigid_opt',
+                    append='_compute_rigid_opt_AFTER_PRESENTATION',
                     opt_path='./data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
                     opt_lambda=7.5,
                     genspeed=(0, 431.35))
     
-    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
+    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design_AFTER_PRESENTATION.htc'
     # make flexible hawc2s file for new opt file
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=False,
-                    append='_compute_flex_opt',
+                    append='_compute_flex_opt_AFTER_PRESENTATION',
                     opt_path='./data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=False,
                     append='_flex',
-                    opt_path='./data/group7_3B_design_flex.opt',
+                    opt_path='./data/group7_3B_design_flex_AFTER_PRESENTATION.opt',
                     minpitch=0,
                     opt_lambda=7.5,
                     genspeed=(0, 431.35))

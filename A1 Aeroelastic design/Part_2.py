@@ -328,6 +328,7 @@ plt.ylabel(r"$C_p$ [-]")
 plt.grid(True, linestyle = ':')
 plt.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.png', format='png')
 
 # TSR 7.5 is chosen
 tsr = 7.5
@@ -440,10 +441,14 @@ if print_extra:
     print('Input for the ae.dat file:')
     for i in range(0,len(IIIB.r)):
         #This if-statement is required because from the ae.dat file we need a point a 0m, therefor this assumption is used.
-        if i == 0:
-            print('0\t' + str(round(IIIB.chord[i], 7)) + '\t100\t1\t;')
-        else:
-            print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1]*100, 7)) + '\t1\t;')
+        #if i == 0:
+        #    print('0\t' + str(round(IIIB.chord[i], 7)) + '\t100\t1\t;')
+        #else:
+        #    print(str(round(IIIB.r[i-1], 7)) + '\t' + str(round(IIIB.chord[i-1], 7)) + '\t' + str(round(IIIB.t[i-1]/IIIB.chord[i-1]*100, 7)) + '\t1\t;')
+        
+        #New version - remember to remove r_hub for ae file
+        print(str(round(IIIB.r[i]-IIIB.r_hub, 7)) + '\t' + str(round(IIIB.chord[i], 7)) + '\t' + str(max(round(IIIB.t[i]/IIIB.chord[i]*100, 7), 24.1)) + '\t1\t;')
+
 
 print('Omegas for the opt files')
 for tsr_opt in np.arange(6, 10.1, 0.5):
@@ -718,7 +723,7 @@ new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
 
 save_st("./hawc_files/our_design/data/group7_3B_design_Blade_st.dat", new_ST_data)
 
-opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
+opt_path = './hawc_files/our_design/data/group7_3B_design_flex_AFTER_PRESENTATION.opt'
 flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class f_opt:
@@ -809,7 +814,7 @@ axes11[1].grid(True, linestyle = ':')
 # Save the figure
 fig11.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part4/4.2.svg', format='svg')
-
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.2.png', format='png')
 
 
 '''FIGURE 4.3'''
@@ -843,3 +848,4 @@ axes12[1].grid(True, linestyle = ':')
 # Save the figure
 fig12.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.png', format='png')
