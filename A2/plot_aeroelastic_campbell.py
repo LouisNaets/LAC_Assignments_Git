@@ -3,15 +3,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from lacbox.io import load_cmb
+from lacbox.io import load_cmb, load_amp
+from lacbox.vis import plot_amp
 
 
-TURBINE_NAME = 'DTU 10 MW'
-CMB_PATH = './A2/dtu_10mw_aeroelastic.cmb'
+TURBINE_NAME = 'Redesigned IIIB climate turbine'
+CMB_PATH = './A2/group7_aeroelastic.cmb'
 NMODES = 8  # number of modes to plot
-MODE_NAMES = ['Mode 2', 'Mode 3', 'Mode 4', 'Mode 5', 'Mode 6',
-              'Mode 7', 'Mode 8', 'Mode 9', 'Mode 10', 'Mode 11',
-              'Mode 12']
+MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
+              '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
+              '1st edge SYM']
 OPT_PATH = None  # path to opt file, needed for P-harmonics
 
 # load campbell diagram
@@ -45,4 +46,26 @@ axs[1].legend(bbox_to_anchor=(1.02, 0.5), loc='center left')
 fig.suptitle(f'Aeroelastic Campbell diagram for {TURBINE_NAME}')
 fig.tight_layout()
 
-plt.show()
+fig.savefig('A2/Figures/Campbell_aeroelastic.svg', format='svg')
+fig.savefig('A2/Figures/Campbell_aeroelastic.png', format='png')
+
+nmodes = dfreqs.shape[1]  # get number of modes
+mode_names = [f'Mode {i}' for i in range(1, nmodes+1)]  # list of mode shape names
+
+# Path to the .amp file
+amp_path = './A2/group7_aeroelastic_amp.amp'
+
+# Load the modal amplitudes
+amp_df = load_amp(amp_path)
+#print(amp_df.shape)
+#print(amp_df)
+
+#print(amp_df.index)
+#amp_df.head()
+
+wsp = 11.1  # rated wind speed
+
+fig, ax = plot_amp(amp_df, mode_names, wsp, title=f'Redesigned IIIB climate turbine aeroelastic modal amplitudes at ~{wsp:.0f} m/s')
+
+fig.savefig('A2/Figures/Campbell_aeroelastic_modal_amplitudes.svg', format='svg')
+fig.savefig('A2/Figures/Campbell_aeroelastic_modal_amplitudes.png', format='png')

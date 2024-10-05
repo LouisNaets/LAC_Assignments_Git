@@ -10,13 +10,16 @@ Note:
 import matplotlib.pyplot as plt
 import numpy as np
 
-from lacbox.io import load_cmb
+from lacbox.io import load_cmb, load_amp
+from lacbox.vis import plot_amp
+from plot_amp_custom import plot_amp_rpm
 
 
-TURBINE_NAME = 'DTU 10 MW'
-CMB_PATH = './A2/dtu_10mw_structural.cmb'
-MODE_NAMES = ['Mode 2', 'Mode 3', 'Mode 4', 'Mode 5', 'Mode 6',
-              'Mode 7', 'Mode 8', 'Mode 9']
+TURBINE_NAME = 'Redesigned IIIB climate turbine'
+CMB_PATH = './A2/group7_structural.cmb'
+MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
+              '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
+              '1st edge SYM']
 DT_MODENUM = 9  # what mode number in HAWCStab2 is the drivetrain mode?
 # define turbine natural frequency? blade-only natural frequencies?
 
@@ -57,4 +60,24 @@ ax.legend(bbox_to_anchor=(1.02, 0.5), loc='center left')
 fig.suptitle(f'Structural Campbell diagram for {TURBINE_NAME}')
 fig.tight_layout()
 
-plt.show()
+fig.savefig('A2/Figures/Campbell_structural.svg', format='svg')
+fig.savefig('A2/Figures/Campbell_structural.png', format='png')
+
+nmodes = dfreqs.shape[1]  # get number of modes
+mode_names = [f'Mode {i}' for i in range(1, nmodes+1)]  # list of mode shape names
+
+# Path to the .amp file
+amp_path = './A2/group7_structural_amp.amp'
+
+# Load the modal amplitudes
+amp_df = load_amp(amp_path)
+
+#print(amp_df.index)
+#amp_df.head()
+
+rpm = 0.279253E+00  # rotational speed
+
+fig, ax = plot_amp_rpm(amp_df, mode_names, rpm, title=f'Redesigned IIIB climate turbine structural modal amplitudes at ~{rpm*60/(2*np.pi):.0f} RPM')
+
+fig.savefig('A2/Figures/Campbell_structural_modal_amplitudes.svg', format='svg')
+fig.savefig('A2/Figures/Campbell_structural_modal_amplitudes.png', format='png')
