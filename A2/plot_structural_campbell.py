@@ -92,7 +92,7 @@ for i in range(len(simple_freqs)):
             c = color  # Use the defined color
             break
     ax.plot(omega_rpm, simple_freqs[i], c=c, linewidth=0.75, linestyle='--')#, mfc='none', ms=5, marker=m, markeredgewidth=0.65)
-
+ax.plot(0, 0, c='black', linewidth=0.75, linestyle='--',label = 'Theory')
 
 #Plotting P harmonics 1, 3, and 6
 P_harmonics = [omega_rpm/60*1, omega_rpm/60*3, omega_rpm/60*6]
