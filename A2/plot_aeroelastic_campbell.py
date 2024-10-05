@@ -5,6 +5,7 @@ import numpy as np
 
 from lacbox.io import load_cmb, load_amp
 from lacbox.vis import plot_amp
+from lacbox.io import load_st
 
 
 TURBINE_NAME = 'Redesigned IIIB climate turbine'
@@ -18,22 +19,51 @@ OPT_PATH = None  # path to opt file, needed for P-harmonics
 # load campbell diagram
 wsp, dfreqs, zetas = load_cmb(CMB_PATH, cmb_type='aeroelastic')
 
+# Define custom color and marker groups for specific mode ranges
+color_marker_map = {
+    (0, 1): ('tab:blue', ['o', 'x']), 
+    (2, 3, 4): ('tab:orange', ['o', 'x', '^']),  
+    (5, 6, 10): ('tab:green', ['o', 'x', '^']),   
+    (7, 8, 9): ('tab:red', ['o', 'x', '^'])             
+}
+
 # initialize plot
-fig, axs = plt.subplots(1, 2, figsize=(9.5, 4))
+fig, axs = plt.subplots(1, 2, figsize=(9.5, 4), dpi=500)
 
 # loop through modes
 NMODES = len(MODE_NAMES)
 for i in range(NMODES):
-    # add a custom color or marker for each mode?
-    m, c = '.', f'C{i}'
+    # Set default marker and color
+    m = '.'
+    c = 'tab:gray'
+    # Find the corresponding color and marker for this mode
+    for mode_range, (color, markers) in color_marker_map.items():
+        if i in mode_range:
+            m = markers[mode_range.index(i)]  # Get the specific marker
+            c = color  # Use the defined color
+            break
 
     # left plot: damped nat freqs in ground-fixed frame
-    axs[0].plot(wsp, dfreqs[:, i], marker=m, c=c)
+    axs[0].plot(wsp, dfreqs[:, i], marker=m, c=c, mfc='none', ms=5, linewidth=0.75, markeredgewidth=0.65)
 
     # right plot: percent criticl damping
-    axs[1].plot(wsp, zetas[:, i], marker=m, c=c, label=MODE_NAMES[i])
+    axs[1].plot(wsp, zetas[:, i], marker=m, label=MODE_NAMES[i], c=c, mfc='none', ms=5, linewidth=0.75, markeredgewidth=0.65)
 
 # load opt file, add P-harmonics?
+opt_path = './A2/group7_3B_design_flex.opt'
+flex_opt_data = np.loadtxt(opt_path, skiprows=1)
+
+class f_opt:
+    V_o = flex_opt_data[:, 0]
+    omega = flex_opt_data[:, 2]
+
+#Plotting P harmonics 1, 3, and 6
+P_harmonics = [f_opt.omega/60*1, f_opt.omega/60*3, f_opt.omega/60*6]
+for i in range(len(P_harmonics)):
+    axs[0].plot(f_opt.V_o, P_harmonics[i], linewidth=0.85, c='tab:gray')
+    if i == 1:
+        axs[0].plot(f_opt.V_o, P_harmonics[i], linewidth=0.85, c='tab:gray', label='1P, 3P, 6P')
+        axs[1].plot(5, 0, linewidth=0.85, c='tab:gray', label='1P, 3P, 6P') #for the legend
 
 # prettify
 axs[0].set(xlabel='Wind speed [m/s]', ylabel='Damped nat. frequencies [Hz]')
