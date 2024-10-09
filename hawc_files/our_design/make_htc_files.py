@@ -50,26 +50,12 @@ if __name__ == '__main__':
                     opt_lambda=7.5,
                     genspeed=(0, 431.35))
     
-    # make flexible hawc2s file (for A2) - outcommented for now to not mess with the file
-    #htc = MyHTC(ORIG_PATH)
-    #htc.make_hawc2s(SAVE_HAWC2S_DIR,
-    #                rigid=False,
-    #                append='_flex',
-    #                opt_path='./data/group7_3B_design_flex.opt',
-    #                minpitch=0,
-    #                opt_lambda=7.5,
-    #                genspeed=(0, 431.35))
-    
-    # make flexible hawc2s which also creates cmb and amp files file (for A2)
+    # make flexible hawc2s file (for A2)
     htc = MyHTC(ORIG_PATH)
     htc.make_hawc2s(SAVE_HAWC2S_DIR,
                     rigid=False,
-                    append='_flex_part2',
+                    append='_flex',
                     opt_path='./data/group7_3B_design_flex.opt',
                     minpitch=0,
                     opt_lambda=7.5,
-                    genspeed=(0, 431.35),
-                    compute_steady_states=True,
-                    compute_stability_analysis=True,
-                    save_modal_amplitude=True)
-    
+                    genspeed=(0, 431.35))

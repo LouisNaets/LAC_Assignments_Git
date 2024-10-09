@@ -333,7 +333,7 @@ begin aero ;  aerodynamic forces
   link 1 mbdy_c2_def blade1;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
-  ae_filename        ./data/group7_3B_design_ae.dat ; !! UPDATED !!
+  ae_filename        ./data/group7_3B_design_ae_AFTER_PRESENTATION.dat ; !! UPDATED !!
   pc_filename        ./data/DTU_10MW_RWT_pc.dat ;
   induction_method   1 ;     0=none, 1=normal
   aerocalc_method    1 ;     0=no aero calculations, 1=with aero calculations
