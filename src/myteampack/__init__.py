@@ -17,7 +17,7 @@ class MyHTC(HTCFile):
     def _add_ctrltune_block(self, partial_load=(0.05, 0.7),  # pylint:disable=unused-argument
                             full_load=(0.06, 0.7),
                             gain_scheduling=2, constant_power=1,
-                            regions=(5, 10, 12, 31), **kwargs):
+                            regions=(1, 10, 12, 31), **kwargs):
         """Add a controller-tuning block to HAWC2S file. See HAWCStab2
         manual for explanation of input parameters.
         """
@@ -30,7 +30,7 @@ class MyHTC(HTCFile):
         ctrltune.add_line(name='constant_power', values=[constant_power], comments='0 constant torque, 1 constant power at full load')
         ctrltune.add_line(name='regions', values=regions, comments='Index of opt point (starting from 1) where new ctrl region starts')
 
-    def _add_hawc2s_commands(self, rigid, tipcorr=True, induction=True,
+    def _add_hawc2s_commands(self, rigid, gradient, tipcorr=True, induction=True,
                              num_modes=12, **kwargs):
         """Add commands for HAWC2S to end of hawcstab2 block.
         
@@ -41,6 +41,7 @@ class MyHTC(HTCFile):
         defl_key = ['', 'no'][rigid]  # blade deformation or no?
         tipcorr_key = ['no', ''][tipcorr]  # tip correction or no?
         ind_key = ['no', ''][induction]  # induction or no?
+        grad_key = ['no', ''][gradient]  # gradients or no?
         # add the pre-amble and output folder
         self.hawcstab2.add_line(name='', values=[''], comments='\n; HAWC2S commands (uncomment as needed)')
         self.hawcstab2.add_line(name='output_folder', values=['res_hawc2s'], comments='define the folder where generated files should be saved')
@@ -48,7 +49,7 @@ class MyHTC(HTCFile):
         hawc2s_commands = {'compute_optimal_pitch_angle': [['use_operational_data'],
                                                            're-calculate and save opt file (pitch/rotor speed curve)'],
                            'compute_steady_states': [[f'{defl_key}bladedeform', f'{tipcorr_key}tipcorrect',
-                                                      f'{ind_key}induction', 'nogradients'],
+                                                      f'{ind_key}induction', f'{grad_key}gradients'],
                                                      'compute steady states -- needed for aeroelastic calculations'],
                            'save_power': [[''], 'save steady-state values to .pwr'],
                            'save_induction': [[''], 'save steady-state spanwise values to .ind files, 3 for each wind speed'],
@@ -134,10 +135,10 @@ class MyHTC(HTCFile):
         self._update_name_and_save(save_dir, append)
         print(f'File "{append}" saved.')
 
-    def make_hawc2s_ctrltune(self, save_dir, rigid, append, opt_path,
-                    genspeed=(0, 480), minpitch=(0), opt_lambda=(8),
+    def make_hawc2s_ctrltune(self, save_dir, rigid, gradient, append, opt_path,
+                    genspeed=(0, 480), minpitch=(0), opt_lambda=(8), gearratio=(1),
                     partial_load=(0.05, 0.7), full_load=(0.06, 0.7),
-                    gain_scheduling=2, constant_power=1, regions=(5, 10, 12, 31), **kwargs):
+                    gain_scheduling=2, constant_power=1, regions=(1, 10, 12, 31), **kwargs):
         """Make a HAWC2S file with specific settings.
 
         Args:
@@ -153,7 +154,7 @@ class MyHTC(HTCFile):
             full_load (tuple, optional): Full load parameters. Defaults to (0.06, 0.7).
             gain_scheduling (int, optional): Gain scheduling parameter. Defaults to 2.
             constant_power (int, optional): Constant power parameter. Defaults to 1.
-            regions (tuple, optional): Regions parameter. Defaults to (5, 10, 12, 31).
+            regions (tuple, optional): Regions parameter. Defaults to (1, 10, 12, 31).
         """
         # verify the file has hawcstab2 block
         self._check_hawcstab2()
@@ -168,10 +169,12 @@ class MyHTC(HTCFile):
         self.hawcstab2.operational_data.genspeed = genspeed
         # update the minimum pitch
         self.hawcstab2.operational_data.minpitch = minpitch
+        # update the gear ratio
+        self.hawcstab2.operational_data.gearratio = gearratio
         # update the tsr
         self.hawcstab2.operational_data.opt_lambda = opt_lambda
         # add hawc2s commands
-        self._add_hawc2s_commands(rigid=rigid, **kwargs)
+        self._add_hawc2s_commands(rigid=rigid, gradient=gradient, **kwargs)
         # add controller tuning block
         self._add_ctrltune_block(partial_load=partial_load, full_load=full_load,
                                  gain_scheduling=gain_scheduling, constant_power=constant_power,
