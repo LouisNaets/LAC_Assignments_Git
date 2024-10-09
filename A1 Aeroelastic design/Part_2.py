@@ -723,7 +723,7 @@ new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
 
 save_st("./hawc_files/our_design/data/group7_3B_design_Blade_st.dat", new_ST_data)
 
-opt_path = './hawc_files/our_design/data/group7_3B_design_flex_AFTER_PRESENTATION.opt'
+opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
 flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class f_opt:

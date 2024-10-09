@@ -10,7 +10,9 @@ if __name__ == '__main__':
 
     # make htc file for tuning controller parameters
     htc = MyHTC(ORIG_PATH)
-    htc.make_hawc2s_ctrltune(save_dir=SAVE_HAWC2S_DIR,
+    htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
                     rigid=False,
                     append='_controller_tuning',
-                    opt_path='./data/dtu_10mw_rigid.opt')
+                    opt_path='./data/dtu_10mw_rigid.opt',
+                    partial_load=(0.05, 0.7),
+                    full_load=(0.06, 0.7))
