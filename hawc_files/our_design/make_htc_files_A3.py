@@ -23,3 +23,34 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
+
+    omega_Omegas = [0.05, 0.01, 0.1]
+    for idx, omega in enumerate(omega_Omegas, start=1):
+        htc = MyHTC(ORIG_PATH)
+        append_str = f'_A3_part2_C{idx}'
+        htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
+                    rigid=False,
+                    gradient = True,
+                    append=append_str,
+                    opt_path='./data/group7_3B_design_flex.opt',
+                    opt_lambda=7.5,
+                    constant_power=1,
+                    full_load=(omega, 0.7),
+                    compute_steady_states=True,
+                    save_power=True,
+                    compute_controller_input=True)
+        
+    for idx, omega in enumerate(omega_Omegas, start=4):
+        htc = MyHTC(ORIG_PATH)
+        append_str = f'_A3_part2_C{idx}'
+        htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
+                    rigid=False,
+                    gradient = True,
+                    append=append_str,
+                    opt_path='./data/group7_3B_design_flex.opt',
+                    opt_lambda=7.5,
+                    constant_power=0,
+                    full_load=(omega, 0.7),
+                    compute_steady_states=True,
+                    save_power=True,
+                    compute_controller_input=True)
