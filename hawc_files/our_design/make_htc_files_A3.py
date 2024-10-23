@@ -55,7 +55,9 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
-        
+    
+    #Part 3 requires a new subfolder for saving htc files
+    SAVE_HAWC2S_DIR = './hawc_files/our_design/htc'
     cp_dict = load_ctrl_txt('./hawc_files/our_design/res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
     htc = MyHTC(ORIG_PATH)
     htc.make_step(save_dir=SAVE_HAWC2S_DIR,
