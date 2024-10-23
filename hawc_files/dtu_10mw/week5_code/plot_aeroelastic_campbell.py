@@ -7,7 +7,7 @@ from lacbox.io import load_cmb
 
 
 TURBINE_NAME = 'DTU 10 MW'
-CMB_PATH = './dtu_10mw_aeroelastic.cmb'
+CMB_PATH = 'dtu_10mw_aeroelastic.cmb'
 NMODES = 8  # number of modes to plot
 MODE_NAMES = ['Mode 2', 'Mode 3', 'Mode 4', 'Mode 5', 'Mode 6',
               'Mode 7', 'Mode 8', 'Mode 9', 'Mode 10', 'Mode 11',
@@ -44,5 +44,5 @@ axs[1].legend(bbox_to_anchor=(1.02, 0.5), loc='center left')
 # add figure title and scale nicely
 fig.suptitle(f'Aeroelastic Campbell diagram for {TURBINE_NAME}')
 fig.tight_layout()
-
+fig.savefig(f'./Figures/Aeroelastic_campbell.svg', format='svg')
 plt.show()
