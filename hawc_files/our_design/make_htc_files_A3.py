@@ -3,10 +3,50 @@
 Requires myteampack (which requires lacbox).
 """
 from myteampack import MyHTC
+from pathlib import Path
+from lacbox.io import load_ctrl_txt
+from lacbox.test import test_data_path
 
 if __name__ == '__main__':
     ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
     SAVE_HAWC2S_DIR = './hawc_files/our_design'
+
+    # load ctrl tuning data to dictionary
+    fname = Path(test_data_path) / 'group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+    ctrltune_dict = load_ctrl_txt(fname)
+
+    print('DICTIONARY KEYS:\n---------------------')
+    [print(s) for s in ctrltune_dict.keys()]
+    print('\nAERO_GAINS KEYS:\n---------------------')
+    [print(s) for s in ctrltune_dict['aero_gains'].columns]
+
+    # print the keys
+    """  print('DICTIONARY KEYS:\n---------------------')
+    [print(s) for s in ctrltune_dict.keys()]
+    print('\nAERO_GAINS KEYS:\n---------------------')
+    [print(s) for s in ctrltune_dict['aero_gains'].columns];
+    DICTIONARY KEYS:
+    ---------------------
+    K_Nm/(rad/s)^2
+    Irotor_kg*m^2
+    KpTrq_Nm/(rad/s)
+    KiTrq_Nm/rad
+    KpPit_rad/(rad/s)
+    KiPit_rad/rad
+    K1_deg
+    K2_deg^2
+    Kp2_rad/(rad/s)
+    Ko1_deg
+    Ko2_deg^2
+    aero_gains
+
+    AERO_GAINS KEYS:
+    ---------------------
+    dq/dtheta_kNm/deg
+    fit_kNm/deg
+    dq/domega_kNm/(rad/s)
+    fit_kNm/(rad/s) """
+    """ 
 
     # make htc file for tuning controller parameters
     htc = MyHTC(ORIG_PATH)
@@ -53,4 +93,4 @@ if __name__ == '__main__':
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
                     save_power=True,
-                    compute_controller_input=True)
+                    compute_controller_input=True) """
