@@ -5,21 +5,20 @@ Requires myteampack (which requires lacbox).
 from myteampack import MyHTC
 from pathlib import Path
 from lacbox.io import load_ctrl_txt
-from lacbox.test import test_data_path
 
 if __name__ == '__main__':
     ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
     SAVE_HAWC2S_DIR = './hawc_files/our_design'
 
     # load ctrl tuning data to dictionary
-    fname = './hawc_files/our_design/res_hawc2s/'+'group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+    fname = './hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
     ctrltune_dict = load_ctrl_txt(fname)
 
     print('DICTIONARY KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict.keys()]
     print('\nAERO_GAINS KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict['aero_gains'].columns]
-
+    
     # print the keys
     """  print('DICTIONARY KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict.keys()]
