@@ -5,10 +5,12 @@ Requires myteampack (which requires lacbox).
 from myteampack import MyHTC
 from lacbox.io import load_ctrl_txt
 from pathlib import Path
+import os 
 
 if __name__ == '__main__':
-    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
-    SAVE_HAWC2S_DIR = './hawc_files/our_design'
+    # ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
+    ORIG_PATH = 'C:/Users/hrara/Downloads/LAC_Assignments_Git/hawc_files/our_design/_master/group7_3B_design.htc'
+    SAVE_HAWC2S_DIR = './'
     file_path = './res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt'
     # make htc file for tuning controller parameters
     # htc = MyHTC(ORIG_PATH)
@@ -56,7 +58,18 @@ if __name__ == '__main__':
     #                 compute_steady_states=True,
     #                 save_power=True,
     #                 compute_controller_input=True)
+    cp_dict = load_ctrl_txt(file_path)
+    htc = MyHTC(ORIG_PATH)
+    htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append="part_3",
+                  cp_dict=cp_dict, 
+                  t_start=0.,
+                  t_end=880.,
+                  start_wsp=10.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 880, 4, 25))
 
-    a = load_ctrl_txt(file_path)
-    print(a.keys())
-    print(a)
+
