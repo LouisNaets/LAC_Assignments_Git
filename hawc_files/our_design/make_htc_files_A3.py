@@ -70,6 +70,6 @@ if __name__ == '__main__':
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 880, 4, 25))
+                  wind_ramp_abs=((0, 880, 4, 25)))
 
 

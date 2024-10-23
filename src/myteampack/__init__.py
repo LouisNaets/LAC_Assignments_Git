@@ -185,17 +185,17 @@ class MyHTC(HTCFile):
     
     def _update_ctrl_params(self, cp_dict:dict):
         cp = self.dll.type2_dll__1.init # control param 
-        cp.constant__2 = 0 #min rotor compute
-        cp.constant__3 = 0.903 # rated rotor 8.627 RPM
-        cp.constant__4 = 0 # max gen torque need to compute
-        cp.constant__5 = 0 # min pitch
-        cp.constant__11 = cp_dict["K_Nm/(rad/s)^2"] 
-        cp.constant__12 = cp_dict["KpTrq_Nm/(rad/s)"]
-        cp.constant__13 = cp_dict["KiTrq_Nm/rad"]
-        cp.constant__16 = cp_dict["KpPit_rad/(rad/s)"]
-        cp.constant__17 = cp_dict["KiPit_rad/rad"]
-        cp.constant__21 = cp_dict["K1_deg"]
-        cp.constant__22 = cp_dict["K2_deg^2"]
+        cp.constant__2 = [2, 0] #min rotor compute
+        cp.constant__3 = [3, 0.903] # rated rotor 8.627 RPM
+        cp.constant__4 = [4, 0] # max gen torque need to compute
+        cp.constant__5 = [5,0] # min pitch
+        cp.constant__11 = [11, cp_dict["K_Nm/(rad/s)^2"]] 
+        cp.constant__12 = [12, cp_dict["KpTrq_Nm/(rad/s)"]]
+        cp.constant__13 = [13, cp_dict["KiTrq_Nm/rad"]]
+        cp.constant__16 = [16, cp_dict["KpPit_rad/(rad/s)"]]
+        cp.constant__17 = [17, cp_dict["KiPit_rad/rad"]]
+        cp.constant__21 = [21, cp_dict["K1_deg"]]
+        cp.constant__22 = [22, cp_dict["K2_deg^2"]]
 
 
     def make_step(self, save_dir,  append, cp_dict, t_start:float, t_end:float, start_wsp:float, tint:float, turb_format:int, 
@@ -211,6 +211,6 @@ class MyHTC(HTCFile):
         self.wind.turb_format = turb_format 
         self.wind.tower_shadow_method = tower_shadow_method
         self.wind.wind_ramp_abs = wind_ramp_abs
-
+        
         self._update_name_and_save(save_dir, append)
         print(f'File "{append}" saved.')
