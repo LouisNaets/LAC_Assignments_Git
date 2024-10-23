@@ -9,16 +9,17 @@ from lacbox.io import load_ctrl_txt
 if __name__ == '__main__':
     ORIG_PATH = './_master/group7_3B_design.htc'
     SAVE_HAWC2S_DIR = './'
+    SAVE_HAWC2_DIR = './htc/'
 
      # load ctrl tuning data to dictionary
-    fname = './res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+    """     fname = './res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
     ctrltune_dict = load_ctrl_txt(fname)
 
     print('DICTIONARY KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict.keys()]
     print('\nAERO_GAINS KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict['aero_gains'].columns]
-    
+     """
     # print the keys
     """  print('DICTIONARY KEYS:\n---------------------')
     [print(s) for s in ctrltune_dict.keys()]
@@ -79,10 +80,13 @@ if __name__ == '__main__':
                     save_power=True,
                     compute_controller_input=True)
         #adding data from C#_ctrl_tuning.txt
+        htc = MyHTC(ORIG_PATH)
         fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
+        print('DICTIONARY KEYS:\n---------------------')
+        [print(s) for s in ctrltune_dict.keys()]
         append_str = f'_A3_part3_C{idx}'
-        htc.make_step(SAVE_HAWC2S_DIR,
+        htc.make_step(SAVE_HAWC2_DIR,
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
@@ -109,10 +113,11 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
+        htc = MyHTC(ORIG_PATH)
         fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         append_str = f'_A3_part3_C{idx}'
-        htc.make_step(SAVE_HAWC2S_DIR,
+        htc.make_step(SAVE_HAWC2_DIR,
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
@@ -123,7 +128,7 @@ if __name__ == '__main__':
                   shear_format=(3,0),
                   tower_shadow_method=0,
                   wind_ramp_abs=(0, 880, 4, 25))
-"""         
+    """         
     htc = MyHTC(ORIG_PATH)
     htc.make_step(SAVE_HAWC2S_DIR,
                   append="part_3",
