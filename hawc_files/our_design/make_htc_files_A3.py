@@ -7,11 +7,11 @@ from pathlib import Path
 from lacbox.io import load_ctrl_txt
 
 if __name__ == '__main__':
-    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
-    SAVE_HAWC2S_DIR = './hawc_files/our_design'
+    ORIG_PATH = './_master/group7_3B_design.htc'
+    SAVE_HAWC2S_DIR = './'
 
-    # load ctrl tuning data to dictionary
-    fname = './hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+     # load ctrl tuning data to dictionary
+    fname = './res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
     ctrltune_dict = load_ctrl_txt(fname)
 
     print('DICTIONARY KEYS:\n---------------------')
@@ -78,6 +78,22 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
+        #adding data from C#_ctrl_tuning.txt
+        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        append_str = f'_A3_part3_C{idx}'
+        htc.make_step(SAVE_HAWC2S_DIR,
+                  append=append_str,
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=880.,
+                  start_wsp=10.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 880, 4, 25))
+
         
     for idx, omega in enumerate(omega_Omegas, start=4):
         htc = MyHTC(ORIG_PATH)
@@ -93,3 +109,30 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
+        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        append_str = f'_A3_part3_C{idx}'
+        htc.make_step(SAVE_HAWC2S_DIR,
+                  append=append_str,
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=880.,
+                  start_wsp=10.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 880, 4, 25))
+"""         
+    htc = MyHTC(ORIG_PATH)
+    htc.make_step(SAVE_HAWC2S_DIR,
+                  append="part_3",
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=880.,
+                  start_wsp=10.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 880, 4, 25)) """

@@ -185,7 +185,7 @@ class MyHTC(HTCFile):
 
 
     def _update_ctrl_params(self, cp_dict:dict):
-        cp = self.dll.type_2_dll__1.init # control param 
+        cp = self.dll.type2_dll__1.init # control param 
         cp.constant__2 = 0 #min rotor compute
         cp.constant__3 = 0.903 # rated rotor 8.627 RPM
         cp.constant__4 = None # max gen torque need to compute
@@ -199,8 +199,19 @@ class MyHTC(HTCFile):
         cp.constant__22 = cp_dict["K2_deg^2"]
 
 
-    def make_step(self, cp_dict ):
+    def make_step(self, save_dir,  append, cp_dict, t_start:float, t_end:float, start_wsp:float, tint:float, turb_format:int, 
+                  shear_format, tower_shadow_method:int, wind_ramp_abs):
         
         #update control parameterse
         self._update_ctrl_params(cp_dict)
         del self.hawcstab2
+        self.simulation.time_stop = (t_end-t_start)+100
+        self.wind.wsp = start_wsp
+        self.wind.tint = tint
+        self.wind.shear_format = shear_format
+        self.wind.turb_format = turb_format 
+        self.wind.tower_shadow_method = tower_shadow_method
+        self.wind.wind_ramp_abs = wind_ramp_abs
+
+        self._update_name_and_save(save_dir, append)
+        print(f'File "{append}" saved.')
