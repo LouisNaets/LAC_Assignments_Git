@@ -12,7 +12,7 @@ if __name__ == '__main__':
     SAVE_HAWC2S_DIR = './hawc_files/our_design'
 
     # load ctrl tuning data to dictionary
-    fname = Path(test_data_path) / 'group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+    fname = './hawc_files/our_design/res_hawc2s/'+'group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
     ctrltune_dict = load_ctrl_txt(fname)
 
     print('DICTIONARY KEYS:\n---------------------')
@@ -46,11 +46,11 @@ if __name__ == '__main__':
     fit_kNm/deg
     dq/domega_kNm/(rad/s)
     fit_kNm/(rad/s) """
-    """ 
+    
 
     # make htc file for tuning controller parameters
     htc = MyHTC(ORIG_PATH)
-    # print(dir(htc))  # Check if make_hawc2s_ctrltune exists
+    print(dir(htc))  # Check if make_hawc2s_ctrltune exists
 
     htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
                     rigid=False,
@@ -93,4 +93,4 @@ if __name__ == '__main__':
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
                     save_power=True,
-                    compute_controller_input=True) """
+                    compute_controller_input=True)
