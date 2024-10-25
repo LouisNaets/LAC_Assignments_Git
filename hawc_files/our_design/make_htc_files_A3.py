@@ -75,7 +75,7 @@ if __name__ == '__main__':
                   tower_shadow_method=0,
                   wind_ramp_abs=(0, 1862, 4, 25))
 
-    for idx in range(1,7):
+    for idx in range(1,3):
         htc = MyHTC(ORIG_PATH)
         fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
