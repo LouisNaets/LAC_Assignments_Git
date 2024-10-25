@@ -218,7 +218,7 @@ class MyHTC(HTCFile):
         for v_o in range(wind_ramp_abs[3], wind_ramp_abs[2], -1): #go backwards
             i = last_i + (wind_ramp_abs[3] - v_o)               # continue couting up from the ramp-up
             self.wind.add_line('wind_ramp_abs', values=(99+41*i, 100+41*i, 0, -1), comments=f'wsp after step {v_o-1}')
-        for xN in range(40+i):
-            self.wind.add_line('wind_ramp_abs', values=(99+41*i, 100+41*i, 0, 0), comments=f'wsp after step {v_o-1}')
+        #for xN in range(5+i):
+        self.wind.add_line('wind_ramp_abs', values=(99+41*i, 100+40+41*i, 0, 0), comments=f'wsp after step {v_o-1}')
         self._update_name_and_save(save_dir, append)
         print(f'File "{append}" saved.')

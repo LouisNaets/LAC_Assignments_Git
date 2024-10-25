@@ -90,13 +90,13 @@ if __name__ == '__main__':
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
-                  t_end=1882.,
+                  t_end=1862.,
                   start_wsp=10.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 1882, 4, 25))
+                  wind_ramp_abs=(0, 1862, 4, 25))
 
         
     for idx, omega in enumerate(omega_Omegas, start=4):
@@ -121,13 +121,13 @@ if __name__ == '__main__':
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
-                  t_end=1882.,
+                  t_end=1862.,
                   start_wsp=10.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 1822, 4, 25))
+                  wind_ramp_abs=(0, 1862, 4, 25))
     """         
     htc = MyHTC(ORIG_PATH)
     htc.make_step(SAVE_HAWC2S_DIR,
