@@ -203,7 +203,8 @@ class MyHTC(HTCFile):
         #update control parameterse
         self._update_ctrl_params(cp_dict)
         del self.hawcstab2
-        self.simulation.time_stop = (t_end-t_start)+100
+        self.simulation.time_stop = (t_end-t_start)
+        self.output.time = (t_start, t_end)
         self.wind.wsp = start_wsp
         self.wind.tint = tint
         self.wind.shear_format = shear_format

@@ -19,6 +19,7 @@ if __name__ == '__main__':
                     append='_controller_tuning',
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     partial_load=(0.05, 0.7),
                     full_load=(0.06, 0.7),
                     compute_steady_states=True,
@@ -35,6 +36,7 @@ if __name__ == '__main__':
                     append=append_str,
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     constant_power=1,
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
@@ -50,6 +52,7 @@ if __name__ == '__main__':
                     append=append_str,
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     constant_power=0,
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
@@ -64,10 +67,29 @@ if __name__ == '__main__':
                   append="_A3_part3",
                   cp_dict=cp_dict, 
                   t_start=0.,
-                  t_end=1822.,
+                  t_end=1862.,
                   start_wsp=10.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 1822, 4, 25))
+                  wind_ramp_abs=(0, 1862, 4, 25))
+
+    for idx in range(1,7):
+        htc = MyHTC(ORIG_PATH)
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        #print('DICTIONARY KEYS:\n---------------------')
+        #[print(s) for s in ctrltune_dict.keys()]
+        append_str = f'_A3_part3_C{idx}'
+        htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append=append_str,
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=1862., #this includes the 100s transient
+                  start_wsp=4.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 1862, 4, 25))
