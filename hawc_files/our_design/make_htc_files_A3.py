@@ -7,12 +7,12 @@ from pathlib import Path
 from lacbox.io import load_ctrl_txt
 
 if __name__ == '__main__':
-    ORIG_PATH = './_master/group7_3B_design.htc'
-    SAVE_HAWC2S_DIR = './'
-    SAVE_HAWC2_DIR = './htc/'
+    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
+    SAVE_HAWC2S_DIR = './hawc_files/our_design/'
+    SAVE_HAWC2_DIR = './hawc_files/our_design/htc/'
 
      # load ctrl tuning data to dictionary
-    """     fname = './res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
+    """     fname = './hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
     ctrltune_dict = load_ctrl_txt(fname)
 
     print('DICTIONARY KEYS:\n---------------------')
@@ -81,7 +81,7 @@ if __name__ == '__main__':
                     compute_controller_input=True)
         #adding data from C#_ctrl_tuning.txt
         htc = MyHTC(ORIG_PATH)
-        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         print('DICTIONARY KEYS:\n---------------------')
         [print(s) for s in ctrltune_dict.keys()]
@@ -90,13 +90,13 @@ if __name__ == '__main__':
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
-                  t_end=880.,
+                  t_end=1882.,
                   start_wsp=10.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 880, 4, 25))
+                  wind_ramp_abs=(0, 1882, 4, 25))
 
         
     for idx, omega in enumerate(omega_Omegas, start=4):
@@ -114,20 +114,20 @@ if __name__ == '__main__':
                     save_power=True,
                     compute_controller_input=True)
         htc = MyHTC(ORIG_PATH)
-        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         append_str = f'_A3_part3_C{idx}'
         htc.make_step(SAVE_HAWC2_DIR,
                   append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
-                  t_end=880.,
+                  t_end=1882.,
                   start_wsp=10.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 880, 4, 25))
+                  wind_ramp_abs=(0, 1822, 4, 25))
     """         
     htc = MyHTC(ORIG_PATH)
     htc.make_step(SAVE_HAWC2S_DIR,

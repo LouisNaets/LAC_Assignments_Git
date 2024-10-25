@@ -2,7 +2,7 @@
 ;   Modified from version 9.2a for LAC course
 ;
   begin simulation;
-    time_stop	980.0;	total time to simulate
+    time_stop	1982.0;	total time to simulate
     solvertype	1;	1=dense newmark, 2=sparse newmark (12.7+)
     on_no_convergence	continue;
     convergence_limits	1000 1 1e-07;
@@ -328,6 +328,109 @@
     wind_ramp_abs	860 861 0 1;	wsp after step 23
     wind_ramp_abs	900 901 0 1;	wsp after step 24
     wind_ramp_abs	940 941 0 1;	wsp after step 25
+    wind_ramp_abs	1001 1002 0 -1;	wsp after step 24
+    wind_ramp_abs	1042 1043 0 -1;	wsp after step 23
+    wind_ramp_abs	1083 1084 0 -1;	wsp after step 22
+    wind_ramp_abs	1124 1125 0 -1;	wsp after step 21
+    wind_ramp_abs	1165 1166 0 -1;	wsp after step 20
+    wind_ramp_abs	1206 1207 0 -1;	wsp after step 19
+    wind_ramp_abs	1247 1248 0 -1;	wsp after step 18
+    wind_ramp_abs	1288 1289 0 -1;	wsp after step 17
+    wind_ramp_abs	1329 1330 0 -1;	wsp after step 16
+    wind_ramp_abs	1370 1371 0 -1;	wsp after step 15
+    wind_ramp_abs	1411 1412 0 -1;	wsp after step 14
+    wind_ramp_abs	1452 1453 0 -1;	wsp after step 13
+    wind_ramp_abs	1493 1494 0 -1;	wsp after step 12
+    wind_ramp_abs	1534 1535 0 -1;	wsp after step 11
+    wind_ramp_abs	1575 1576 0 -1;	wsp after step 10
+    wind_ramp_abs	1616 1617 0 -1;	wsp after step 9
+    wind_ramp_abs	1657 1658 0 -1;	wsp after step 8
+    wind_ramp_abs	1698 1699 0 -1;	wsp after step 7
+    wind_ramp_abs	1739 1740 0 -1;	wsp after step 6
+    wind_ramp_abs	1780 1781 0 -1;	wsp after step 5
+    wind_ramp_abs	1821 1822 0 -1;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
+    wind_ramp_abs	1821 1822 0 0;	wsp after step 4
   end wind;
 ;
   begin aerodrag;	aerodynamic drag
