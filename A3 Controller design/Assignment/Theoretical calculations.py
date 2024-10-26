@@ -87,3 +87,14 @@ k_I_p = (omega[1]**2 * I) / -dQ_dtheta_0
 print('{:.3e}'.format(k_I_p))
 
 print(dQ_dOmega_op)
+
+#Estimating k_P and k_I for C7
+zeta = 0.7
+omega = 0.03*(2*np.pi)
+print('C7 estimations 1')
+
+k_P_p = (2*zeta*omega*I - 1/eta * dQ_dOmega_op)/-dQ_dtheta_0
+print('{:.3e}'.format(k_P_p))
+
+k_I_p = (omega**2 * I) / -dQ_dtheta_0
+print('{:.3e}'.format(k_I_p))

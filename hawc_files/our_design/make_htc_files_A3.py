@@ -93,3 +93,24 @@ if __name__ == '__main__':
                   shear_format=(3,0),
                   tower_shadow_method=0,
                   wind_ramp_abs=(0, 1862, 4, 25))
+        
+    C7_list = ['0.03_0.7', '0.03_0.8', '0.05_0.8']
+
+    idx = 0
+    for conditions in C7_list:
+        idx = idx+1
+        htc = MyHTC(ORIG_PATH)
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part3_C7_{conditions}.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        append_str = f'_A3_part3_C7_{idx}'
+        htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append=append_str,
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=1862., #this includes the 100s transient
+                  start_wsp=4.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 1862, 4, 25))
