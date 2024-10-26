@@ -6,51 +6,61 @@ import pandas as pd
 from lacbox.io import ReadHAWC2
 from lacbox.test import test_data_path
 
-def plot_wind_turbine_data(c1,c2,c3, title:str, omega1:str, omega2:str, zeta1:str):
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+
+def plot_wind_turbine_data(c1, c2, c3, title: str, omega1: str, omega2: str, zeta1: str):
     # Create a figure and two sets of 2x2 subplots
     fig, axs = plt.subplots(2, 2, figsize=(18, 10))
 
     # Adjust the layout to prevent overlapping
-    # fig.tight_layout(pad=7.0)
     fig.subplots_adjust(hspace=0.2, wspace=0.1)
-    fig.suptitle(f"{title}", fontsize=16, y=0.93)
+    fig.suptitle(f"{title}", fontsize=18, y=0.93)
+
     # C1-3 plots (first set)
     axs[0, 0].plot(c1["time"], c1["wind_speed"])
     axs[0, 0].plot(c2["time"], c2["wind_speed"])
     axs[0, 0].plot(c3["time"], c3["wind_speed"])
-    axs[0, 0].set_title('Wind Speed')
-    # axs[0, 0].set_xlabel('Time')
-    axs[0, 0].set_ylabel('Wind Speed [m/s]')
+    axs[0, 0].set_title('Wind Speed', fontsize=18)
+    axs[0, 0].set_ylabel('Wind Speed [m/s]', fontsize=18)
+    axs[0, 0].tick_params(axis='both', which='major', labelsize=16)
+    axs[0, 0].tick_params(labelbottom=False)  # Remove x-axis tick marks
     axs[0, 0].grid()
 
-    axs[0, 1].plot(c1["time"], c1["pitch"], label ='$ω_Ω$=0.05 Hz & $ζ_Ω=0.7 $')
-    axs[0, 1].plot(c2["time"], c2["pitch"], label =f'$ω_Ω$={omega1} Hz & $ζ_Ω={zeta1} $')
-    axs[0, 1].plot(c3["time"], c3["pitch"], label =f'$ω_Ω$={omega2} Hz & $ζ_Ω={zeta1} $')
-    axs[0, 1].set_title('Pitch Angle')
-    # axs[0, 1].set_xlabel('Time')
-    axs[0, 1].legend(loc='upper left')
-    axs[0, 1].set_ylabel('Pitch [Deg]')
+    axs[0, 1].plot(c1["time"], c1["pitch"])
+    axs[0, 1].plot(c2["time"], c2["pitch"])
+    axs[0, 1].plot(c3["time"], c3["pitch"])
+    axs[0, 1].set_title('Pitch Angle', fontsize=18)
+    axs[0, 1].set_ylabel('Pitch [Deg]', fontsize=18)
+    axs[0, 1].yaxis.set_label_position("right")
+    axs[0, 1].yaxis.tick_right()
     axs[0, 1].set_ylim(-1, 25)
+    axs[0, 1].tick_params(axis='both', which='major', labelsize=16)
+    axs[0, 1].tick_params(labelbottom=False)  # Remove x-axis tick marks
     axs[0, 1].grid()
-
 
     axs[1, 0].plot(c1["time"], c1["rotational_speed"])
     axs[1, 0].plot(c2["time"], c2["rotational_speed"])
     axs[1, 0].plot(c3["time"], c3["rotational_speed"])
-    axs[1, 0].set_title('Rotational Speed')
-    axs[1, 0].set_xlabel('Time [s]')
-    axs[1, 0].set_ylabel('$\Omega$ [Rad/sec]')
+    axs[1, 0].set_title('Rotational Speed', fontsize=18)
+    axs[1, 0].set_xlabel('Time [s]', fontsize=18)
+    axs[1, 0].set_ylabel('$\Omega$ [Rad/sec]', fontsize=18)
+    axs[1, 0].tick_params(axis='both', which='major', labelsize=16)
     axs[1, 0].grid()
 
+    axs[1, 1].plot(c1["time"], c1["elec_power"], label='$ω_Ω$=0.05 Hz & $ζ_Ω=0.7 $')
+    axs[1, 1].plot(c2["time"], c2["elec_power"], label=f'$ω_Ω$={omega1} Hz & $ζ_Ω={zeta1} $')
+    axs[1, 1].plot(c3["time"], c3["elec_power"], label=f'$ω_Ω$={omega2} Hz & $ζ_Ω={zeta1} $')
+    axs[1, 1].set_title('Electrical Power', fontsize=18)
+    axs[1, 1].set_xlabel('Time [s]', fontsize=18)
+    axs[1, 1].set_ylabel('Power [w]', fontsize=18)
+    axs[1, 1].legend(loc='best', fontsize=16)
+    axs[1, 1].tick_params(axis='both', which='major', labelsize=16)
+    axs[1, 1].yaxis.set_label_position("right")
+    axs[1, 1].yaxis.tick_right()
+    axs[1, 1].grid()
 
-    axs[1, 1].plot(c1["time"], c1["elec_power"])
-    axs[1, 1].plot(c2["time"], c2["elec_power"])
-    axs[1, 1].plot(c3["time"], c3["elec_power"])
-    axs[1, 1].set_title('Electrical Power')
-    axs[1, 1].set_xlabel('Time [s]')
-    
-    axs[1, 1].set_ylabel('Power [w]')
-    axs[1,1].grid()
+    fig.tight_layout()
     
 def extract_values_for_part_3(df):
 
