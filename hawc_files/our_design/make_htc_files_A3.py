@@ -3,54 +3,15 @@
 Requires myteampack (which requires lacbox).
 """
 from myteampack import MyHTC
-from pathlib import Path
 from lacbox.io import load_ctrl_txt
 
 if __name__ == '__main__':
     ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
-    SAVE_HAWC2S_DIR = './hawc_files/our_design/'
-    SAVE_HAWC2_DIR = './hawc_files/our_design/htc/'
-
-     # load ctrl tuning data to dictionary
-    """     fname = './hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C1_ctrl_tuning.txt'
-    ctrltune_dict = load_ctrl_txt(fname)
-
-    print('DICTIONARY KEYS:\n---------------------')
-    [print(s) for s in ctrltune_dict.keys()]
-    print('\nAERO_GAINS KEYS:\n---------------------')
-    [print(s) for s in ctrltune_dict['aero_gains'].columns]
-     """
-    # print the keys
-    """  print('DICTIONARY KEYS:\n---------------------')
-    [print(s) for s in ctrltune_dict.keys()]
-    print('\nAERO_GAINS KEYS:\n---------------------')
-    [print(s) for s in ctrltune_dict['aero_gains'].columns];
-    DICTIONARY KEYS:
-    ---------------------
-    K_Nm/(rad/s)^2
-    Irotor_kg*m^2
-    KpTrq_Nm/(rad/s)
-    KiTrq_Nm/rad
-    KpPit_rad/(rad/s)
-    KiPit_rad/rad
-    K1_deg
-    K2_deg^2
-    Kp2_rad/(rad/s)
-    Ko1_deg
-    Ko2_deg^2
-    aero_gains
-
-    AERO_GAINS KEYS:
-    ---------------------
-    dq/dtheta_kNm/deg
-    fit_kNm/deg
-    dq/domega_kNm/(rad/s)
-    fit_kNm/(rad/s) """
-    
+    SAVE_HAWC2S_DIR = './hawc_files/our_design'
 
     # make htc file for tuning controller parameters
     htc = MyHTC(ORIG_PATH)
-    print(dir(htc))  # Check if make_hawc2s_ctrltune exists
+    # print(dir(htc))  # Check if make_hawc2s_ctrltune exists
 
     htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
                     rigid=False,
@@ -58,6 +19,7 @@ if __name__ == '__main__':
                     append='_controller_tuning',
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     partial_load=(0.05, 0.7),
                     full_load=(0.06, 0.7),
                     compute_steady_states=True,
@@ -74,30 +36,12 @@ if __name__ == '__main__':
                     append=append_str,
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     constant_power=1,
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
-        #adding data from C#_ctrl_tuning.txt
-        htc = MyHTC(ORIG_PATH)
-        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
-        ctrltune_dict = load_ctrl_txt(fname)
-        print('DICTIONARY KEYS:\n---------------------')
-        [print(s) for s in ctrltune_dict.keys()]
-        append_str = f'_A3_part3_C{idx}'
-        htc.make_step(SAVE_HAWC2_DIR,
-                  append=append_str,
-                  cp_dict=ctrltune_dict, 
-                  t_start=0.,
-                  t_end=1862.,
-                  start_wsp=10.,
-                  tint=0.,
-                  turb_format=0, 
-                  shear_format=(3,0),
-                  tower_shadow_method=0,
-                  wind_ramp_abs=(0, 1862, 4, 25))
-
         
     for idx, omega in enumerate(omega_Omegas, start=4):
         htc = MyHTC(ORIG_PATH)
@@ -108,18 +52,20 @@ if __name__ == '__main__':
                     append=append_str,
                     opt_path='./data/group7_3B_design_flex.opt',
                     opt_lambda=7.5,
+                    genspeed=(0, 431.35), #added these after the part 2 simulation
                     constant_power=0,
                     full_load=(omega, 0.7),
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
-        htc = MyHTC(ORIG_PATH)
-        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
-        ctrltune_dict = load_ctrl_txt(fname)
-        append_str = f'_A3_part3_C{idx}'
-        htc.make_step(SAVE_HAWC2_DIR,
-                  append=append_str,
-                  cp_dict=ctrltune_dict, 
+    
+    #Part 3 requires a new subfolder for saving htc files
+    SAVE_HAWC2S_DIR = './hawc_files/our_design/htc'
+    cp_dict = load_ctrl_txt('./hawc_files/our_design/res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
+    htc = MyHTC(ORIG_PATH)
+    htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append="_A3_part3",
+                  cp_dict=cp_dict, 
                   t_start=0.,
                   t_end=1862.,
                   start_wsp=10.,
@@ -128,16 +74,43 @@ if __name__ == '__main__':
                   shear_format=(3,0),
                   tower_shadow_method=0,
                   wind_ramp_abs=(0, 1862, 4, 25))
-    """         
-    htc = MyHTC(ORIG_PATH)
-    htc.make_step(SAVE_HAWC2S_DIR,
-                  append="part_3",
+
+    for idx in range(1,7):
+        htc = MyHTC(ORIG_PATH)
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        #print('DICTIONARY KEYS:\n---------------------')
+        #[print(s) for s in ctrltune_dict.keys()]
+        append_str = f'_A3_part3_C{idx}'
+        htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append=append_str,
                   cp_dict=ctrltune_dict, 
                   t_start=0.,
-                  t_end=880.,
-                  start_wsp=10.,
+                  t_end=1862., #this includes the 100s transient
+                  start_wsp=4.,
                   tint=0.,
                   turb_format=0, 
                   shear_format=(3,0),
                   tower_shadow_method=0,
-                  wind_ramp_abs=(0, 880, 4, 25)) """
+                  wind_ramp_abs=(0, 1862, 4, 25))
+        
+    C7_list = ['0.03_0.7', '0.03_0.8', '0.05_0.8', '0.02_0.7', '0.015_0.7', '0.0075_0.7']
+
+    idx = 0
+    for conditions in C7_list:
+        idx = idx+1
+        htc = MyHTC(ORIG_PATH)
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part3_C7_{conditions}.txt'
+        ctrltune_dict = load_ctrl_txt(fname)
+        append_str = f'_A3_part3_C7_{idx}'
+        htc.make_step(save_dir=SAVE_HAWC2S_DIR,
+                  append=append_str,
+                  cp_dict=ctrltune_dict, 
+                  t_start=0.,
+                  t_end=1862., #this includes the 100s transient
+                  start_wsp=4.,
+                  tint=0.,
+                  turb_format=0, 
+                  shear_format=(3,0),
+                  tower_shadow_method=0,
+                  wind_ramp_abs=(0, 1862, 4, 25))
