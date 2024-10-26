@@ -13,14 +13,11 @@
  ***********************************************************************
 ________________________________________________________________________
   Log file output
-                                                       Time : 16:24:38
-                                                       Date : 09:10.2024
+                                                       Time : 13:07:04
+                                                       Date : 25:10.2024
 ________________________________________________________________________
  Opening main command file: .\group7_3B_design_controller_tuning.htc
- Current directory is 
- G:\Other computers\Grote Laptop\Desktop\TU Delft\MSc EWEM 1\Q5-6 DTU\46320 Load
- s Aerodynamics and Control of Wind Turbines\LAC_Assignments_Git\hawc_files\our_
- design
+ Current directory is C:\LAC_git\LAC_Assignments_Git\hawc_files\our_design
  Reading data of main body : tower
  Succes opening ./data/DTU_10MW_RWT_Tower_st.dat
  timoschenko input commands read with succes

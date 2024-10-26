@@ -206,7 +206,7 @@
       begin relative;	blade2 to hub2
         mbdy1	hub2 last;
         mbdy2	blade2 1;
-        mbdy2_eulerang	0 0 0;	same as hub2; yB downwind along shaft, zB outward towards blade tip
+        mdy2_eulerang	0 0 0;	same as hub2; yB downwind along shaft, zB outward towards blade tip
       end relative;
 ;
       begin relative;	blade3 to hub3

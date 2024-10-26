@@ -3,6 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import os
 
 from lacbox.io import ReadHAWC2
 from lacbox.test import test_data_path
@@ -102,13 +103,14 @@ def plot_wind_turbine_data(c1,c2,c3, title:str):
 
 
 
-# %%
-df1 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C1.hdf5")
-df2 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C2.hdf5")
-df3 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C3.hdf5")
-df4 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C4.hdf5")
-df5 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C5.hdf5")
-df6 = ReadHAWC2("part_3_results/group7_3B_design_A3_part3_C6.hdf5")
+# %% extract data from part 3 HAWC results
+ORIG_PATH = 'C:/git/LAC_Assignments_Git/hawc_files/our_design/'
+df1 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C1.hdf5")
+df2 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C2.hdf5")
+df3 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C3.hdf5")
+df4 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C4.hdf5")
+df5 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C5.hdf5")
+df6 = ReadHAWC2(ORIG_PATH+"res/group7_3B_design_A3_part3_C6.hdf5")
 
 # %%
 def extract_values_for_part_3(df):
