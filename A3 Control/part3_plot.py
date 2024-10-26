@@ -61,43 +61,43 @@ def plot_wind_turbine_data(c1,c2,c3, title:str):
     axs[1,1].grid()
 
 
-    # # C4-6 plots (second set)
-    # axs[2, 0].plot(c4["time"], c4["wind_speed"])
-    # axs[2, 0].plot(c5["time"], c5["wind_speed"])
-    # axs[2, 0].plot(c6["time"], c6["wind_speed"])
+    # C4-6 plots (second set)
+    axs[2, 0].plot(c4["time"], c4["wind_speed"])
+    axs[2, 0].plot(c5["time"], c5["wind_speed"])
+    axs[2, 0].plot(c6["time"], c6["wind_speed"])
 
-    # # axs[2, 0].set_xlabel('Time')
-    # axs[2, 0].set_title('Wind Speed')
-    # axs[2, 0].set_ylabel('Wind Speed [m/s]')
-    # axs[2,0].grid()
-
-
-    # axs[2, 1].plot(c4["time"], c4["pitch"], label ='$\omega_{\Omega}$=0.05 Hz & r"$\zeta_{\Omega}=0.7 $')
-    # axs[2, 1].plot(c5["time"], c5["pitch"], label ='$\omega_{\Omega}$=0.01 Hz & r"$\zeta_{\Omega}=0.7 $')
-    # axs[2, 1].plot(c6["time"], c6["pitch"], label ='$\omega_{\Omega}$=0.10 Hz & r"$\zeta_{\Omega}=0.7 $')
-    # axs[2, 1].legend()
-    # axs[2, 1].set_title('Pitch Angle')
-    # # axs[2, 1].set_xlabel('Time')
-    # axs[2, 1].set_ylabel('Pitch [Deg]')
-    # axs[2,1].grid()
+    # axs[2, 0].set_xlabel('Time')
+    axs[2, 0].set_title('Wind Speed')
+    axs[2, 0].set_ylabel('Wind Speed [m/s]')
+    axs[2, 0].grid()
 
 
-    # axs[3, 0].plot(c4["time"], c4["rotational_speed"])
-    # axs[3, 0].plot(c5["time"], c5["rotational_speed"])
-    # axs[3, 0].plot(c6["time"], c6["rotational_speed"])
-    # axs[3, 0].set_title('Rotational Speed')
-    # axs[3, 0].set_xlabel('Time [s]')
-    # axs[3, 0].set_ylabel('$\Omega$ [Rad/sec]')
-    # axs[3,0].grid()
+    axs[2, 1].plot(c4["time"], c4["pitch"], label ='$\omega_{\Omega}$=0.05 Hz & r"$\zeta_{\Omega}=0.7 $')
+    axs[2, 1].plot(c5["time"], c5["pitch"], label ='$\omega_{\Omega}$=0.01 Hz & r"$\zeta_{\Omega}=0.7 $')
+    axs[2, 1].plot(c6["time"], c6["pitch"], label ='$\omega_{\Omega}$=0.10 Hz & r"$\zeta_{\Omega}=0.7 $')
+    axs[2, 1].legend()
+    axs[2, 1].set_title('Pitch Angle')
+    # axs[2, 1].set_xlabel('Time')
+    axs[2, 1].set_ylabel('Pitch [Deg]')
+    axs[2,1].grid()
 
 
-    # axs[3, 1].plot(c4["time"], c4["elec_power"])
-    # axs[3, 1].plot(c5["time"], c5["elec_power"])
-    # axs[3, 1].plot(c6["time"], c6["elec_power"])
-    # axs[3, 1].set_title('Electrical Power')
-    # axs[3, 1].set_xlabel('Time [s]')
-    # axs[3, 1].set_ylabel('Power [w]')
-    # axs[3,1].grid() 
+    axs[3, 0].plot(c4["time"], c4["rotational_speed"])
+    axs[3, 0].plot(c5["time"], c5["rotational_speed"])
+    axs[3, 0].plot(c6["time"], c6["rotational_speed"])
+    axs[3, 0].set_title('Rotational Speed')
+    axs[3, 0].set_xlabel('Time [s]')
+    axs[3, 0].set_ylabel('$\Omega$ [Rad/sec]')
+    axs[3,0].grid()
+
+
+    axs[3, 1].plot(c4["time"], c4["elec_power"])
+    axs[3, 1].plot(c5["time"], c5["elec_power"])
+    axs[3, 1].plot(c6["time"], c6["elec_power"])
+    axs[3, 1].set_title('Electrical Power')
+    axs[3, 1].set_xlabel('Time [s]')
+    axs[3, 1].set_ylabel('Power [w]')
+    axs[3,1].grid() 
     plt.show()
 
 
@@ -135,7 +135,7 @@ c6 = extract_values_for_part_3(df6)
 plot_wind_turbine_data(c1, c2, c3, "Constant Power")
 
 # %%
-plot_wind_turbine_data(c4, c5, c6)
+plot_wind_turbine_data(c4, c5, c6,'Constant Power')
 
 
 # %%
