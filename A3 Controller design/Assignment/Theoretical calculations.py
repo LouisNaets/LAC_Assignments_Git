@@ -90,7 +90,7 @@ print(dQ_dOmega_op)
 
 #Estimating k_P and k_I for C7
 zeta = 0.7
-omega = 0.03*(2*np.pi)
+omega = 0.0075*(2*np.pi)
 print('C7 estimations 1')
 
 k_P_p = (2*zeta*omega*I - 1/eta * dQ_dOmega_op)/-dQ_dtheta_0
