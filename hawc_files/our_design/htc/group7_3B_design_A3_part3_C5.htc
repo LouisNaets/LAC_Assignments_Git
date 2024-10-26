@@ -349,7 +349,7 @@
     wind_ramp_abs	1739 1740 0 -1;	wsp after step 6
     wind_ramp_abs	1780 1781 0 -1;	wsp after step 5
     wind_ramp_abs	1821 1822 0 -1;	wsp after step 4
-    wind_ramp_abs	1821 1862 0 0;	wsp after step 4
+    wind_ramp_abs	1823 1864 0 0;	wsp after step 4
   end wind;
 ;
   begin aerodrag;	aerodynamic drag
