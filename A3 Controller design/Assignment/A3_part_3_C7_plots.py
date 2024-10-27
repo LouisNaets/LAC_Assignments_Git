@@ -11,9 +11,9 @@ def plot_wind_turbine_data(c1,c2,c3, title:str, omega1:str, omega2:str, zeta1:st
     fig, axs = plt.subplots(2, 2, figsize=(18, 10))
 
     # Adjust the layout to prevent overlapping
-    # fig.tight_layout(pad=7.0)
-    fig.subplots_adjust(hspace=0.2, wspace=0.1)
-    fig.suptitle(f"{title}", fontsize=16, y=0.93)
+    fig.tight_layout(pad=5.0)
+    #fig.subplots_adjust(hspace=0.2, wspace=0.1)
+    #fig.suptitle(f"{title}", fontsize=16, y=0.93)
     # C1-3 plots (first set)
     axs[0, 0].plot(c1["time"], c1["wind_speed"])
     axs[0, 0].plot(c2["time"], c2["wind_speed"])
@@ -49,7 +49,7 @@ def plot_wind_turbine_data(c1,c2,c3, title:str, omega1:str, omega2:str, zeta1:st
     axs[1, 1].set_title('Electrical Power')
     axs[1, 1].set_xlabel('Time [s]')
     
-    axs[1, 1].set_ylabel('Power [w]')
+    axs[1, 1].set_ylabel('Power [W]')
     axs[1,1].grid()
     
 def extract_values_for_part_3(df):
@@ -62,6 +62,24 @@ def extract_values_for_part_3(df):
         'time': df.data[:,0]
     }    
 
+def extract_values_for_part_3_omit100(df):
+    # Extract columns
+    time = df.data[:, 0]
+    pitch = df.data[:, 3]
+    rotational_speed = df.data[:, 9]
+    elec_power = df.data[:, 104]
+    wind_speed = df.data[:, 16]
+    
+    # Filter data to start from 100 seconds
+    mask = time >= 100
+    return {
+        'pitch': pitch[mask],
+        'rotational_speed': rotational_speed[mask],
+        'elec_power': elec_power[mask],
+        'wind_speed': wind_speed[mask],
+        'time': time[mask]
+    }
+
 df1 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C1.hdf5")
 df2 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_1.hdf5")
 df3 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_4.hdf5")
@@ -71,14 +89,14 @@ df6 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_6.hdf5")
 df7 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_2.hdf5")
 df8 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_3.hdf5")
 
-c1 = extract_values_for_part_3(df1)
-c2 = extract_values_for_part_3(df2)
-c3 = extract_values_for_part_3(df3)
-c4 = extract_values_for_part_3(df4)
-c5 = extract_values_for_part_3(df5)
-c6 = extract_values_for_part_3(df6)
-c7 = extract_values_for_part_3(df7)
-c8 = extract_values_for_part_3(df8)
+c1 = extract_values_for_part_3_omit100(df1)
+c2 = extract_values_for_part_3_omit100(df2)
+c3 = extract_values_for_part_3_omit100(df3)
+c4 = extract_values_for_part_3_omit100(df4)
+c5 = extract_values_for_part_3_omit100(df5)
+c6 = extract_values_for_part_3_omit100(df6)
+c7 = extract_values_for_part_3_omit100(df7)
+c8 = extract_values_for_part_3_omit100(df8)
 
 plot_wind_turbine_data(c1, c2, c3, "", '0.03', '0.02', '0.7')
 plot_wind_turbine_data(c4, c5, c6, "", '0.015', '0.0075', '0.7')
