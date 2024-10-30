@@ -103,16 +103,19 @@ for iplot, chan_id in enumerate(chan_ids):
             theory = h2_thrust * DZ_TB - FG_TIMES_DY
         case 'TbSS':  # tower-base side-side
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_aero_trq
         case 'YbTilt':  # yaw bearing tilt
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_thrust * DZ_YB - FG_TIMES_DY
         case 'YbRoll':  # yaw bearing roll
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_aero_trq
         case 'ShftTrs':  # shaft torsion
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = -h2_aero_trq
+        case 'IPBRM':  # shaft torsion
+            u_theory = h2_wind
+            theory = h2_aero_trq/3
 
         # other values have no theory
         case other:
