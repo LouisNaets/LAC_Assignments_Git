@@ -132,7 +132,7 @@ c4 = extract_values_for_part_3_omit100(df4)
 c5 = extract_values_for_part_3_omit100(df5)
 c6 = extract_values_for_part_3_omit100(df6)
 
-plot_wind_turbine_data(c1, c2, c3, "",'0.01','0.1','0.07')
-plot_wind_turbine_data(c4, c5, c6, "",'0.01','0.1','0.07')
+plot_wind_turbine_data(c1, c2, c3, "",'0.01','0.1','0.7')
+plot_wind_turbine_data(c4, c5, c6, "",'0.01','0.1','0.7')
 
 plt.show()
