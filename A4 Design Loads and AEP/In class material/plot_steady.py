@@ -16,8 +16,8 @@ import numpy as np
 
 
 # analysis settings
-HAWC2S_PATH = './dtu_10mw_res/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
-STATS_PATH = './dtu_10mw_res/dtu_10mw_steady_stats.hdf5'  # path to mean steady stats
+HAWC2S_PATH = './A4 Design Loads and AEP/In class material/dtu_10mw_res/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
+STATS_PATH = './A4 Design Loads and AEP/In class material/dtu_10mw_res/dtu_10mw_steady_stats.hdf5'  # path to mean steady stats
 SUBFOLDER = 'notiltnodragrigid'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
 
 # turbine constants
@@ -85,16 +85,16 @@ for iplot, chan_id in enumerate(chan_ids):
             theory = h2s_pitch
         case 'RotSpd':  # rotor speed
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_rotspd*np.pi/30
         case 'Thrust':  # thrust
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_thrust
         case 'GenTrq': # generator torque
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_aerotrq * GENEFF * 10**3
         case 'ElPow':  # electrical power
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_paero * GENEFF * 10**3
 
         # ===========================================================================
         # PART 2. HAWC2 loads versus theory calculated using HAWC2 thrust/torque.
