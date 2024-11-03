@@ -112,7 +112,7 @@ def main():
     # constants for this script
     del_htc_dir = True  # delete htc directory if it already exists?
     #master_htc = './_master/group7_3B_design.htc'
-    master_htc = './hawc_files/our_design/htc/group7_3B_design_A3_part3_C1.htc' #this is maybe not the correct .htc file? - should it be one including contrller tuning?
+    master_htc = './hawc_files/our_design/_master/group7_3B_design_A4.htc' #this is maybe not the correct .htc file? - should it be one including contrller tuning?
     opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
     #cases = ['tilt', 'notilt', 'notiltrigid', 'notiltnodragrigid']
     cases = ['tilt', 'notilt']
