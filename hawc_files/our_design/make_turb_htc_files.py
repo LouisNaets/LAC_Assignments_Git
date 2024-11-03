@@ -56,18 +56,16 @@ def make_single_turb(htc, wsp, turbclass, htc_dir='./htc_turb/', res_dir='./res_
     htc.set_time(start=time_start, stop=time_stop)  # simulation times
     # calculate turbulence intensity for this turbulence class and wind speed
     turb_int = turbclass.get_turbulence_intensity(wsp)
-    # TODO: add code
+    turbulence = turbclass.get_turbulence(wsp)
     # set parameters in wind block
-    # TODO: set turbulence intensity
-    # TODO: set turbulence
-    # TODO: set tower shadow
-    # TODO: set mean wind speed
-    # TODO: set power-law shear profile
-    htc.wind.tint = 0  # no TI
-    htc.wind.turb_format = 0  # no turbulence
+    htc.wind.tint = turb_int  # set TI
+    htc.wind.turb_format = turbulence  # set turbulence
     htc.wind.tower_shadow_method = 0  # no tower shadow
     htc.wind.wsp = wsp  # mean wind speed
-    htc.wind.shear_format = [1, wsp]  # constant wsp profile with height
+    z_ref = 119 # dtu 10mw hub height
+    alpha = 0.2 #power law exponent for nuetral stability over open terrrain
+    htc.wind.shear_format = [2, wsp, z_ref, alpha]  # power-law shear profile
+    #htc.wind.shear_format = [1, wsp]  # constant wsp profile with height
     # set parameters in mann block
     turb_filesname = [f'./turb/{fname}_turb_{c}.bin' for c in 'uvw']
     no_grid_points = (nx, ny, nz)
@@ -95,8 +93,8 @@ def main():
     # TODO: and (b) generates multiple random seeds at each wind speed
     # constants for this script
     del_htc_dir = True  # delete htc directory if it already exists?
-    master_htc = './_master/dtu_10mw.htc'
-    opt_path = './data/dtu_10mw_flex_minrotspd.opt'
+    master_htc = './hawc_files/dtu_10mw/_master/dtu_10mw.htc'
+    opt_path = './hawc_files/dtu_10mw/data/dtu_10mw_flex_minrotspd.opt'
     wsps = range(5, 25)  # wind speed range
     htc_dir = './htc_turb/'  # top-level folder to save htc files (can be path to gbar!)
     res_dir = './res_turb/'  # where HAWC2 should save res files, relative to its working directory
