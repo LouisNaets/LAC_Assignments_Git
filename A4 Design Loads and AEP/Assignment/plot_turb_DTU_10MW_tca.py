@@ -14,6 +14,7 @@ from lacbox.io import load_stats, load_oper
 import matplotlib.pyplot as plt
 import numpy as np
 from sys import exit
+import statistics as stats
 
 
 # analysis settings
@@ -57,12 +58,7 @@ turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'del8', 'del10', 'del12', 'wsp']
 
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
-df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb') #tca or tcb instead of tilt/notilt
-print(df['subfolder'].unique())
-print(df)
-#for column in turb_ids:
-#    print(df[column])
-exit()
+df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb')
 
 # load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
 opt_dict = load_oper(HAWC2S_PATH)
@@ -77,88 +73,67 @@ h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  #
 # initialize the figure and axes
 fig, axs = plt.subplots(4, 3, figsize=(12, 8), clear=True)
 
-# loop over each channels and plot the steady state with the theory line
+# Set the opacity and marker size variables
+dot_opacity = 0.25  # Opacity for individual points
+line_opacity = 0.8  # Opacity for the mean lines
+dot_size = 10       # Size for individual points
+line_size = 40      # Size for mean points
+max_color = 'tab:gray'
+mean_color = 'tab:blue'
+min_color = 'tab:orange'
+
+# Loop over each channel and plot the steady state with the theory line
 for iplot, chan_id in enumerate(chan_ids):
     
-    # isolate the channel data
+    # Isolate the channel data
     chan_df = df.filter_channel(chan_id, CHAN_DESCS)
 
-    # extract hawc2 wind and channel to plot from the HAWC2 stats
-    h2_wind = chan_df['wsp']
-    HAWC2val = chan_df['mean']
+    # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
+    h2_wind = np.array(chan_df['wsp'])
+    HAWC2val_mean = np.array(chan_df['mean'])
+    HAWC2val_min = np.array(chan_df['min'])
+    HAWC2val_max = np.array(chan_df['max'])
 
-    match chan_id:
-        # ===========================================================================
-        # PART 1. HAWC2 operational data versus HAWC2S opt file.
-        case 'BldPit':  # pitch angle
-            u_theory = h2s_u
-            theory = h2s_pitch
-        case 'RotSpd':  # rotor speed
-            u_theory = h2s_u
-            theory = h2s_rotspd*np.pi/30
-        case 'Thrust':  # thrust
-            u_theory = h2s_u
-            theory = h2s_thrust
-        case 'GenTrq': # generator torque
-            u_theory = h2s_u
-            theory = h2s_aerotrq * GENEFF * 10**3
-        case 'ElPow':  # electrical power
-            u_theory = h2s_u
-            theory = h2s_paero * GENEFF * 10**3
-
-        # ===========================================================================
-        # PART 2. HAWC2 loads versus theory calculated using HAWC2 thrust/torque.
-        case 'TbFA':  # tower-base fore-aft
-            u_theory = h2_wind
-            theory = h2_thrust * DZ_TB - FG_TIMES_DY
-        case 'TbSS':  # tower-base side-side
-            u_theory = h2_wind
-            theory = h2_aero_trq
-        case 'YbTilt':  # yaw bearing tilt
-            u_theory = h2_wind
-            theory = h2_thrust * DZ_YB - FG_TIMES_DY
-        case 'YbRoll':  # yaw bearing roll
-            u_theory = h2_wind
-            theory = h2_aero_trq
-        case 'ShftTrs':  # shaft torsion
-            u_theory = h2_wind
-            theory = -h2_aero_trq
-        case 'IPBRM':  # shaft torsion
-            u_theory = h2_wind
-            theory = h2_aero_trq/3
-
-        # other values have no theory
-        case other:
-            u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)
-
-    # sort both the theory and the hawc2 by increasing wind speed (convert to numpy arrays first)
-    u_theory, theory = np.array(u_theory), np.array(theory)
-    h2_wind, HAWC2val = np.array(h2_wind), np.array(HAWC2val)
-    i_theory = np.argsort(u_theory)
+    # Sort HAWC2 values by increasing wind speed
     i_h2 = np.argsort(h2_wind)
+    h2_wind_sorted = h2_wind[i_h2]
+    HAWC2val_mean_sorted = HAWC2val_mean[i_h2]
+    HAWC2val_min_sorted = HAWC2val_min[i_h2]
+    HAWC2val_max_sorted = HAWC2val_max[i_h2]
 
-    # define legend label for the "theoretical" line
-    if np.nan in theory:
-        theory_label = None
-    elif np.array_equal(u_theory, h2s_u):
-        theory_label = 'HAWC2S'
-        linestyle, color = ':', 'r'
-    else:
-        theory_label = 'Theoretical equation'
-        linestyle, color = '--', '#ffa500'
+    # Calculate the mean for each unique wind speed for 'mean', 'min', and 'max'
+    unique_wind_speeds = np.unique(h2_wind_sorted)
+    mean_HAWC2val_per_wind = [np.mean(HAWC2val_mean_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+    min_HAWC2val_per_wind = [np.mean(HAWC2val_min_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+    max_HAWC2val_per_wind = [np.mean(HAWC2val_max_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
 
-    # plot the results
+    # Plot the results
     ax = axs.flatten()[iplot]
-    ax.plot(u_theory[i_theory], theory[i_theory], linestyle=linestyle, c=color, label=theory_label)  # theoretical line
-    ax.plot(h2_wind[i_h2], HAWC2val[i_h2], 'o', label='HAWC2 mean')  # HAWC2 steady results
+    # Individual 'mean' values with lower opacity and smaller markers
+    ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=mean_color, alpha=dot_opacity, s=dot_size, label='Mean')
+    # Mean of 'mean' with higher opacity and larger markers
+    ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=mean_color, alpha=line_opacity, markersize=line_size)#, label='Mean of means')
+
+    # Individual 'min' values
+    ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=min_color, alpha=dot_opacity, s=dot_size, label='Min')
+    # Mean of 'min'
+    ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=min_color, alpha=line_opacity, markersize=line_size)#, label='Mean of min')
+
+    # Individual 'max' values
+    ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=max_color, alpha=dot_opacity, s=dot_size, label='Max')
+    # Mean of 'max'
+    ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=max_color, alpha=line_opacity, markersize=line_size)#, label='Mean of max')
+
+    # Formatting the plot
     ax.grid('on')
     ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
            ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
 
+# Add legends and format the figure
 axs[0, 0].legend()
-axs[1, 2].legend()
-fig.suptitle(f'Case: {SUBFOLDER}')
+#axs[1, 2].legend()
+fig.suptitle(f'Case: DTU 10MW turbine - {SUBFOLDER}')
 fig.tight_layout()
 
-plt.show()
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/dtu10mw_tca.svg', format='svg')
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/dtu10mw_tca.png', format='png')
