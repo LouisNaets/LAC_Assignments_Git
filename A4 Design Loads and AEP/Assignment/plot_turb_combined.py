@@ -16,6 +16,7 @@ import numpy as np
 from sys import exit
 import statistics as stats
 
+plt.rcParams.update({'axes.labelsize': 12, 'xtick.labelsize': 12, 'ytick.labelsize': 12, 'legend.fontsize': 8, 'axes.titlesize': 15})
 
 # analysis settings
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
@@ -49,11 +50,28 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
+              'EdgDefl': 'state pos x  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
+              'FlpDefl': 'state pos y  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
+              'TowerClearance': 'min. distance bladetips tower'
               }
+
+#What to include from the description?
+#Why is tower clearance in [m] and then in order of 50m?
+#How are the units included in the plots?
+
+
+#'min. distance bladetips tower'
+#'TowerClerance': 'DLL :  5 inpvec :   1  min. distance bladetips tower [m]' tower clearance
+
+#'EdgDefl': 'State pos x  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' edgewise deflection
+
+#'FlpDefl': 'State pos y  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' flapwise deflection
+
+
 
 # what channels we want to plot
 chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
-            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM']
+            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgDefl', 'FlpDefl', 'TowerClearance']
 
 turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
@@ -63,116 +81,84 @@ turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
 df, wsps = load_stats(STATS_PATH, statstype='turb')
 df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype='turb')
 
-# load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
-opt_dict = load_oper(HAWC2S_PATH)
-h2s_u, h2s_pitch, h2s_rotspd, = opt_dict['ws_ms'], opt_dict['pitch_deg'], opt_dict['rotor_speed_rpm']
-h2s_paero, h2s_thrust = opt_dict['power_kw'], opt_dict['thrust_kn']
-h2s_aerotrq = h2s_paero / (h2s_rotspd * np.pi / 30)
-
-# get hawc2 thrust and aerodynamic torque for theoretical calculations
-h2_thrust = df.filter_channel('Thrust', CHAN_DESCS)['mean']
-h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  # aerodynamic torque [kNm]
+dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
 
 # initialize the figure and axes
-fig, axs = plt.subplots(4, 3, figsize=(12, 8), clear=True)
+fig, axs = plt.subplots(5, 3, figsize=(12, 10), clear=True, dpi=500)
 
 # Set the opacity and marker size variables
 dot_opacity = 0.25  # Opacity for individual points
-line_opacity = 0.8  # Opacity for the mean lines
-dot_size = 10       # Size for individual points
+dot_size = 7       # Size for individual points
+line_opacity = 1  # Opacity for the mean lines
 line_size = 40      # Size for mean points
-max_color = 'tab:gray'
-mean_color = 'tab:blue'
-min_color = 'tab:orange'
-max_color_DTU = 'tab:green'
-mean_color_DTU = 'tab:red'
-min_color_DTU = 'tab:purple'
+color_mean = ['tab:blue','tab:red']
+color_outer_bounds = ['cornflowerblue','lightcoral']
 
-# Loop over each channel and plot the steady state with the theory line
-for iplot, chan_id in enumerate(chan_ids):
-    
-    # Isolate the channel data
-    chan_df = df.filter_channel(chan_id, CHAN_DESCS)
-    chan_df_DTU = df_DTU.filter_channel(chan_id, CHAN_DESCS)
+for df, wsps, i, label_name in dfs:
+    # Loop over each channel and plot the steady state with the theory line
+    for iplot, chan_id in enumerate(chan_ids):
+        
+        # Isolate the channel data
+        chan_df = df.filter_channel(chan_id, CHAN_DESCS)
+        chan_df_DTU = df_DTU.filter_channel(chan_id, CHAN_DESCS)
 
-    # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
-    h2_wind = np.array(chan_df['wsp'])
-    HAWC2val_mean = np.array(chan_df['mean'])
-    HAWC2val_min = np.array(chan_df['min'])
-    HAWC2val_max = np.array(chan_df['max'])
+        # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
+        h2_wind = np.array(chan_df['wsp'])
+        HAWC2val_mean = np.array(chan_df['mean'])
+        HAWC2val_min = np.array(chan_df['min'])
+        HAWC2val_max = np.array(chan_df['max'])
 
-    h2_wind_DTU = np.array(chan_df_DTU['wsp'])
-    HAWC2val_mean_DTU = np.array(chan_df_DTU['mean'])
-    HAWC2val_min_DTU = np.array(chan_df_DTU['min'])
-    HAWC2val_max_DTU = np.array(chan_df_DTU['max'])
+        # Sort HAWC2 values by increasing wind speed
+        i_h2 = np.argsort(h2_wind)
+        h2_wind_sorted = h2_wind[i_h2]
+        HAWC2val_mean_sorted = HAWC2val_mean[i_h2]
+        HAWC2val_min_sorted = HAWC2val_min[i_h2]
+        HAWC2val_max_sorted = HAWC2val_max[i_h2]
 
-    # Sort HAWC2 values by increasing wind speed
-    i_h2 = np.argsort(h2_wind)
-    h2_wind_sorted = h2_wind[i_h2]
-    HAWC2val_mean_sorted = HAWC2val_mean[i_h2]
-    HAWC2val_min_sorted = HAWC2val_min[i_h2]
-    HAWC2val_max_sorted = HAWC2val_max[i_h2]
+        # Calculate the mean for each unique wind speed for 'mean', 'min', and 'max'
+        unique_wind_speeds = np.unique(h2_wind_sorted)
+        mean_HAWC2val_per_wind = [np.mean(HAWC2val_mean_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+        min_HAWC2val_per_wind = [np.mean(HAWC2val_min_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+        max_HAWC2val_per_wind = [np.mean(HAWC2val_max_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
 
-    i_h2_DTU = np.argsort(h2_wind_DTU)
-    h2_wind_sorted_DTU = h2_wind_DTU[i_h2_DTU]
-    HAWC2val_mean_sorted_DTU = HAWC2val_mean_DTU[i_h2_DTU]
-    HAWC2val_min_sorted_DTU = HAWC2val_min_DTU[i_h2_DTU]
-    HAWC2val_max_sorted_DTU = HAWC2val_max_DTU[i_h2_DTU]
+        # Plot the results
+        ax = axs.flatten()[iplot]
 
-    # Calculate the mean for each unique wind speed for 'mean', 'min', and 'max'
-    unique_wind_speeds = np.unique(h2_wind_sorted)
-    mean_HAWC2val_per_wind = [np.mean(HAWC2val_mean_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
-    min_HAWC2val_per_wind = [np.mean(HAWC2val_min_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
-    max_HAWC2val_per_wind = [np.mean(HAWC2val_max_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+        if chan_id == 'TowerClearance':
+            # Individual 'min' values
+            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'min'
+            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
 
-    mean_HAWC2val_per_wind_DTU = [np.mean(HAWC2val_mean_sorted_DTU[h2_wind_sorted_DTU == wsp]) for wsp in unique_wind_speeds]
-    min_HAWC2val_per_wind_DTU = [np.mean(HAWC2val_min_sorted_DTU[h2_wind_sorted_DTU == wsp]) for wsp in unique_wind_speeds]
-    max_HAWC2val_per_wind_DTU = [np.mean(HAWC2val_max_sorted_DTU[h2_wind_sorted_DTU == wsp]) for wsp in unique_wind_speeds]
+            # Formatting the plot
+            ax.grid('on')
+            ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
+                ylabel=f'{chan_id} [m]', xlim=[4, 25])
 
-    # Plot the results
-    ax = axs.flatten()[iplot]
-    # Individual 'mean' values with lower opacity and smaller markers
-    ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=mean_color, alpha=dot_opacity, s=dot_size, label='Mean')
-    # Mean of 'mean' with higher opacity and larger markers
-    ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=mean_color, alpha=line_opacity, markersize=line_size)#, label='Mean of means')
+        else:
+            # Individual 'mean' values with lower opacity and smaller markers
+            ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'mean' with higher opacity and larger markers
+            ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=color_mean[i], alpha=line_opacity, markersize=line_size, label=f'$μ_{{{label_name}}}$')#, label='Mean of means')
 
-    # Individual 'min' values
-    ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=min_color, alpha=dot_opacity, s=dot_size, label='Min')
-    # Mean of 'min'
-    ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=min_color, alpha=line_opacity, markersize=line_size)#, label='Mean of min')
+            # Individual 'min' values
+            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'min'
+            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
 
-    # Individual 'max' values
-    ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=max_color, alpha=dot_opacity, s=dot_size, label='Max')
-    # Mean of 'max'
-    ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=max_color, alpha=line_opacity, markersize=line_size)#, label='Mean of max')
+            # Individual 'max' values
+            ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'max'
+            ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size)#, label='Mean of max')
 
-
-
-    # Individual 'mean' values with lower opacity and smaller markers
-    ax.scatter(h2_wind_sorted_DTU, HAWC2val_mean_sorted_DTU, color=mean_color_DTU, alpha=dot_opacity, s=dot_size, label='DTU Mean')
-    # Mean of 'mean' with higher opacity and larger markers
-    ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind_DTU, color=mean_color_DTU, alpha=line_opacity, markersize=line_size)#, label='Mean of means')
-
-    # Individual 'min' values
-    ax.scatter(h2_wind_sorted_DTU, HAWC2val_min_sorted_DTU, color=min_color_DTU, alpha=dot_opacity, s=dot_size, label='DTU Min')
-    # Mean of 'min'
-    ax.plot(unique_wind_speeds, min_HAWC2val_per_wind_DTU, color=min_color_DTU, alpha=line_opacity, markersize=line_size)#, label='Mean of min')
-
-    # Individual 'max' values
-    ax.scatter(h2_wind_sorted_DTU, HAWC2val_max_sorted_DTU, color=max_color_DTU, alpha=dot_opacity, s=dot_size, label='DTU Max')
-    # Mean of 'max'
-    ax.plot(unique_wind_speeds, max_HAWC2val_per_wind_DTU, color=max_color_DTU, alpha=line_opacity, markersize=line_size)#, label='Mean of max')
-
-
-    # Formatting the plot
-    ax.grid('on')
-    ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
-           ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
+            # Formatting the plot
+            ax.grid('on')
+            ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
+                ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
 
 # Add legends and format the figure
 axs[0, 0].legend()
-#axs[1, 2].legend()
-fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
+#fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
 fig.tight_layout()
 
 plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_turb_stats.svg', format='svg')
