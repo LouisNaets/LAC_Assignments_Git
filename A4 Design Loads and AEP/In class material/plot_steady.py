@@ -16,8 +16,8 @@ import numpy as np
 
 
 # analysis settings
-HAWC2S_PATH = './dtu_10mw_res/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
-STATS_PATH = './dtu_10mw_res/dtu_10mw_steady_stats.hdf5'  # path to mean steady stats
+HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
+STATS_PATH = './res_turb_2/tca/group7_turbA_stats.csv'  # path to mean steady stats
 SUBFOLDER = 'notiltnodragrigid'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
 
 # turbine constants

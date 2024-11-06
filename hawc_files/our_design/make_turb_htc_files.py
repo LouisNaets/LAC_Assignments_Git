@@ -86,7 +86,7 @@ def make_single_turb(htc, wsp, turbclass, htc_dir='./htc_turb/', res_dir='./res_
     # set parameters in wind block
     htc.wind.tint = turb_int  # set TI
     htc.wind.turb_format = 1  # set turbulence to mann
-    htc.wind.tower_shadow_method = 0  # no tower shadow
+    htc.wind.tower_shadow_method = 3  # no tower shadow
     htc.wind.wsp = wsp  # mean wind speed
     htc.wind.shear_format = [3, 0.2]  # power-law shear profile
     #htc.wind.shear_format = [1, wsp]  # constant wsp profile with height
@@ -115,13 +115,13 @@ def main():
     """
     # Constants for this script
     del_htc_dir = True  # Delete HTC directory if it already exists?
-    master_htc = './hawc_files/dtu_10mw/_master/dtu_10mw.htc'
-    opt_path = './hawc_files/dtu_10mw/data/dtu_10mw_flex_minrotspd.opt'
+    master_htc = './hawc_files/our_design/_master/group7_3B_design_A4.htc'
+    opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
     wsps = range(5, 25)  # Wind speed range
     htc_dir = './htc_turb/'  # Folder to save HTC files
     res_dir = './res_turb/'  # Where HAWC2 should save results
     start_seed = 42  # Seed for reproducibility
-    num_seeds_per_wsp = 3  # Number of seeds per wind speed
+    num_seeds_per_wsp = 6  # Number of seeds per wind speed
 
     # Delete the top-level directory if requested
     _clean_directory(htc_dir, del_htc_dir)
