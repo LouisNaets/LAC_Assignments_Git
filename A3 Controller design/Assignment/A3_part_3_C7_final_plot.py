@@ -6,6 +6,8 @@ import pandas as pd
 from lacbox.io import ReadHAWC2
 from lacbox.test import test_data_path
 
+plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 12, 'ytick.labelsize': 12, 'legend.fontsize': 10, 'axes.titlesize': 15})
+
 def plot_wind_turbine_data(c1,c2, title:str, omega1:str, omega2:str, zeta1:str, i:int):
     # Create a figure and two sets of 2x2 subplots
     fig, axs = plt.subplots(2, 2, figsize=(18, 10))
