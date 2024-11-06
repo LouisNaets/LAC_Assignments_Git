@@ -18,7 +18,7 @@ import numpy as np
 # analysis settings
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
 STATS_PATH = './A4 Design Loads and AEP/Assignment/a4_steady_stats.csv'  # path to mean steady stats
-SUBFOLDER = 'notilt'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
+SUBFOLDER = 'tilt'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
 
 # turbine constants
 GENEFF = 0.94  # generator/gearbox efficienty [%]
