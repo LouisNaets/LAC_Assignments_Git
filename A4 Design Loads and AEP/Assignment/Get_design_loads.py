@@ -143,5 +143,6 @@ for iplot, chan_id in enumerate(chan_ids):
 
 plt.show()
 
+#fakka strijders
 
     
