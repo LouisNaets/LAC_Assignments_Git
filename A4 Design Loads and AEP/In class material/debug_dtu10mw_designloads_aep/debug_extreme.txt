@@ -1,0 +1,49 @@
+
+EXTREME DESIGN LOADS CALCULATIONS FOR DTU 10 MW
+
+Turbulence class: A
+
+Load channel: TbFA [kNm]
+Extreme value: 215879.984375
+Characteristic value: 291437.97890625003
+Design value: 364297.47363281256
+
+Load channel: TbSS [kNm]
+Extreme value: 69760.18684895833
+Characteristic value: 94176.25224609375
+Design value: 117720.31530761719
+
+Load channel: YbTilt [kNm]
+Extreme value: 32585.416666666668
+Characteristic value: 43990.31250000001
+Design value: 54987.89062500001
+
+Load channel: YbRoll [kNm]
+Extreme value: 14167.382486979166
+Characteristic value: 19125.966357421876
+Design value: 23907.457946777344
+
+Load channel: ShftTrs [kNm]
+Extreme value: -12068.249674479166
+Characteristic value: 16292.137060546875
+Design value: 20365.171325683594
+
+Load channel: OoPBRM [kNm]
+Extreme value: -42829.711588541664
+Characteristic value: 57820.11064453125
+Design value: 72275.13830566406
+
+Load channel: IPBRM [kNm]
+Extreme value: 24160.418619791668
+Characteristic value: 32616.565136718753
+Design value: 40770.70642089844
+
+Summary
+['TbFA', 'TbSS', 'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM']
+364297.47 kNm
+117720.32 kNm
+54987.89 kNm
+23907.46 kNm
+20365.17 kNm
+72275.14 kNm
+40770.71 kNm
