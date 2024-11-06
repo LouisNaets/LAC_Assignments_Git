@@ -17,8 +17,8 @@ import numpy as np
 
 # analysis settings
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-STATS_PATH = './res_turb_2/tca/group7_turbA_stats.csv'  # path to mean steady stats
-SUBFOLDER = 'notiltnodragrigid'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
+STATS_PATH = './A4 Design Loads and AEP/stats_files/a4_steady_stats.csv'  # path to mean steady stats
+SUBFOLDER = 'tilt'  # which subfolder to plot: tilt, notilt, notiltrigid, notiltnodragrigid
 
 # turbine constants
 GENEFF = 0.94  # generator/gearbox efficienty [%]
@@ -53,6 +53,7 @@ chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
 
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
 df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='steady')
+print(df)
 
 # load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
 opt_dict = load_oper(HAWC2S_PATH)
@@ -85,16 +86,16 @@ for iplot, chan_id in enumerate(chan_ids):
             theory = h2s_pitch
         case 'RotSpd':  # rotor speed
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_rotspd*np.pi/30
         case 'Thrust':  # thrust
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_thrust
         case 'GenTrq': # generator torque
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_aerotrq * GENEFF * 10**3
         case 'ElPow':  # electrical power
             u_theory = h2s_u
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2s_paero * GENEFF * 10**3
 
         # ===========================================================================
         # PART 2. HAWC2 loads versus theory calculated using HAWC2 thrust/torque.
@@ -103,16 +104,19 @@ for iplot, chan_id in enumerate(chan_ids):
             theory = h2_thrust * DZ_TB - FG_TIMES_DY
         case 'TbSS':  # tower-base side-side
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_aero_trq
         case 'YbTilt':  # yaw bearing tilt
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_thrust * DZ_YB - FG_TIMES_DY
         case 'YbRoll':  # yaw bearing roll
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = h2_aero_trq
         case 'ShftTrs':  # shaft torsion
             u_theory = h2_wind
-            theory = np.nan * np.ones_like(u_theory)  # TODO: update line!
+            theory = -h2_aero_trq
+        case 'IPBRM':  # shaft torsion
+            u_theory = h2_wind
+            theory = h2_aero_trq/3
 
         # other values have no theory
         case other:
@@ -147,5 +151,7 @@ axs[0, 0].legend()
 axs[1, 2].legend()
 fig.suptitle(f'Case: {SUBFOLDER}')
 fig.tight_layout()
+fig.savefig(f'./A4 Design Loads and AEP/figures/{SUBFOLDER}_steady.png')
+fig.savefig(f'./A4 Design Loads and AEP/figures/{SUBFOLDER}_steady.svg')
 
 plt.show()
