@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sys import exit
 import statistics as stats
+from scipy.stats import weibull_min
 
-WTG = 'group7'  # 'DTU10MW' or 'group7'
+WTG = 'DTU10MW'  # 'DTU10MW' or 'group7'
 
 if WTG == 'group7':
     # analysis settings
@@ -50,6 +51,17 @@ extreme_design_loads = {
     'IPBRM': 40770.71
 }
 
+# Wohler exponent for each channel
+m = {
+    'TbFA': 4,
+    'TbSS': 4,
+    'YbTilt': 4,
+    'YbRoll': 4,
+    'ShftTrs': 4,
+    'OoPBRM': 10,
+    'IPBRM': 10
+}
+
 # turbine constants
 GENEFF = 0.94  # generator/gearbox efficienty [%]
 FG_TIMES_DY = 6250  # yaw-bearing pitch moment due to gravity [kNm]
@@ -87,17 +99,46 @@ h2s_aerotrq = h2s_paero / (h2s_rotspd * np.pi / 30)
 h2_thrust = df.filter_channel('Thrust', CHAN_DESCS)['mean']
 h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  # aerodynamic torque [kNm]
 
+# Calculate Bin Probabilities
+U_ave = 10
+U_std = 2   
+
+c = 2/np.sqrt(np.pi) * U_ave
+k = 2
+# k = (U_std/U_ave) ** -1.086
+
+bin_edges = np.array([4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 
+                      14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5, 24.5])
+
+bin_probabilities = np.zeros(len(bin_edges) - 1)
+
+for i in range(len(bin_probabilities)):
+    # Probability of being in the current bin
+    bin_probabilities[i] = weibull_min.cdf(bin_edges[i + 1], k, scale=c) - weibull_min.cdf(bin_edges[i], k, scale=c)
+
+bin_probabilities /= np.sum(bin_probabilities)
+
+print("Bin probabilities:", bin_probabilities)
+print("Sum of bin probabilities:", np.sum(bin_probabilities))
+
+# Calculate Lifetime cycles for each bin
+N_T = 630720000 # total number of cycles in the lifetime
+n_eq = 10e6  # equivalent cycle count
+n_i = N_T * bin_probabilities
+
 # Loop over each channel and plot the steady state with the theory line
 for iplot, chan_id in enumerate(chan_ids):
     
     # Isolate the channel data
     chan_df = df.filter_channel(chan_id, CHAN_DESCS)
+    Wohler_exponent = m[chan_id]
 
     # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
     h2_wind = np.array(chan_df['wsp'])
     HAWC2val_mean = np.array(chan_df['mean'])
     HAWC2val_min = np.array(chan_df['min'])
     HAWC2val_max = np.array(chan_df['max'])
+    HAWC2val_del = np.array(chan_df[f'del{m[chan_id]}'])
 
     # Sort HAWC2 values by increasing wind speed
     i_h2 = np.argsort(h2_wind)
@@ -105,6 +146,7 @@ for iplot, chan_id in enumerate(chan_ids):
     HAWC2val_mean_sorted = HAWC2val_mean[i_h2]
     HAWC2val_min_sorted = HAWC2val_min[i_h2]
     HAWC2val_max_sorted = HAWC2val_max[i_h2]
+    HAWC2val_del_sorted = np.array([HAWC2val_del[i:i+6] for i in range(0, len(HAWC2val_del), 6)])
 
     # Calculate the max of the max, and min of min
     unique_wind_speeds = np.unique(h2_wind_sorted)
@@ -141,8 +183,30 @@ for iplot, chan_id in enumerate(chan_ids):
     plt.grid()
     plt.legend()
 
-plt.show()
+    R_eq = np.zeros(len(n_i))
 
-#fakka strijders
+    
+    for i in range(len(n_i)):
+        # Adjust each DEL by the cycle ratio (N_T / n_eq) raised to the Wöhler exponent
+        adjusted_DELs = (n_i[i] / n_eq) * (HAWC2val_del_sorted[i] ** Wohler_exponent)
+
+        # Sum the adjusted DELs
+        sum_adjusted_DELs = np.sum(adjusted_DELs)
+
+        # Take the (m-th root) to get the equivalent DEL
+        R_eq[i] = sum_adjusted_DELs ** (1 / Wohler_exponent)
+
+        # Compute lifetime fatigue load
+        
+
+
+        # print(f"{chan_id} Equivalent DELs:")
+        # print(f"Wind speed bin {unique_wind_speeds[i]} : {R_eq[i]:.8f} kNm")
+
+
+
+# plt.show()
+
+
 
     
