@@ -75,8 +75,9 @@ h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  #
 ubar = 10 #m/s from  IEC 1A
 k = 2              # Weibull shape parameter
 c = 1.13*ubar                      # Weibull scale parameter
-v = np.arange(0,25)
+v = np.arange(4.5,25.5)
 weibull =  (k / c) * (v/ c)**(k - 1) * np.exp(-(v / c)**k); 
+print(v)
 print(weibull)
 print(c)
 exit()
