@@ -20,10 +20,10 @@ plt.rcParams.update({'axes.labelsize': 12, 'xtick.labelsize': 12, 'ytick.labelsi
 
 # analysis settings
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-STATS_PATH = './A4 Design Loads and AEP/Assignment/group7_turbB_stats_ts.csv'  # path to mean steady stats
-STATS_PATH_DTU = './A4 Design Loads and AEP/Assignment/dtu_10mw_turb_stats.hdf5'
-SUBFOLDER_our = 'tcb'
-SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
+STATS_PATH = './A4 Design Loads and AEP/Assignment/a4_steady_stats.csv'  # path to mean steady stats
+STATS_PATH_DTU = './A4 Design Loads and AEP/Assignment/dtu_10mw_steady_stats.hdf5'
+SUBFOLDER_our = 'notilt'
+SUBFOLDER_DTU = 'notilt'  # which subfolder to plot: tca or tcb
 
 # turbine constants
 GENEFF = 0.94  # generator/gearbox efficienty [%]
@@ -78,8 +78,8 @@ turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'del8', 'del10', 'del12', 'wsp']
 
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
-df, wsps = load_stats(STATS_PATH, statstype='turb')
-df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype='turb')
+df, wsps = load_stats(STATS_PATH, subfolder='tilt', statstype='steady')
+df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder='tilt', statstype='steady')
 
 dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
 
@@ -161,5 +161,6 @@ axs[0, 0].legend()
 #fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
 fig.tight_layout()
 
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_turb_stats.svg', format='svg')
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_turb_stats.png', format='png')
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_steady_stats.svg', format='svg')
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_steady_stats.png', format='png')
+#plt.show()
