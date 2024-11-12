@@ -16,73 +16,212 @@ import numpy as np
 from sys import exit
 import statistics as stats
 
+def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
+    '''
+    Calculate the AEP of the turbine based on the power output and the wind speed distribution
+    '''
+    # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
+    # turbine constants
+    GENEFF = 0.94  # generator/gearbox efficienty [%]
+    FG_TIMES_DY = 6250  # yaw-bearing pitch moment due to gravity [kNm]
+    if 'notilt' in SUBFOLDER:
+        DZ_YB = 2.75  # distance from hub center to yaw bearing [m]
+        DZ_TB = 115.63 + DZ_YB  # distance from hub center to tower base [m]
+    else:
+        DZ_YB = 2.75 + 7.1*np.sin(5*np.pi/180)  # distance from hub center to yaw bearing [m]
+        DZ_TB = 115.63 + DZ_YB  # distance from hub center to tower base [m]
+    CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which descriptions
+                'RotSpd': 'rotor speed',  # in the HAWC2 statistics file correspond to which
+                'Thrust': 'aero rotor thrust',  # channels we want
+                'GenTrq': 'generator torque',
+                'ElPow': 'pelec',
+                'TbFA': 'momentmx mbdy:tower nodenr:   1',
+                'TbSS': 'momentmy mbdy:tower nodenr:   1',
+                'YbTilt': 'momentmx mbdy:tower nodenr:  11',
+                'YbRoll': 'momentmy mbdy:tower nodenr:  11',
+                'ShftTrs': 'momentmz mbdy:shaft nodenr:   4',
+                'OoPBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: hub1',
+                'IPBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: hub1',
+                'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
+                'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
+                'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
+                'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
+                }
+
+    # what channels we want to plot
+    chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
+                'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM']
+
+    turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
+                'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
+                'del8', 'del10', 'del12', 'wsp']
+    df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb')
+    print(df)
+
+    # load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
+    opt_dict = load_oper(HAWC2S_PATH)
+    h2s_u, h2s_pitch, h2s_rotspd, = opt_dict['ws_ms'], opt_dict['pitch_deg'], opt_dict['rotor_speed_rpm']
+    h2s_paero, h2s_thrust = opt_dict['power_kw'], opt_dict['thrust_kn']
+    h2s_aerotrq = h2s_paero / (h2s_rotspd * np.pi / 30)
+
+    # get hawc2 thrust and aerodynamic torque for theoretical calculations
+    h2_thrust = df.filter_channel('Thrust', CHAN_DESCS)['mean']
+    h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  # aerodynamic torque [kNm]
+
+    # ---------------- AEP calculations --------------------
+    TI = 0.18 #TI = sigma/mean
+    sigma = TI * ubar #standard deviation
+    k = 2                                   # # Weibull shape parameter
+    c = 1.13*ubar             # Weibull scale parameter
+    v = np.arange(5,25)
+    weibull =  (k / c) * (v/ c)**(k - 1) * np.exp(-(v / c)**k); 
+    bin_prop_jenni =  [0.06442809, 0.0709227,  0.07472189, 0.07591763, 0.0747455,  0.07155162,
+    0.06675382, 0.06080169, 0.05413969, 0.04717648, 0.04026251, 0.03367663,
+    0.02762128, 0.02222493, 0.01755019, 0.01360521, 0.01035688, 0.00774379,
+    0.00568809, 0.0041053 ]
+    print("Wind speeds ", v)
+    print("Bin probabilties: ",weibull)
+    print("Weibull scale parameter (c):", round(c, 3))
+    print("Weibull shape parameter (k):", round(k, 3))
+    print('Weibull sum: ', sum(weibull))
+    #print('Weibull jenni sum: ', sum(bin_prop_jenni))
+    #print("Element-wise difference: ", weibull-np.array(bin_prop_jenni))
+
+    # plt.plot(v, weibull, label='Weibull distribution')
+    # plt.plot(v, bin_prop_jenni, label='Bin prop Jenni')
+    # plt.legend()
+    #plt.show()
+
+    #get hawc2 electric power
+    h2_power = df.filter_channel('ElPow', CHAN_DESCS)
+    h2_power_mean = np.array(h2_power['mean'])
+    # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
+    h2_wind = np.array(h2_power['wsp'])
+    i_h2 = np.argsort(h2_wind)
+    h2_wind_sorted = h2_wind[i_h2]
+    h2_power_mean_sorted = h2_power_mean[i_h2]
+
+    #Average electrical power over turbulent seeds
+    h2_power_mean_turb = np.array([])
+    for i in range(0, len(h2_power_mean_sorted), 6):  
+        mean = stats.mean(h2_power_mean_sorted[i:i+6])
+        h2_power_mean_turb = np.append(h2_power_mean_turb, mean)  
+    print('Electric power:', h2_power_mean_turb/1e6)
+    p_tot = h2_power_mean_turb*weibull
+    R = 1
+    P_tot_reliability = np.sum(p_tot) * R
+    AEP = P_tot_reliability * 8760*1e-9
+    print('AEP:', str(AEP), 'MWh') 
+    # plt.figure(figsize=(6, 4), clear=True)
+    # plt.plot(v, p_tot*1e-9, label = 'Mean')
+    # plt.legend(fontsize=18)
+    # plt.xlabel('Wind speed [m/s]', fontsize=18)
+    # plt.ylabel('Power [MWh]' ,fontsize=18)
+    # plt.xticks(fontsize=18)
+    # plt.yticks(fontsize=18)
+    # plt.show()
+
+    return AEP, p_tot, weibull, h2_wind_sorted, v
 
 # analysis settings
-HAWC2S_PATH = './A4 Design Loads and AEP/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
-STATS_PATH = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
-SUBFOLDER = 'tca'  # which subfolder to plot: tca or tcb
+HAWC2S_PATH_DTU = './A4 Design Loads and AEP/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
+STATS_PATH_DTU = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
+SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
 
-# turbine constants
-GENEFF = 0.94  # generator/gearbox efficienty [%]
-FG_TIMES_DY = 6250  # yaw-bearing pitch moment due to gravity [kNm]
-if 'notilt' in SUBFOLDER:
-    DZ_YB = 2.75  # distance from hub center to yaw bearing [m]
-    DZ_TB = 115.63 + DZ_YB  # distance from hub center to tower base [m]
-else:
-    DZ_YB = 2.75 + 7.1*np.sin(5*np.pi/180)  # distance from hub center to yaw bearing [m]
-    DZ_TB = 115.63 + DZ_YB  # distance from hub center to tower base [m]
-CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which descriptions
-              'RotSpd': 'rotor speed',  # in the HAWC2 statistics file correspond to which
-              'Thrust': 'aero rotor thrust',  # channels we want
-              'GenTrq': 'generator torque',
-              'ElPow': 'pelec',
-              'TbFA': 'momentmx mbdy:tower nodenr:   1',
-              'TbSS': 'momentmy mbdy:tower nodenr:   1',
-              'YbTilt': 'momentmx mbdy:tower nodenr:  11',
-              'YbRoll': 'momentmy mbdy:tower nodenr:  11',
-              'ShftTrs': 'momentmz mbdy:shaft nodenr:   4',
-              'OoPBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: hub1',
-              'IPBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: hub1',
-              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
-              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
-              'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
-              'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              }
-
-# what channels we want to plot
-chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
-            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM']
-
-turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
-            'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
-            'del8', 'del10', 'del12', 'wsp']
-
-# load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
-df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb')
-
-# load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
-opt_dict = load_oper(HAWC2S_PATH)
-h2s_u, h2s_pitch, h2s_rotspd, = opt_dict['ws_ms'], opt_dict['pitch_deg'], opt_dict['rotor_speed_rpm']
-h2s_paero, h2s_thrust = opt_dict['power_kw'], opt_dict['thrust_kn']
-h2s_aerotrq = h2s_paero / (h2s_rotspd * np.pi / 30)
-
-# get hawc2 thrust and aerodynamic torque for theoretical calculations
-h2_thrust = df.filter_channel('Thrust', CHAN_DESCS)['mean']
-h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  # aerodynamic torque [kNm]
+HAWC2S_PATH_OURS = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
+STATS_PATH_OURS = './A4 Design Loads and AEP/stats_files/group7_turbB_stats_ts.csv'  # path to mean steady stats
+SUBFOLDER_OURS = 'tcb'  # which subfolder to plot: tca or tcb
 
 
-# ---------------- AEP calculations --------------------
-ubar = 10 #m/s from  IEC 1A
-k = 2              # Weibull shape parameter
-c = 1.13*ubar                      # Weibull scale parameter
-v = np.arange(4.5,25.5)
-weibull =  (k / c) * (v/ c)**(k - 1) * np.exp(-(v / c)**k); 
-print(v)
-print(weibull)
-print(c)
-exit()
+AEP_DTU, p_tot_DTU, weibull_DTU, h2_wind_sorted_DTU, v_bins_DTU = AEP_data(STATS_PATH_DTU, HAWC2S_PATH_DTU, SUBFOLDER_DTU, 10)
+AEP_OURS, p_tot_OURS, weibull_OURS, h2_wind_sorted_OURS, v_bins_OURS = AEP_data(STATS_PATH_OURS, HAWC2S_PATH_OURS, SUBFOLDER_OURS, 7.5)
 
 
+# --- Power Production per Wind Bin (Bar Plot) ---
+
+# Interpolated power curves
+total_power_curve_DTU = np.interp(v_bins_DTU, v_bins_DTU, p_tot_DTU)
+total_power_curve_OURS = np.interp(v_bins_OURS, v_bins_OURS, p_tot_OURS)
+
+# Initialize the figure
+plt.figure(figsize=(12, 8))
+
+# --- Power Production per Wind Bin (Bar Plot) ---
+# DTU 10 MW - Dark Blue
+plt.bar(v_bins_DTU, p_tot_DTU, width=0.8, alpha=0.7, color='navy', label='Power Output - DTU 10 MW')
+# Custom Design - Light Blue
+plt.bar(v_bins_OURS, p_tot_OURS, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Custom Design')
+
+# --- Total Power Curve (Line Plot) ---
+# DTU 10 MW - Solid Line
+plt.plot(v_bins_DTU+0.5, total_power_curve_DTU, 'o-', color='darkblue', label='Total Power Curve - DTU 10 MW')
+# Custom Design - Dashed Line
+plt.plot(v_bins_OURS+0.5, total_power_curve_OURS, 'o--', color='deepskyblue', label='Total Power Curve - Custom Design')
+
+# --- Bin Probabilities (Overlaid Bar Plot) ---
+# DTU 10 MW - Dark Blue (transparent)
+plt.bar(v_bins_DTU+0.5, weibull_DTU, width=0.4, alpha=0.3, color='navy', label='Bin Probabilities - DTU 10 MW')
+# Custom Design - Light Blue (transparent)
+plt.bar(v_bins_OURS+0.5, weibull_OURS, width=0.4, alpha=0.3, color='skyblue', label='Bin Probabilities - Custom Design')
+
+# --- Labels, Legends, and Formatting ---
+plt.xlabel('Wind Speed [m/s]')
+plt.ylabel('Power [MW] / Probability')
+plt.title('Comparison of Power Production and Bin Probabilities')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+
+# Display the plot
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# '''AEP Q1 - Weibull parameters'''
+# U_mean =10
+# sigma_U = 5
+
+# C = (2/np.sqrt(np.pi))*U_mean
+# k = (sigma_U/U_mean)**(-1.086)
+# print("Weibull scale parameter (C):", round(C, 3))
+# print("Weibull shape parameter (k):", round(k, 3))
+# print('Note: These expressions are valid only when 1.6 < k < 3')
+
+# '''AEP Q2 - Simple power curve AEP'''
+# V_bins = [0,5,8,12,14,25,100] #100 is just a high random number
+# P_bins = [0,20,35,40,45,0]
+
+# V_prob = []
+# for i in range(0,len(V_bins)-1):
+#     V_prob.append(np.exp(-(V_bins[i]/C)**k) - np.exp(-(V_bins[i+1]/C)**k))
+
+# P = [p * v for p, v in zip(P_bins, V_prob)]
+# P_tot = sum(P)
+
+# print("Power generation before reliability:", round(P_tot,3), 'kW')
+
+# R = 0.95
+# P_tot_reliability = P_tot * R
+# AEP = P_tot_reliability * 365.25 * 24/1000
+
+# print('AEP:', str(round(AEP,2)), 'MWh')
 
 
 
@@ -91,16 +230,16 @@ exit()
 
 # ---------------------- Plotting ----------------------
 # initialize the figure and axes
-fig, axs = plt.subplots(4, 3, figsize=(12, 8), clear=True)
+# fig, axs = plt.subplots(4, 3, figsize=(12, 8), clear=True)
 
-# Set the opacity and marker size variables
-dot_opacity = 0.25  # Opacity for individual points
-line_opacity = 0.8  # Opacity for the mean lines
-dot_size = 10       # Size for individual points
-line_size = 40      # Size for mean points
-max_color = 'tab:gray'
-mean_color = 'tab:blue'
-min_color = 'tab:orange'
+# # Set the opacity and marker size variables
+# dot_opacity = 0.25  # Opacity for individual points
+# line_opacity = 0.8  # Opacity for the mean lines
+# dot_size = 10       # Size for individual points
+# line_size = 40      # Size for mean points
+# max_color = 'tab:gray'
+# mean_color = 'tab:blue'
+# min_color = 'tab:orange'
 
 # # Loop over each channel and plot the steady state with the theory line
 # for iplot, chan_id in enumerate(chan_ids):
@@ -154,4 +293,7 @@ min_color = 'tab:orange'
 # #axs[1, 2].legend()
 # fig.suptitle(f'Case: DTU 10MW turbine - {SUBFOLDER}')
 # fig.tight_layout()
+# plt.show()
+
+
 
