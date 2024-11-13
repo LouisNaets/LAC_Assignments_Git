@@ -50,28 +50,23 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'EdgDefl': 'state pos x  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
-              'FlpDefl': 'state pos y  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
+              'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
               'TowerClearance': 'min. distance bladetips tower'
               }
-
-#What to include from the description?
-#Why is tower clearance in [m] and then in order of 50m?
-#How are the units included in the plots?
-
 
 #'min. distance bladetips tower'
 #'TowerClerance': 'DLL :  5 inpvec :   1  min. distance bladetips tower [m]' tower clearance
 
-#'EdgDefl': 'State pos x  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' edgewise deflection
+#'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped' edgewise blade moment
 
-#'FlpDefl': 'State pos y  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' flapwise deflection
+#'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped' flapwise blade moment
 
 
 
 # what channels we want to plot
 chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
-            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgDefl', 'FlpDefl', 'TowerClearance']
+            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgBRM', 'FlpBRM', 'TowerClearance']
 
 turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',

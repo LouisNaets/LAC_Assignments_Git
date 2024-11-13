@@ -55,10 +55,6 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'TowerClearance': 'min. distance bladetips tower'
               }
 
-#What to include from the description?
-#Why is tower clearance in [m] and then in order of 50m?
-#How are the units included in the plots?
-
 
 #'min. distance bladetips tower'
 #'TowerClerance': 'DLL :  5 inpvec :   1  min. distance bladetips tower [m]' tower clearance
