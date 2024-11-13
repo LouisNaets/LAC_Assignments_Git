@@ -46,8 +46,6 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'ShftTrs': 'momentmz mbdy:shaft nodenr:   4',
               'OoPBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: hub1',
               'IPBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: hub1',
-              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
-              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
               'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
