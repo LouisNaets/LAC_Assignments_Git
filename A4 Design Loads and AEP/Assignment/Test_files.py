@@ -96,12 +96,12 @@ def LifetimeFatigueLoad(bin_probabilities):
     return lifetime_fatigue_load
 
 
-
 U_ave = 10
 U_std = 2   
-
 c = 2/np.sqrt(np.pi) * U_ave
 k = 2
+
+SafetyFactorsTest()
 
 bin_probabilities = ProbabilityBinsTest(c, k)
 
