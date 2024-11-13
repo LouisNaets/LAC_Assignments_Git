@@ -46,12 +46,10 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'ShftTrs': 'momentmz mbdy:shaft nodenr:   4',
               'OoPBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: hub1',
               'IPBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: hub1',
-              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
-              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
-              'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
               'TowerClearance': 'min. distance bladetips tower'
               }
 
@@ -79,7 +77,7 @@ df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder='tilt', statstype='stead
 dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
 
 # initialize the figure and axes
-fig, axs = plt.subplots(5, 3, figsize=(12, 10), clear=True, dpi=500)
+fig, axs = plt.subplots(5, 3, figsize=(12, 13), clear=True, dpi=500)
 
 # Set the opacity and marker size variables
 dot_opacity = 0.25  # Opacity for individual points

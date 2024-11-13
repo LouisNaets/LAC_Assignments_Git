@@ -64,12 +64,20 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
 
 
 # what channels we want to plot
-chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
-            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgBRM', 'FlpBRM', 'TowerClearance']
+chan_ids = ['TbFA', 'TbSS', 'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgBRM', 'FlpBRM']
+
+m_values = {
+    'TbFA': 4, 'TbSS': 4, 'YbTilt': 4, 'YbRoll': 4,
+    'ShftTrs': 4, 'OoPBRM': 10, 'IPBRM': 10, 'EdgBRM': 10, 'FlpBRM': 10
+}
 
 turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
             'del8', 'del10', 'del12', 'wsp']
+
+# Helper function to calculate 10-minute combined DEL for each bin
+def combine_10min_DELs(DELs, m):
+    return (np.mean(DELs ** m)) ** (1 / m)
 
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
 df, wsps = load_stats(STATS_PATH, statstype='turb')
@@ -78,7 +86,7 @@ df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype
 dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
 
 # initialize the figure and axes
-fig, axs = plt.subplots(5, 3, figsize=(12, 13), clear=True, dpi=500)
+fig, axs = plt.subplots(3, 3, figsize=(12, 8), clear=True, dpi=500)
 
 # Set the opacity and marker size variables
 dot_opacity = 0.25  # Opacity for individual points
@@ -95,70 +103,46 @@ for df, wsps, i, label_name in dfs:
         # Isolate the channel data
         chan_df = df.filter_channel(chan_id, CHAN_DESCS)
         chan_df_DTU = df_DTU.filter_channel(chan_id, CHAN_DESCS)
+        Wohler_exponent = m_values[chan_id]
 
-        # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
+        # Extract HAWC2 wind and the stats ('delX') for the channel
         h2_wind = np.array(chan_df['wsp'])
-        HAWC2val_mean = np.array(chan_df['mean'])
-        HAWC2val_min = np.array(chan_df['min'])
-        HAWC2val_max = np.array(chan_df['max'])
+        HAWC2val_del = np.array(chan_df[f'del{Wohler_exponent}'])
 
         # Sort HAWC2 values by increasing wind speed
         i_h2 = np.argsort(h2_wind)
         h2_wind_sorted = h2_wind[i_h2]
-        HAWC2val_mean_sorted = HAWC2val_mean[i_h2]
-        HAWC2val_min_sorted = HAWC2val_min[i_h2]
-        HAWC2val_max_sorted = HAWC2val_max[i_h2]
+        HAWC2val_del_sorted = HAWC2val_del[i_h2]
 
         # Calculate the mean for each unique wind speed for 'mean', 'min', and 'max'
         unique_wind_speeds = np.unique(h2_wind_sorted)
-        mean_HAWC2val_per_wind = [np.mean(HAWC2val_mean_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
-        min_HAWC2val_per_wind = [np.mean(HAWC2val_min_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
-        max_HAWC2val_per_wind = [np.mean(HAWC2val_max_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+        HAWC2val_del_per_wind = np.array([HAWC2val_del_sorted[h2_wind_sorted == wsp] for wsp in unique_wind_speeds])
 
+        DELs_10min = []
+
+        for DEL_bin in HAWC2val_del_per_wind:
+            combined_DEL = combine_10min_DELs(DEL_bin, Wohler_exponent)
+            DELs_10min.append(combined_DEL)
+
+        DELs_10min = np.array(DELs_10min)
+        
         # Plot the results
         ax = axs.flatten()[iplot]
 
-        if chan_id == 'TowerClearance':
-            # Individual 'min' values
-            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
-            # Mean of 'min'
-            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
-
-            # Formatting the plot
-            ax.grid('on')
-            ax.set(xlabel='Wind speed [m/s]' if iplot > 11 else None,
-                ylabel=f'{chan_id} [m]', xlim=[4, 25])
-
-        else:
-            # Individual 'mean' values with lower opacity and smaller markers
-            ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
-            # Mean of 'mean' with higher opacity and larger markers
-            ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=color_mean[i], alpha=line_opacity, markersize=line_size, label=f'$μ_{{{label_name}}}$')#, label='Mean of means')
-
-            # Individual 'min' values
-            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
-            # Mean of 'min'
-            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
-
-            # Individual 'max' values
-            ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
-            # Mean of 'max'
-            ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size)#, label='Mean of max')
-
-            # Formatting the plot
-            ax.grid('on')
-            ax.set(xlabel='Wind speed [m/s]' if iplot > 11 else None,
-                ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
-            
-            if chan_id == 'GenTrq':
-                ax.set(ylabel=f'{chan_id} [Nm]')
-            elif chan_id == 'ElPow':
-                ax.set(ylabel=f'{chan_id} [W]')
+        # Individual 'mean' values with lower opacity and smaller markers
+        ax.scatter(h2_wind_sorted, HAWC2val_del_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
+        # Mean of 'mean' with higher opacity and larger markers
+        ax.plot(unique_wind_speeds, DELs_10min, color=color_mean[i], alpha=line_opacity, markersize=line_size, label=f'{label_name}')#, label='Mean of means')
+    
+        # Formatting the plot
+        ax.grid('on')
+        ax.set(xlabel='Wind speed [m/s]' if iplot > 5 else None,
+            ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
 
 # Add legends and format the figure
 axs[0, 0].legend()
 #fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
 fig.tight_layout()
 
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_turb_stats.svg', format='svg')
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_turb_stats.png', format='png')
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_DEL.svg', format='svg')
+plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_DEL.png', format='png')
