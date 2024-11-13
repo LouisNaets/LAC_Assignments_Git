@@ -10,7 +10,7 @@ gravity moment.
 
 YOUR TASK! Add the lines that calculate the theory, as prompted by the slides.
 """
-from lacbox.io import load_stats, load_oper
+from lacbox.io import load_stats, load_oper, load_st
 import matplotlib.pyplot as plt
 import numpy as np
 from sys import exit
@@ -50,8 +50,8 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'EdgDefl': 'state pos x  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
-              'FlpDefl': 'state pos y  mbdy:blade1 e-nr:  26 z-rel:1.00 coo: blade1  blade1 tip pos',
+              'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
               'TowerClearance': 'min. distance bladetips tower'
               }
 
@@ -63,15 +63,15 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
 #'min. distance bladetips tower'
 #'TowerClerance': 'DLL :  5 inpvec :   1  min. distance bladetips tower [m]' tower clearance
 
-#'EdgDefl': 'State pos x  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' edgewise deflection
+#'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped' edgewise blade moment
 
-#'FlpDefl': 'State pos y  Mbdy:blade1 E-nr:  26 Z-rel:1.00 coo: blade1  blade1 tip pos' flapwise deflection
+#'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped' flapwise blade moment
 
 
 
 # what channels we want to plot
 chan_ids = ['BldPit', 'RotSpd', 'Thrust', 'GenTrq', 'ElPow', 'TbFA', 'TbSS',
-            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgDefl', 'FlpDefl', 'TowerClearance']
+            'YbTilt', 'YbRoll', 'ShftTrs', 'OoPBRM', 'IPBRM', 'EdgBRM', 'FlpBRM', 'TowerClearance']
 
 turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
             'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
@@ -155,6 +155,11 @@ for df, wsps, i, label_name in dfs:
             ax.grid('on')
             ax.set(xlabel='Wind speed [m/s]' if iplot > 11 else None,
                 ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
+            
+            if chan_id == 'GenTrq':
+                ax.set(ylabel=f'{chan_id} [Nm]')
+            elif chan_id == 'ElPow':
+                ax.set(ylabel=f'{chan_id} [W]')
 
 # Add legends and format the figure
 axs[0, 0].legend()
