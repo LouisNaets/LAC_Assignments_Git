@@ -66,7 +66,8 @@ CHAN_DESCS = {'TbFA': 'momentmx mbdy:tower nodenr:   1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped'
+              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'TowerClearance': 'dll :  5 inpvec :   1  min. distance bladetips tower'
               }
 
 # Weibull bin probabilities
@@ -145,17 +146,17 @@ for iplot, chan_id in enumerate(chan_ids):
 
     # Plot the max values max_HAWC2val_per_wind vs wind speed (unique_wind_speeds) as bars
     ax = axs[iplot]
-    ax.bar(unique_wind_speeds, max_charval_per_wind, width=0.6, color='b', alpha=0.6, label='HAWC2 max')
-    ax.bar(unique_wind_speeds, min_charval_per_wind, width=0.6, color='r', alpha=0.6, label='HAWC2 min')
+    ax.bar(unique_wind_speeds, max_charval_per_wind, width=0.6, color='navy', alpha=0.7, label='HAWC2 max')
+    ax.bar(unique_wind_speeds, min_charval_per_wind, width=0.6, color='skyblue', alpha=0.7, label='HAWC2 min')
     ax.axhline(extreme_design_loads[chan_id], color='r', linestyle='--', label='DTU 10MW Extreme Design Load')
-    ax.set_title(chan_id)
+    ax.set_title(chan_id, fontsize=16)
     if iplot >= 6:
-        ax.set_xlabel('Wind speed [m/s]')
-    if iplot % 2 == 0:
-        ax.set_ylabel('Max value [kNm]')
+        ax.set_xlabel('Wind speed [m/s]', fontsize=14)
+    if iplot % 3 == 0:
+        ax.set_ylabel('Max value [kNm]', fontsize=14)
     ax.grid()
     if iplot == 0:
-        ax.legend()
+        ax.legend(fontsize=14)
 
     ## Fatigue Design Load
     # Calculate combined 10-min DEL and lifetime fatigue load
@@ -169,6 +170,25 @@ for iplot, chan_id in enumerate(chan_ids):
     lifetime_fatigue_load = calculate_lifetime_fatigue(DELs_10min, n_i, Wohler_exponent)
 
     print(f"{chan_id}: Lifetime Fatigue Load = {lifetime_fatigue_load:.8f} kNm")
+
+## Calculate the minimum tower clearance
+chan_id = 'TowerClearance'
+chan_df = df.filter_channel(chan_id, CHAN_DESCS)
+
+h2_wind = np.array(chan_df['wsp'])
+TowerClearance_min = np.array(chan_df['min'])
+
+i_h2 = np.argsort(h2_wind)
+h2_wind_sorted = h2_wind[i_h2]
+TowerClearance_min_sorted = TowerClearance_min[i_h2]
+print(TowerClearance_min_sorted)
+
+unique_wind_speeds = np.unique(h2_wind_sorted)
+min_TowerClearance_per_wind = [np.min(TowerClearance_min_sorted[h2_wind_sorted == wsp]) for wsp in unique_wind_speeds]
+
+min_TowerClearance = np.min(min_TowerClearance_per_wind)
+
+print(f'{chan_id}: Min tower clearance = {min_TowerClearance:.2f} m')
 
 fig.tight_layout()
 plt.savefig(f'./A4 Design Loads and AEP/Assignment/Figures/{WTG} Ultimate design_loads.png')

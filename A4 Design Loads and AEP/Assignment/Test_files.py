@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.stats import weibull_min
+import h5py
+
 
 def SafetyFactorsTest():
 # Calculate and print partial safety factors for each load channel
@@ -26,6 +28,7 @@ def SafetyFactorsTest():
 
 
 def ProbabilityBinsTest(c, k):
+    U_ave = 10
     bin_probabilities_verification = [0.06442809, 0.0709227, 0.07472189, 0.07591763, 0.0747455, 0.07155162,
                                       0.06675382, 0.06080169, 0.05413969, 0.04717648, 0.04026251, 0.03367663,
                                       0.02762128, 0.02222493, 0.01755019, 0.01360521, 0.01035688, 0.00774379,
@@ -33,6 +36,9 @@ def ProbabilityBinsTest(c, k):
     # Define bin edges (as given)
     bin_edges = np.array([4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 
                       14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5, 24.5])
+
+    bins = bin_edges + 0.5
+    print("Bins:", bins)
     
     bin_probabilities = np.zeros(len(bin_edges) - 1)
 
@@ -40,9 +46,13 @@ def ProbabilityBinsTest(c, k):
         # Probability of being in the current bin
         bin_probabilities[i] = weibull_min.cdf(bin_edges[i + 1], k, scale=c) - weibull_min.cdf(bin_edges[i], k, scale=c)
 
+    bin_CDF_IEC = 1 - np.exp(-np.pi * (bin_edges / (2 * U_ave)) ** 2 )
+    bin_probabilities_IEC = np.diff(bin_CDF_IEC)
+
     # Verifiy the results with the given bin probabilities
     assert np.allclose(bin_probabilities, bin_probabilities_verification, rtol=1e-5), "Bin probabilities do not match the verification values"
     print("Bin probabilities:", bin_probabilities)
+    print('Bin probabilities IEC:', bin_probabilities_IEC)
 
     return bin_probabilities
 
@@ -101,13 +111,37 @@ U_std = 2
 c = 2/np.sqrt(np.pi) * U_ave
 k = 2
 
-SafetyFactorsTest()
+# SafetyFactorsTest()
 
 bin_probabilities = ProbabilityBinsTest(c, k)
 
-CombinedDelTest(bin_probabilities[0])
+# CombinedDelTest(bin_probabilities[0])
 
-LifetimeFatigueLoad(bin_probabilities)
+# LifetimeFatigueLoad(bin_probabilities)
+
+
+
+# Specify the path to your HDF5 file
+file_path = '.\A4 Design Loads and AEP\Assignment\dtu_10mw_turb_stats.hdf5'
+search_value = '5.946875487657857'
+found_values = []
+
+with h5py.File(file_path, 'r') as hdf_file:
+    # Function to recursively search through the file for the target value
+    def recursive_search(group):
+        for key in group.keys():
+            item = group[key]
+            if isinstance(item, h5py.Dataset):
+                # Check if the dataset contains the search value
+                if search_value in str(item[:]):
+                    found_values.append((key, item[:]))
+            elif isinstance(item, h5py.Group):
+                recursive_search(item)
+
+    # Start recursive search from the root
+    recursive_search(hdf_file)
+
+print("Found values:", found_values)
 
 
 """
