@@ -16,7 +16,7 @@ import numpy as np
 from sys import exit
 import statistics as stats
 
-def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
+def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar, winddist):
     '''
     Calculate the AEP of the turbine based on the power output and the wind speed distribution
     '''
@@ -55,8 +55,10 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
     turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
                 'mean', 'max', 'min', 'std', '1%', '50%', '99%', 'del3', 'del4', 'del5',
                 'del8', 'del10', 'del12', 'wsp']
-    df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb')
-    print(df)
+    if SUBFOLDER=='':
+        df, wsps = load_stats(STATS_PATH, statstype='turb')
+    else:
+        df, wsps = load_stats(STATS_PATH, subfolder=SUBFOLDER, statstype='turb')
 
     # load/calc. the stuff we need from the HAWC2S opt/pwr file for the operational data comparisons
     opt_dict = load_oper(HAWC2S_PATH)
@@ -69,23 +71,42 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
     h2_aero_trq = df.filter_channel('GenTrq', CHAN_DESCS)['mean'] / GENEFF * 1e-3  # aerodynamic torque [kNm]
 
     # ---------------- AEP calculations --------------------
-    TI = 0.18 #TI = sigma/mean
-    sigma = TI * ubar #standard deviation
-    k = 2                                   # # Weibull shape parameter
-    c = 1.13*ubar             # Weibull scale parameter
     v = np.arange(5,25)
-    weibull =  (k / c) * (v/ c)**(k - 1) * np.exp(-(v / c)**k); 
+    bin_edges = np.arange(4.5, 25.5)
+
+    if winddist == 'weibull':
+        TI = 0.18 #TI = sigma/mean
+        #sigma = TI * ubar #standard deviation
+        k = 2                                   # # Weibull shape parameter
+        c = 2/np.sqrt(np.pi)*ubar             # Weibull scale parameter
+        bin_prop =  (k / c) * (bin_edges/ c)**(k - 1) * np.exp(-(bin_edges / c)**k)
+        bin_prop = np.exp(-((v-0.5)/(2*ubar/np.sqrt(np.pi)))**2) - np.exp(-((v+0.5)/(2*ubar/np.sqrt(np.pi)))**2) #weibull equation SLIDE 14
+        print('WEIBULL distribution for bin probaility selected')
+        print("Weibull scale parameter (c):", round(c, 3))
+        print("Weibull shape parameter (k):", round(k, 3))
+    
+    elif winddist == 'rayleigh':
+        bin_prop = 1-np.exp(-np.pi*(v/(2*ubar))**2)          #IEC rayleigh equation 8
+        bin_prop = np.pi/2*(v/ubar**2)*np.exp((-np.pi/4)*(v/ubar)**2)      #paper  Rayleigh pdf
+        print('RAYLEIGH distribution for bin probaility selected')
+    else:   
+        print('ERROR: Invalid wind distribution selected')
+        exit()
+
     bin_prop_jenni =  [0.06442809, 0.0709227,  0.07472189, 0.07591763, 0.0747455,  0.07155162,
     0.06675382, 0.06080169, 0.05413969, 0.04717648, 0.04026251, 0.03367663,
     0.02762128, 0.02222493, 0.01755019, 0.01360521, 0.01035688, 0.00774379,
     0.00568809, 0.0041053 ]
-    print("Wind speeds ", v)
-    print("Bin probabilties: ",weibull)
-    print("Weibull scale parameter (c):", round(c, 3))
-    print("Weibull shape parameter (k):", round(k, 3))
-    print('Weibull sum: ', sum(weibull))
+
+    # bin_prop_avg = np.array([])
+    # for i in range(0, len(bin_prop)-1):
+    #     np.append(bin_prop_avg, np.mean(bin_prop[i:i+1]))
+    # bin_prop = bin_prop_avg
+    print("Wind speeds: ", v)
+    print("Bin probabilties: ",bin_prop)
+    print('Sum of bin probability: ', sum(bin_prop))
     #print('Weibull jenni sum: ', sum(bin_prop_jenni))
-    #print("Element-wise difference: ", weibull-np.array(bin_prop_jenni))
+    print("Element-wise difference: ", bin_prop-np.array(bin_prop_jenni))
 
     # plt.plot(v, weibull, label='Weibull distribution')
     # plt.plot(v, bin_prop_jenni, label='Bin prop Jenni')
@@ -107,11 +128,14 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
         mean = stats.mean(h2_power_mean_sorted[i:i+6])
         h2_power_mean_turb = np.append(h2_power_mean_turb, mean)  
     print('Electric power:', h2_power_mean_turb/1e6)
-    p_tot = h2_power_mean_turb*weibull
+    p_tot = h2_power_mean_turb*bin_prop
     R = 1
     P_tot_reliability = np.sum(p_tot) * R
     AEP = P_tot_reliability * 8760*1e-9
-    print('AEP:', str(AEP), 'MWh') 
+    print('AEP:', str(AEP), 'GWh')
+    print('')
+    print('----------------------End of AEP calculation----------------------')
+    print('')
     # plt.figure(figsize=(6, 4), clear=True)
     # plt.plot(v, p_tot*1e-9, label = 'Mean')
     # plt.legend(fontsize=18)
@@ -121,20 +145,20 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar):
     # plt.yticks(fontsize=18)
     # plt.show()
 
-    return AEP, p_tot, weibull, h2_wind_sorted, v
+    return AEP, p_tot, bin_prop, h2_wind_sorted, v, h2_power_mean_turb
 
 # analysis settings
 HAWC2S_PATH_DTU = './A4 Design Loads and AEP/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
 STATS_PATH_DTU = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
-SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
+SUBFOLDER_DTU = 'tcb'  # which subfolder to plot: tca or tcb
 
 HAWC2S_PATH_OURS = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
 STATS_PATH_OURS = './A4 Design Loads and AEP/stats_files/group7_turbB_stats_ts.csv'  # path to mean steady stats
-SUBFOLDER_OURS = 'tcb'  # which subfolder to plot: tca or tcb
+SUBFOLDER_OURS = ''  # which subfolder to plot: tca or tcb
 
 
-AEP_DTU, p_tot_DTU, weibull_DTU, h2_wind_sorted_DTU, v_bins_DTU = AEP_data(STATS_PATH_DTU, HAWC2S_PATH_DTU, SUBFOLDER_DTU, 10)
-AEP_OURS, p_tot_OURS, weibull_OURS, h2_wind_sorted_OURS, v_bins_OURS = AEP_data(STATS_PATH_OURS, HAWC2S_PATH_OURS, SUBFOLDER_OURS, 7.5)
+AEP_DTU, p_tot_DTU, bin_prop_DTU, h2_wind_sorted_DTU, v_bins_DTU, power_mean_DTU = AEP_data(STATS_PATH_DTU, HAWC2S_PATH_DTU, SUBFOLDER_DTU, 7.5, 'weibull')
+AEP_OURS, p_tot_OURS, bin_prop_OURS, h2_wind_sorted_OURS, v_bins_OURS, power_mean_OURS = AEP_data(STATS_PATH_OURS, HAWC2S_PATH_OURS, SUBFOLDER_OURS, 7.5, 'weibull')
 
 
 # --- Power Production per Wind Bin (Bar Plot) ---
@@ -148,21 +172,21 @@ plt.figure(figsize=(12, 8))
 
 # --- Power Production per Wind Bin (Bar Plot) ---
 # DTU 10 MW - Dark Blue
-plt.bar(v_bins_DTU, p_tot_DTU, width=0.8, alpha=0.7, color='navy', label='Power Output - DTU 10 MW')
+plt.bar(v_bins_DTU, p_tot_DTU*1e-6, width=0.8, alpha=0.7, color='navy', label='Power Output - DTU 10 MW')
 # Custom Design - Light Blue
-plt.bar(v_bins_OURS, p_tot_OURS, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Custom Design')
+plt.bar(v_bins_OURS, p_tot_OURS*1e-6, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Custom Design')
 
 # --- Total Power Curve (Line Plot) ---
 # DTU 10 MW - Solid Line
-plt.plot(v_bins_DTU+0.5, total_power_curve_DTU, 'o-', color='darkblue', label='Total Power Curve - DTU 10 MW')
+plt.plot(v_bins_DTU, power_mean_DTU*1e-6, 'o-', color='darkblue', label='Total Power Curve - DTU 10 MW')
 # Custom Design - Dashed Line
-plt.plot(v_bins_OURS+0.5, total_power_curve_OURS, 'o--', color='deepskyblue', label='Total Power Curve - Custom Design')
+plt.plot(v_bins_OURS, power_mean_OURS*1e-6, 'o--', color='deepskyblue', label='Total Power Curve - Custom Design')
 
 # --- Bin Probabilities (Overlaid Bar Plot) ---
 # DTU 10 MW - Dark Blue (transparent)
-plt.bar(v_bins_DTU+0.5, weibull_DTU, width=0.4, alpha=0.3, color='navy', label='Bin Probabilities - DTU 10 MW')
+plt.bar(v_bins_DTU, bin_prop_DTU*100, width=0.4, alpha=0.3, color='navy', label='Bin Probabilities - DTU 10 MW')
 # Custom Design - Light Blue (transparent)
-plt.bar(v_bins_OURS+0.5, weibull_OURS, width=0.4, alpha=0.3, color='skyblue', label='Bin Probabilities - Custom Design')
+plt.bar(v_bins_OURS, bin_prop_OURS*100, width=0.4, alpha=0.3, color='skyblue', label='Bin Probabilities - Custom Design')
 
 # --- Labels, Legends, and Formatting ---
 plt.xlabel('Wind Speed [m/s]')
@@ -173,17 +197,51 @@ plt.grid(True)
 plt.tight_layout()
 
 # Display the plot
+#plt.show()
+
+
+
+# Initialize the figure and create two y-axes
+fig, ax1 = plt.subplots(figsize=(12, 8))
+
+# --- Total Power Curve (Line Plot) on the left y-axis (ax1) ---
+ax1.plot(v_bins_DTU, power_mean_DTU* 1e-6, 'o-', color='indigo', label='Total Power Curve - DTU 10 MW')
+ax1.plot(v_bins_OURS, power_mean_OURS * 1e-6, 'o--', color='mediumpurple', label='Total Power Curve - Our Design')
+
+# Label and formatting for the left y-axis
+ax1.set_xlabel('Wind Speed [m/s]', fontsize=18)
+ax1.set_ylabel('Power Output [MW] & Bin probability [%]', color='darkorchid', fontsize=18)
+ax1.tick_params(axis='y', labelcolor='darkorchid', labelsize=18)
+ax1.tick_params(axis='x', labelsize=18)
+
+ax1.plot(v_bins_DTU, bin_prop_DTU*100, 's-', color='indigo', label='Bin Probabilities - DTU 10 MW')
+ax1.plot(v_bins_OURS, bin_prop_OURS*100, 's--',color='mediumpurple', label='Bin Probabilities - Our design')
+#ax1.set_ylabel('Bin Probability', color='purple', fontsize=18)
+
+# Create a secondary y-axis for weighted power (ax2)
+ax2 = ax1.twinx()
+
+# --- Power Production per Wind Bin (Bar Plot) on the left y-axis (ax1) ---
+ax2.bar(v_bins_DTU, p_tot_DTU * 8670 * 1e-6, width=0.8, alpha=0.7, color='navy', label='Power Output - DTU 10 MW')
+ax2.bar(v_bins_OURS, p_tot_OURS * 8670 * 1e-6, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Our Design')
+
+# Label and formatting for the right y-axis
+ax2.tick_params(axis='y', labelcolor='darkblue', labelsize=18)
+ax2.set_ylabel('Weighted Power Output [MWh]', color='darkblue', fontsize=18)
+
+# Legends for both axes
+ax1.legend(loc='center right', bbox_to_anchor=(1, 0.7), fontsize=16)
+ax2.legend(loc='center right', bbox_to_anchor=(1, 0.55), fontsize=16)
+
+# Title and grid
+#plt.title('Comparison of Power Production and Bin Probabilities')
+ax1.grid(True)
+plt.tight_layout()
+
+# Display the plot
+plt.savefig('./A4 Design Loads and AEP/figures/AEP_comparison.png', dpi=300)
+plt.savefig('./A4 Design Loads and AEP/figures/AEP_comparison.svg', dpi=300)
 plt.show()
-
-
-
-
-
-
-
-
-
-
 
 
 
