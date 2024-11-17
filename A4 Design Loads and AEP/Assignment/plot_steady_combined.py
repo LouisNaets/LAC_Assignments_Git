@@ -148,6 +148,11 @@ for df, wsps, i, label_name in dfs:
             ax.grid('on')
             ax.set(xlabel='Wind speed [m/s]' if iplot > 11 else None,
                 ylabel=f'{chan_id} [{chan_df.units.iloc[0]}]', xlim=[4, 25])
+            
+            if chan_id == 'GenTrq':
+                ax.set(ylabel=f'{chan_id} [Nm]')
+            elif chan_id == 'ElPow':
+                ax.set(ylabel=f'{chan_id} [W]')
 
 # Add legends and format the figure
 axs[0, 0].legend()
