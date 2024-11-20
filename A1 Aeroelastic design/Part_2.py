@@ -107,11 +107,12 @@ tc_datasets = [tc_241_data, tc_301_data, tc_360_data, tc_480_data]
 titles = ['tc_241_data', 'tc_301_data', 'tc_360_data', 'tc_480_data']
 
 # Chosen design points for each airfoil
-Cl_points = [1.3, 1.23, 1.37, 0.54]
-Cd_points = [0.013, 0.014, 0.021, 0.032]
+Cl_points = [1.2914, 1.2874, 1.3897, 0.7]                         # !! UPDATED !!
+Cd_points = [0.0124, 0.0152, 0.0213, 0.032]                       # !! UPDATED !!  
 Cl_Cd_points = np.array(Cl_points)/np.array(Cd_points)
-alpha_points = [8.1, 7.5, 5.8, 1.8]
+alpha_points = [8, 8, 6, 2.55]                                    # !! UPDATED !!
 t_c_points = [24.1, 30.1, 36.0, 48.0]
+
 
 # Plot for each tc dataset
 for i, tc_data in enumerate(tc_datasets):
@@ -301,13 +302,13 @@ fig3.savefig('A1 Aeroelastic design/Figures/aoa_cl_cd.svg', format='svg')
 fig4.savefig('A1 Aeroelastic design/Figures/CLT_CLP_a.svg', format='svg')
 
 # Design function 3 is chosen
-i_design = 3
+i_design = 2                                                       # !! UPDATED !!
 
 '''
 Step 7: Find the design with tip-speed-ratio that maximizes CP
 '''
 
-tsr_range = np.arange(6, 12, 0.5)
+tsr_range = np.arange(6, 12, 0.05)
 IA.CP_store = np.zeros(len(tsr_range))
 IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
@@ -316,11 +317,11 @@ for i, tsr in enumerate(tsr_range):
         IA.r, IA.t, tsr, IA.R, IA.cl_des, IA.cd_des, IA.aoa_des, IA.chord_root, IA.chord_max, B)
     IA.CP_store[i] = IA.CP
 
-    print(f"tsr: {tsr}, CP: {IA.CP:1.3f}")
+    # print(f"tsr: {tsr}, CP: {IA.CP:1.3f}")
 
 # Plot the power coefficient
 plt.figure()
-plt.plot(tsr_range, IA.CP_store, linestyle = '-', marker = 'o')
+plt.plot(tsr_range, IA.CP_store, linestyle = '-')
 plt.axhline(y=max(IA.CP_store), color='grey', linestyle='--')
 plt.axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--')
 plt.xlabel("Tip-speed ratio (TSR) [-]")
@@ -331,13 +332,13 @@ plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.png', format='png')
 
 # TSR 7.5 is chosen
-tsr = 7.5
+tsr = 7.3                           # !! UPDATED !!
 
 '''
 Step 8: Present your final chord, twist, and relative thickness distributions and compare to the original DTU 10MW rotor. 
 '''
 
-# Final designs for chosen TSR = 7.5 and design function 3
+# Final designs for chosen TSR = 7.2 and design function 2               # !! UPDATED !!
 
 # !! This wasn't actually required we just needed the original values for the DTU 10MW reference turbine
 # IA class 
