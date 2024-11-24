@@ -130,7 +130,7 @@ class MyHTC(HTCFile):
         # update the tsr
         self.hawcstab2.operational_data.opt_lambda = opt_lambda
         # add hawc2s commands
-        self._add_hawc2s_commands(rigid=rigid, **kwargs)
+        self._add_hawc2s_commands(rigid=rigid, **kwargs) #!! updated for part 1 - is probably required again later !!
         # update filename and save the file
         self._update_name_and_save(save_dir, append)
         print(f'File "{append}" saved.')
