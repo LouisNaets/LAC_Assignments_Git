@@ -133,23 +133,23 @@ begin new_htc_structure;  material properties, orientations and constraints of b
       sec     8       -0.288563       -0.0077066      13.68818        -20.0   ;
       sec     9       -0.399194       -0.0048832      15.557459       -20.0   ;
       sec     10      -0.576634       -0.0180296      18.8794584      -20.0   ;
-      sec     11      -0.707136       -0.0501772      22.1989704      -18.5635504     ;
-      sec     12      -0.791081       -0.0941228      25.5168239      -15.7865535     ;
-      sec     13      -0.837195       -0.14888        28.833952       -12.9804062     ;
-      sec     14      -0.853948       -0.214514       32.150769       -10.0706411     ;
-      sec     15      -0.849367       -0.290618       35.4677934      -7.2582228      ;
-      sec     16      -0.79392        -0.462574       41.6873567      -3.7433831      ;
-      sec     17      -0.716284       -0.688437       48.322131       -1.8459643      ;
-      sec     18      -0.634358       -0.960017       54.9571126      -0.4682109      ;
-      sec     19      -0.553179       -1.28424        61.5918869      0.4745642       ;
-      sec     20      -0.475422       -1.66402        68.2263502      1.2072677       ;
-      sec     21      -0.40318        -2.10743        74.860399       1.814543        ;
-      sec     22      -0.330085       -2.6563         81.9089333      2.3548419       ;
-      sec     23      -0.31014        -2.78882        83.4637464      2.4625943       ;
-      sec     24      -0.286719       -2.92517        85.0188704      2.5658784       ;
-      sec     25      -0.255823       -3.06577        86.5738907      2.6652593       ;
-      sec     26      -0.207891       -3.20952        88.1289111      2.7619711       ;
-      sec     27      -0.089894       -3.33685        89.5155046      2.8450081       ;
+      sec     11      -0.707136       -0.0501772      22.1989704      -18.0852986     ;
+      sec     12      -0.791081       -0.0941228      25.5168239      -15.133814      ;
+      sec     13      -0.837195       -0.14888        28.833952       -12.3062168     ;
+      sec     14      -0.853948       -0.214514       32.150769       -9.5789656      ;
+      sec     15      -0.849367       -0.290618       35.4677934      -7.3512782      ;
+      sec     16      -0.79392        -0.462574       41.6873567      -3.7457501      ;
+      sec     17      -0.716284       -0.688437       48.322131       -1.1689592      ;
+      sec     18      -0.634358       -0.960017       54.9571126      0.3316377       ;
+      sec     19      -0.553179       -1.28424        61.5918869      1.3957707       ;
+      sec     20      -0.475422       -1.66402        68.2263502      2.1442686       ;
+      sec     21      -0.40318        -2.10743        74.860399       2.7515439       ;
+      sec     22      -0.330085       -2.6563         81.9089333      3.2918429       ;        
+      sec     23      -0.31014        -2.78882        83.4637464      3.3995953       ;
+      sec     24      -0.286719       -2.92517        85.0188704      3.5028794       ;
+      sec     25      -0.255823       -3.06577        86.5738907      3.6022602       ;
+      sec     26      -0.207891       -3.20952        88.1289111      3.698972        ;
+      sec     27      -0.089894       -3.33685        89.5155046      3.7820091       ;
      end c2_def ;                                 
    end main_body;
 ;
@@ -333,7 +333,7 @@ begin aero ;  aerodynamic forces
   link 1 mbdy_c2_def blade1;
   link 2 mbdy_c2_def blade2;
   link 3 mbdy_c2_def blade3;
-  ae_filename        ./data/group7_3B_design_ae.dat ; !! UPDATED !!
+  ae_filename        ./data/updated_design_ae.dat ; !! UPDATED !!
   pc_filename        ./data/DTU_10MW_RWT_pc.dat ;
   induction_method   1 ;     0=none, 1=normal
   aerocalc_method    1 ;     0=no aero calculations, 1=with aero calculations
@@ -694,15 +694,15 @@ begin hawcstab2;  commands for hawc2s/hawcstab2
   end rotating_threebladed_substructure;
   ;
   ; path to opt file, used for all commands EXCEPT compute_optimal_pitch_angle
-  operational_data_filename	./data/dtu_10mw_flex.opt;
+  operational_data_filename	./data/dtu_10mw_flex.opt; !! TO BE UPDATED !!
   ;
   ; settings for compute_optimal_pitch_angle
   begin operational_data ;  
     windspeed 4 25 22 ; cut-in [m/s], cut-out [m/s], points [-] -- used if operational_data_file_wind is 0
-    genspeed 0 431 ; min, max generator speed [rpm] !! UPDATED !!
+    genspeed 0 431 ; min, max generator speed [rpm] !! TO BE UPDATED !!
     gearratio 50.0 ; gear ratio [-]
     minpitch 0.0 ; min. pitch angle [deg]
-    opt_lambda 7.5 ; optimal TSR [-] !! UPDATED !!
+    opt_lambda 7.3 ; optimal TSR [-] !! UPDATED !!
     maxpow 10638.3 ; rated aerodynamic power [kW]
     prvs_turbine 1 ; 1=pitch-regulated, variable-speed turbine
 	operational_data_file_wind 1;  0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above

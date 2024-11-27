@@ -452,7 +452,7 @@ if print_extra:
 
 
 print('Omegas for the opt files')
-for tsr_opt in np.arange(6, 10.1, 0.5):
+for tsr_opt in np.arange(6, 10.1, 0.1):
     omega = tsr_opt*V_0/IIIB.R * (60/(2*np.pi))
     print('TSR: ' + str(tsr_opt) + '-> omega: ' + str(round(omega,7)) + ' RPM')
 
