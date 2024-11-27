@@ -528,9 +528,22 @@ if print_extra:
 
 
 print('Omegas for the opt files')
+iii=0
 for tsr_opt in np.arange(6, 12.1, 0.5):
-    omega = tsr_opt*V_0/IIIB.R * (60/(2*np.pi))
-    print('TSR: ' + str(tsr_opt) + '-> omega: ' + str(round(omega,7)) + ' RPM')
+    omega = tsr_opt*IIIB.V_rated/IIIB.R * (60/(2*np.pi))
+    #print('TSR: ' + str(tsr_opt) + '-> omega: \t' + str(round(omega,7)) + ' RPM')
+    print(str(round(IIIB.V_rated,2)+iii) + '\t0.001070\t' + str(round(omega,7)) + '\t3680.687310\t791.175055')
+    iii = iii+0.0001
+
+print('Omegas for the opt files')
+iii=0
+for tsr_opt in np.arange(7, 9, 0.05):
+    omega = tsr_opt*IIIB.V_rated/IIIB.R * (60/(2*np.pi))
+    #print('TSR: ' + str(tsr_opt) + '-> omega: \t' + str(round(omega,7)) + ' RPM')
+    print('TSR: ' + str(tsr_opt) + '-> omega: \t' + str(round(IIIB.V_rated,2)+iii) + ' m/s')
+    #print(str(round(IIIB.V_rated,2)+iii) + '\t0.001070\t' + str(round(omega,7)) + '\t3680.687310\t791.175055')
+    iii = iii+0.0001
+
 
 #Part 3 plots 1 and 2:
 

@@ -13,8 +13,8 @@
  ***********************************************************************
 ________________________________________________________________________
   Log file output
-                                                       Time : 14:31:01
-                                                       Date : 24:11.2024
+                                                       Time : 19:20:24
+                                                       Date : 26:11.2024
 ________________________________________________________________________
  Opening main command file: .\individual_design_hawc2s_multitsr.htc
  Current directory is 
@@ -44,7 +44,7 @@ ________________________________________________________________________
  Reading data of main body : hub3
  Topologi main body hub3 commands read with succes
  Reading data of main body : blade1
- Succes opening ./data/DTU_10MW_RWT_Blade_st.dat
+ Succes opening ./data/individual_design_Blade_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body blade1 commands read with succes
