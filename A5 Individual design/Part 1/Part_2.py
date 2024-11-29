@@ -813,7 +813,7 @@ new_ST_data = scale_ST_data(st_data_DTU10MW, SF)
 
 save_st("./hawc_files/individual_design/data/individual_design_Blade_st.dat", new_ST_data)
 
-opt_path = './hawc_files/individual_design/data/individual_design_flex.opt'
+opt_path = './hawc_files/individual_design/data/individual_design_flex_minrotspd.opt'
 flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class f_opt:
@@ -909,13 +909,27 @@ plt.savefig('A5 Individual design/Figures 1/4.2.png', format='png')
 
 '''FIGURE 4.3'''
 
-DTU10MW_flex_path = './hawc_files/individual_design/data/dtu_10mw_hawc2s_flex.pwr'
-DTU10MW_flex_data = np.loadtxt(DTU10MW_flex_path, skiprows=1)
+
+# Using the flex_mintorspd instead for comparison
+opt_path = './hawc_files/individual_design/data/dtu_10mw_flex_minrotspd.opt'
+flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class DTU10MW_f_opt:
-    V_o = DTU10MW_flex_data[:, 0]
-    P = DTU10MW_flex_data[:, 1]
-    T = DTU10MW_flex_data[:, 2]
+    V_o = flex_opt_data[:, 0]
+    pitch = flex_opt_data[:, 1]
+    omega = flex_opt_data[:, 2]
+    P = flex_opt_data[:, 3]
+    T = flex_opt_data[:, 4]
+    C_p = []
+    C_T = []
+
+#DTU10MW_flex_path = './hawc_files/individual_design/data/dtu_10mw_hawc2s_flex.pwr'
+#DTU10MW_flex_data = np.loadtxt(DTU10MW_flex_path, skiprows=1)
+
+#class DTU10MW_f_opt:
+#    V_o = DTU10MW_flex_data[:, 0]
+#    P = DTU10MW_flex_data[:, 1]
+#    T = DTU10MW_flex_data[:, 2]
 
 # Set up a 1x2 grid layout
 fig12, axes12 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
