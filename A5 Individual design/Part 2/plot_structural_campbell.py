@@ -17,7 +17,7 @@ from plot_amp_custom import plot_amp_rpm
 
 TURBINE_NAME = 'Redesigned IIIB climate turbine'
 CMB_PATH = './A5 Individual design/Part 2/individual_design_structural.cmb'
-MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
+MODE_NAMES = ['Tower fore-aft', 'Tower side-side', '1st flap BW', '1st flap FW', '1st flap SYM',
               '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
               '1st edge SYM']
 DT_MODENUM = 9  # what mode number in HAWCStab2 is the drivetrain mode?
