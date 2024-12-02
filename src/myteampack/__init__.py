@@ -185,10 +185,10 @@ class MyHTC(HTCFile):
 
     def _update_ctrl_params(self, cp_dict:dict):
         cp = self.dll.type2_dll__1.init # control param 
-        cp.constant__2 = [2, 0] # min rotor compute
-        cp.constant__3 = [3, 0.903] # rated rotor 8.627 RPM
-        cp.constant__4 = [4, 10000/0.903*1.5*1000] # max gen torque multiplied by 1.5 for safety margin
-        cp.constant__5 = [5, 0] # min pitch
+        cp.constant__2 = [2, 0.62832] # min rotor 6 RPM
+        cp.constant__3 = [3, 0.86125] # rated rotor 8.224 RPM
+        cp.constant__4 = [4, 10000/0.86125*1.5*1000] # max gen torque multiplied by 1.5 for safety margin
+        cp.constant__5 = [5, 99] # min pitch
         cp.constant__11 = [11, cp_dict["K_Nm/(rad/s)^2"]]
         cp.constant__12 = [12, cp_dict["KpTrq_Nm/(rad/s)"]]
         cp.constant__13 = [13, cp_dict["KiTrq_Nm/rad"]]
