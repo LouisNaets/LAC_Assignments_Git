@@ -5,7 +5,7 @@ Requires myteampack (which requires lacbox).
 from myteampack import MyHTC
 
 if __name__ == '__main__':
-    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design_old_st.htc'
+    ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
     SAVE_HAWC2S_DIR = './hawc_files/our_design'
     # make rigid hawc2s file for single-wsp opt file
     htc = MyHTC(ORIG_PATH)

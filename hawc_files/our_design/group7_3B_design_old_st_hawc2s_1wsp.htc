@@ -308,7 +308,7 @@
     end rotating_threebladed_substructure;
 ;
 ; path to opt file, used for all commands EXCEPT compute_optimal_pitch_angle
-    operational_data_filename	./hawc_files/our_design/data/group7_3B_design_1wsp.opt;	
+    operational_data_filename	./data/group7_3B_design_1wsp.opt;	
 ;
 ; settings for compute_optimal_pitch_angle
     begin operational_data;

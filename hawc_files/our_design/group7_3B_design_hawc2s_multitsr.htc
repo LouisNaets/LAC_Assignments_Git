@@ -12,7 +12,7 @@
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.00412 0.00412 0.00045;	tuned by Larh
       begin timoschenko_input;
-        filename	./data/DTU_10MW_RWT_Tower_st.dat;
+        filename	./hawc_files/our_design/data/DTU_10MW_RWT_Tower_st.dat;
         set	1 1;	1 1=flexibe, 1 2=stiff
       end timoschenko_input;
       begin c2_def;	definition of centerline in main_body coordinates
@@ -39,7 +39,7 @@
       damping_posdef	0 0 0 0 0 0;
       concentrated_mass	2 0 2.687 0.30061 446040 4106000 410600 4106000;	nacelle mass and inertia corrected by Anyd 25/4/13
       begin timoschenko_input;
-        filename	./data/DTU_10MW_RWT_Towertop_st.dat;
+        filename	./hawc_files/our_design/data/DTU_10MW_RWT_Towertop_st.dat;
         set	1 2;	1 1=flexibe, 1 2=stiff
       end timoschenko_input;
       begin c2_def;	Definition of centerline (main_body coordinates)
@@ -58,7 +58,7 @@
       concentrated_mass	1 0 0 0 0 0 0 3751000;	generator equivalent slow shaft re-tuned by Anyd 20/2/13
       concentrated_mass	5 0 0 0 105520 0 0 325700;	hub mass and inertia re-tuned by Anyd 20/2/13
       begin timoschenko_input;
-        filename	./data/DTU_10MW_RWT_Shaft_st.dat;
+        filename	./hawc_files/our_design/data/DTU_10MW_RWT_Shaft_st.dat;
         set	1 1;	1 1=flexibe, 1 2=stiff
       end timoschenko_input;
       begin c2_def;	definition of centerline in main_body coordinates
@@ -78,7 +78,7 @@
       node_distribution	c2_def;
       damping_posdef	0 0 0 0 0 0;
       begin timoschenko_input;
-        filename	./data/DTU_10MW_RWT_Hub_st.dat;
+        filename	./hawc_files/our_design/data/DTU_10MW_RWT_Hub_st.dat;
         set	1 2;	1 1=flexibe, 1 2=stiff
       end timoschenko_input;
       begin c2_def;	definition of centerline in main_body coordinates
@@ -105,13 +105,13 @@
       node_distribution	c2_def;
       damping_posdef	0 0 0 0.00153 0.00255 0.00033;	3% damping tuned by tkim 23/03/13, unable to fit 3rd and higher mode
       begin timoschenko_input;
-        filename	./data/DTU_10MW_RWT_Blade_st.dat;
+        filename	./hawc_files/our_design/data/DTU_10MW_RWT_Blade_st.dat;
         set	1 1;	1 1=flexibe, 1 2=stiff
       end timoschenko_input;
       begin c2_def;	definition of centerline in main_body coordinates
 ; !! UPDATED !! scale [4] with SF and update [5] to match twist (interpolate to match the z-values)
         nsec	27;
-        sec	1 0 7.01e-05 4.4409e-16 -20;
+        sec	1 0 7.01e-05 0 -20;
         sec	2 -2.06e-05 -0.0122119 3.1094189 -20;
         sec	3 -0.0072881 -0.0249251 6.2188377 -20;
         sec	4 -0.0189235 -0.0273351 7.2553521 -20;
@@ -121,23 +121,23 @@
         sec	8 -0.288563 -0.0077066 13.68818 -20;
         sec	9 -0.399194 -0.0048832 15.557459 -20;
         sec	10 -0.576634 -0.0180296 18.8794584 -20;
-        sec	11 -0.707136 -0.0501772 22.1989704 -18.2078566;
-        sec	12 -0.791081 -0.0941228 25.5168239 -15.4905782;
-        sec	13 -0.837195 -0.14888 28.833952 -12.9526623;
-        sec	14 -0.853948 -0.214514 32.150769 -10.2862504;
-        sec	15 -0.849367 -0.290618 35.4677934 -8.026125;
-        sec	16 -0.79392 -0.462574 41.6873567 -4.4848613;
-        sec	17 -0.716284 -0.688437 48.322131 -1.9041256;
-        sec	18 -0.634358 -0.960017 54.9571126 -0.4179626;
-        sec	19 -0.553179 -1.28424 61.5918869 0.6449545;
-        sec	20 -0.475422 -1.66402 68.2263502 1.389492;
-        sec	21 -0.40318 -2.10743 74.860399 1.9816301;
-        sec	22 -0.330085 -2.6563 81.9089333 2.5083077;
-        sec	23 -0.31014 -2.78882 83.4637464 2.6133281;
-        sec	24 -0.286719 -2.92517 85.0188704 2.7139878;
-        sec	25 -0.255823 -3.06577 86.5738907 2.8108387;
-        sec	26 -0.207891 -3.20952 88.1289111 2.9050854;
-        sec	27 -0.089894 -3.33685 89.5155046 2.9860022;
+        sec	11 -0.707136 -0.0501772 22.1989704 -18.5619308;
+        sec	12 -0.791081 -0.0941228 25.5168239 -15.5655124;
+        sec	13 -0.837195 -0.14888 28.833952 -12.6566593;
+        sec	14 -0.853948 -0.214514 32.150769 -9.7616982;
+        sec	15 -0.849367 -0.290618 35.4677934 -7.03499;
+        sec	16 -0.79392 -0.462574 41.6873567 -3.2941407;
+        sec	17 -0.716284 -0.688437 48.322131 -1.2369831;
+        sec	18 -0.634358 -0.960017 54.9571126 0.2062876;
+        sec	19 -0.553179 -1.28424 61.5918869 1.2005852;
+        sec	20 -0.475422 -1.66402 68.2263502 1.9521684;
+        sec	21 -0.40318 -2.10743 74.860399 2.5753423;
+        sec	22 -0.330085 -2.6563 81.9089333 3.1299615;
+        sec	23 -0.31014 -2.78882 83.4637464 3.2405875;
+        sec	24 -0.286719 -2.92517 85.0188704 3.3466325;
+        sec	25 -0.255823 -3.06577 86.5738907 3.4486753;
+        sec	26 -0.207891 -3.20952 88.1289111 3.5479811;
+        sec	27 -0.089894 -3.33685 89.5155046 3.6332496;
       end c2_def;
     end main_body;
 ;
@@ -282,8 +282,8 @@
     link	1 mbdy_c2_def blade1;
     link	2 mbdy_c2_def blade2;
     link	3 mbdy_c2_def blade3;
-    ae_filename	./data/group7_3B_design_ae.dat;	!! UPDATED !!
-    pc_filename	./data/DTU_10MW_RWT_pc.dat;
+    ae_filename	./hawc_files/our_design/data/group7_3B_design_ae.dat;	!! UPDATED !!
+    pc_filename	./hawc_files/our_design/data/DTU_10MW_RWT_pc.dat;
     induction_method	1;	0=none, 1=normal
     aerocalc_method	1;	0=no aero calculations, 1=with aero calculations
     aerosections	50;
@@ -308,7 +308,7 @@
     end rotating_threebladed_substructure;
 ;
 ; path to opt file, used for all commands EXCEPT compute_optimal_pitch_angle
-    operational_data_filename	./data/group7_3B_design_multitsr.opt;	
+    operational_data_filename	./hawc_files/our_design/data/group7_3B_design_multitsr.opt;	
 ;
 ; settings for compute_optimal_pitch_angle
     begin operational_data;
@@ -316,7 +316,7 @@
       genspeed	0 480;	min, max generator speed [rpm] !! UPDATED !!
       gearratio	50;	gear ratio [-]
       minpitch	0;	min. pitch angle [deg]
-      opt_lambda	7.5;	optimal TSR [-] !! UPDATED !!
+      opt_lambda	8;	optimal TSR [-] !! UPDATED !!
       maxpow	10638.3;	rated aerodynamic power [kW]
       prvs_turbine	1;	1=pitch-regulated, variable-speed turbine
       operational_data_file_wind	1;	0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above

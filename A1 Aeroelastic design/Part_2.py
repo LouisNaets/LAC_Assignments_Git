@@ -408,8 +408,6 @@ plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', for
 #plt.show()
 
 
-# %%
-
 #Part 3
 
 IA.htc_main_z = [4.44089E-16, 3.00000E+00, 6.00000E+00, 7.00004E+00, 8.70051E+00,
@@ -475,7 +473,7 @@ def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
 
 
 # Path for the file
-ind_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_1wsp_u8000.ind"
+ind_path = "./res_hawc2s/group7_3B_design_hawc2s_1wsp_u8000.ind"
 # Load the data
 ind_data = load_ind(ind_path)
 
@@ -546,12 +544,12 @@ plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
 
 
 # Path for the file
-inds_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_multitsr_u8003.ind"
+inds_path = "./res_hawc2s/group7_3B_design_hawc2s_multitsr_u8003.ind"
 # Load the data
 inds_data = load_ind(inds_path)
 
 # Path for the file
-pwr_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_multitsr.pwr"
+pwr_path = "./res_hawc2s/group7_3B_design_hawc2s_multitsr.pwr"
 # Load the data
 pwr_data = load_pwr(pwr_path)
 
@@ -595,6 +593,7 @@ axes6[2,1].grid(True, linestyle = ':')
 # Save the figure
 fig6.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.2.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.2.png', format='png')
 
 plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 12})
 
@@ -618,6 +617,7 @@ axes7[1].grid(True, linestyle = ':')
 # Save the figure
 fig7.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.3.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.3.png', format='png')
 
 '''FIGURE 3.4'''
 
@@ -653,6 +653,7 @@ axes8[1].legend()
 # Save the figure
 fig8.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.4.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.4.png', format='png')
 
 
 
@@ -718,6 +719,7 @@ ax3.legend(handles=[cp_line, ct_line])
 # Adjust layout and save the figure
 fig9.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.5.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.5.png', format='png')
 
 '''
 PART 4
@@ -795,11 +797,13 @@ axes10[1].grid(True, linestyle = ':')
 
 # Save the figure
 fig10.tight_layout()
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.png', format='png')
 
 
 
 '''FIGURE 4.2'''
+print('Part 4')
 
 # Set up a 1x2 grid layout
 fig11, axes11 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
