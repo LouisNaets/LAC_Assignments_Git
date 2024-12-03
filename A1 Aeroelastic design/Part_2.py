@@ -475,7 +475,7 @@ def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
 
 
 # Path for the file
-ind_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_1wsp_u8000.ind"
+ind_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_1wsp_u8000.ind"
 # Load the data
 ind_data = load_ind(ind_path)
 
@@ -542,14 +542,16 @@ axes5[2,1].legend()
 axes5[2,1].grid(True, linestyle = ':')
 fig5.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.svg', format='svg')
+plt.savefig('A1 Aeroelastic design/Figures_part3/3.1.png', format='png')
+
 
 # Path for the file
-inds_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_multitsr_u8003.ind"
+inds_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_multitsr_u8003.ind"
 # Load the data
 inds_data = load_ind(inds_path)
 
 # Path for the file
-pwr_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_multitsr.pwr"
+pwr_path = "./res_hawc2s/group7_3B_design_old_st_hawc2s_multitsr.pwr"
 # Load the data
 pwr_data = load_pwr(pwr_path)
 
@@ -853,4 +855,4 @@ axes12[1].grid(True, linestyle = ':')
 # Save the figure
 fig12.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.svg', format='svg')
-plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.png', format='png')
+plt.savefig('A1 Aeroelastic design/Figures_part4/4.3.png', format='png') 
