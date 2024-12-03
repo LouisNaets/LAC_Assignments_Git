@@ -107,7 +107,7 @@ tc_datasets = [tc_241_data, tc_301_data, tc_360_data, tc_480_data]
 titles = ['tc_241_data', 'tc_301_data', 'tc_360_data', 'tc_480_data']
 
 # Chosen design points for each airfoil
-Cl_points = [1.3, 1.23, 1.37, 0.54]
+Cl_points = [1.4, 1.33, 1.47, 0.64] #EDITED to exclude the LER adjustment of -0.1, thus +0.1 
 Cd_points = [0.013, 0.014, 0.021, 0.032]
 Cl_Cd_points = np.array(Cl_points)/np.array(Cd_points)
 alpha_points = [8.1, 7.5, 5.8, 1.8]
@@ -153,6 +153,8 @@ for i, tc_data in enumerate(tc_datasets):
     # Adjust layout and display the plots
     plt.tight_layout()
     plt.savefig(f'A1 Aeroelastic design/Figures/{titles[i]}.svg', format='svg')
+    plt.savefig(f'A1 Aeroelastic design/Figures/{titles[i]}.png', format='png')
+
 
 # DTU 10MW IIIB
 fig1, axs1 = plt.subplots(3, 1, figsize=(10, 8))
@@ -301,13 +303,13 @@ fig3.savefig('A1 Aeroelastic design/Figures/aoa_cl_cd.svg', format='svg')
 fig4.savefig('A1 Aeroelastic design/Figures/CLT_CLP_a.svg', format='svg')
 
 # Design function 3 is chosen
-i_design = 3
+i_design = 2                    #EDITED choose design function 2 instead of 3
 
 '''
 Step 7: Find the design with tip-speed-ratio that maximizes CP
 '''
 
-tsr_range = np.arange(6, 12, 0.5)
+tsr_range = np.arange(6, 12, 0.1)               #EDITED to have more TSR points 0.1 instead of 0.5
 IA.CP_store = np.zeros(len(tsr_range))
 IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
@@ -331,7 +333,7 @@ plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.png', format='png')
 
 # TSR 7.5 is chosen
-tsr = 7.5
+tsr = 7.1                 #EDITED choose TSR 7.1 instead of 7.5
 
 '''
 Step 8: Present your final chord, twist, and relative thickness distributions and compare to the original DTU 10MW rotor. 
@@ -363,6 +365,9 @@ IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.tc_vals, IIIB.cl_vals, IIIB.cd_vals
 
 IIIB.chord, IIIB.tc, IIIB.twist, IIIB.cl, IIIB.cd, IIIB.aoa, IIIB.a, IIIB.CLT, IIIB.CLP, IIIB.CT, IIIB.CP = single_point_design(
         IIIB.r, IIIB.t, tsr, IIIB.R, IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.chord_root, IIIB.chord_max, B)
+
+#EDITED adjusting the relative thickness to be at least 24.1% as per the assignment
+IIIB.tc = np.maximum(IIIB.tc, 24.1)
 
 # Plot the chord, twist and relative-thickness of the DTU 10MW reference turbine and new IIIB design
 # Determine chord and thickness for IA class from the _ae file

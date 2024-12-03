@@ -10,7 +10,7 @@ B_ref = 3 #[-]
 plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 10})  # Affects both X and Y labels
 
 alpha_vary = np.arange(3, 7.1, 0.5) #[deg]
-TSR_vary = np.arange(6, 10.1, 0.5) #[-]
+TSR_vary = np.arange(6, 10.1, 0.5) #[-]     
 B_vary = np.arange(2, 5.1, 1) #[-]
 
 r_R = np.arange(0.1, 1.01, 0.01)
