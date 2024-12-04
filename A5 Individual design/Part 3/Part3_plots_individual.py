@@ -24,7 +24,7 @@ def plot_wind_turbine_data(data_list, omega_zeta_list, title: str, alphas=None, 
         linestyles = ['-'] * len(data_list)  # Solid lines by default
 
     # Create a figure with 2x2 subplots
-    fig, axs = plt.subplots(2, 2, figsize=(18, 10),dpi=500)
+    fig, axs = plt.subplots(5, 2, figsize=(18, 10),dpi=500)
     fig.tight_layout(pad=5.0)
 
     # Titles and labels for the subplots
@@ -32,11 +32,17 @@ def plot_wind_turbine_data(data_list, omega_zeta_list, title: str, alphas=None, 
         ("Wind Speed", "Wind Speed [m/s]", None),
         ("Pitch Angle", "Pitch [Deg]", None),
         ("Rotational Speed", "$\Omega$ [Rad/sec]", None),
-        ("Electrical Power", "Power [W]", None)
+        ("Electrical Power", "Power [W]", None),
+        ("Aer. Thrust", "Thrust [kN]", None),
+        ("Aer. Torque", "Torque [kNm]", None),
+        ("TBSS", "Moment [kNm]", None),
+        ("TBFA", "Moment [kNm]", None),
+        ("IPBRM", "Moment [kNm]", None),
+        ("EdgBRM", "Moment [kNm]", None)
     ]
 
     # Data keys for each plot
-    keys = ["wind_speed", "pitch", "rotational_speed", "elec_power"]
+    keys = ["wind_speed", "pitch", "rotational_speed", "elec_power", "thrust", "torque", "tbss", "tbfa", "ipbrm", "edgbrm"]
 
     # Loop over subplots and datasets
     for idx, ax in enumerate(axs.flat):
@@ -76,7 +82,13 @@ def extract_values_for_part_3_omit100(df, start=100, stop=None):
     rotational_speed = df.data[:, 9]
     elec_power = df.data[:, 104]
     wind_speed = df.data[:, 16]
-    
+    tbss = df.data[:, 20-1]
+    tbfa = df.data[:, 19-1]
+    thrust = df.data[:, 13-1]
+    torque = df.data[:, 11-1]
+    ipbrm = df.data[:, 29-1]
+    edgbrm = df.data[:, 38-1]
+
     # Manually define start and stop times for filtering
     start = start # Adjust this value as needed
     stop = stop   # Adjust this value as needed, or set to None for no upper limit
@@ -92,7 +104,13 @@ def extract_values_for_part_3_omit100(df, start=100, stop=None):
         'rotational_speed': rotational_speed[mask],
         'elec_power': elec_power[mask],
         'wind_speed': wind_speed[mask],
-        'time': time[mask]
+        'time': time[mask],
+        'tbfa': tbfa[mask],
+        'tbss': tbss[mask],
+        'thrust': thrust[mask],
+        'torque': torque[mask],
+        'ipbrm': ipbrm[mask],
+        'edgbrm': edgbrm[mask]
     }
 
 # Example usage
@@ -115,6 +133,16 @@ data_list_max_wind = [
     extract_values_for_part_3_omit100(df7, 960, 1000)
 ]
 
+data_list_v_rated = [
+    extract_values_for_part_3_omit100(df1, 386, 426),
+    extract_values_for_part_3_omit100(df2, 386, 426),
+    extract_values_for_part_3_omit100(df3, 386, 426),
+    extract_values_for_part_3_omit100(df4, 386, 426),
+    extract_values_for_part_3_omit100(df5, 386, 426),
+    extract_values_for_part_3_omit100(df6, 386, 426),
+    extract_values_for_part_3_omit100(df7, 386, 426)
+]
+
 data_list = [
     extract_values_for_part_3_omit100(df1),
     extract_values_for_part_3_omit100(df2),
@@ -130,6 +158,7 @@ data_list = [
 alphas = None
 linestyles = None  # You can update linestyles if needed
 
-plot_wind_turbine_data(data_list_max_wind, omega_zeta_list, "_Max_Wind_Speed", alphas, linestyles)
+plot_wind_turbine_data(data_list_max_wind, omega_zeta_list, "_25ms", alphas, linestyles)
+plot_wind_turbine_data(data_list_v_rated, omega_zeta_list, "_11ms", alphas, linestyles)
 plot_wind_turbine_data(data_list, omega_zeta_list, "", alphas, linestyles)
 #plt.show()
