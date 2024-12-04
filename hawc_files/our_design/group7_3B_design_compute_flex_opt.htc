@@ -316,7 +316,7 @@
       genspeed	300 414.689;	min, max generator speed [rpm] !! UPDATED !! EDITED from 481 to 414 based on compute_gen_speed.py and min rotor speed
       gearratio	50;	gear ratio [-]
       minpitch	0;	min. pitch angle [deg]
-      opt_lambda	7.2;	optimal TSR [-] !! UPDATED !!
+      opt_lambda	7.0;	optimal TSR [-] !! UPDATED !!
       maxpow	10638.3;	rated aerodynamic power [kW]
       prvs_turbine	1;	1=pitch-regulated, variable-speed turbine
       operational_data_file_wind	1;	0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above

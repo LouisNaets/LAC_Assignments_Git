@@ -330,7 +330,7 @@ plt.plot(tsr_range, IA.CP_store, linestyle = '-', marker = 'o')
 #plt.axhline(y=max(IA.CP_store), color='grey', linestyle='--')
 #plt.axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--')
 plt.axhline(y=max(IA.CP_store), color='grey', linestyle='--')
-plt.axvline(x=tsr_range[np.argmax(IA.CP_store)]+0.1, color='grey', linestyle='--')
+plt.axvline(x=tsr_range[np.argmax(IA.CP_store)]-0.1, color='grey', linestyle='--')
 plt.xlabel("Tip-speed ratio (TSR) [-]")
 plt.ylabel(r"$C_p$ [-]")
 plt.grid(True, linestyle = ':')
@@ -339,9 +339,7 @@ plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.png', format='png')
 
 # TSR 7.5 is chosen
-tsr = 7.1                 #EDITED choose TSR 7.1 instead of 7.5
-print(f'TSR:{tsr_range}')
-print(f'CP:{IA.CP_store}')
+tsr = 7.0                 #EDITED choose TSR 7.0 instead of 7.5
 
 '''
 Step 8: Present your final chord, twist, and relative thickness distributions and compare to the original DTU 10MW rotor. 
