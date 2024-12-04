@@ -108,9 +108,9 @@ titles = ['tc_241_data', 'tc_301_data', 'tc_360_data', 'tc_480_data']
 
 # Chosen design points for each airfoil
 Cl_points = [1.4, 1.33, 1.47, 0.64] #EDITED to exclude the LER adjustment of -0.1, thus +0.1 
-Cd_points = [0.013, 0.014, 0.021, 0.032]
+Cd_points = [0.0134, 0.0158, 0.0222, 0.0322]
 Cl_Cd_points = np.array(Cl_points)/np.array(Cd_points)
-alpha_points = [8.1, 7.5, 5.8, 1.8]
+alpha_points = [9.0353, 8.4334, 6.6813, 2.4799]
 t_c_points = [24.1, 30.1, 36.0, 48.0]
 
 # Plot for each tc dataset
@@ -154,6 +154,7 @@ for i, tc_data in enumerate(tc_datasets):
     plt.tight_layout()
     plt.savefig(f'A1 Aeroelastic design/Figures/{titles[i]}.svg', format='svg')
     plt.savefig(f'A1 Aeroelastic design/Figures/{titles[i]}.png', format='png')
+
 
 
 # DTU 10MW IIIB
