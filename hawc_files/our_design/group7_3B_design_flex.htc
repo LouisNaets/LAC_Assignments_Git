@@ -313,10 +313,10 @@
 ; settings for compute_optimal_pitch_angle
     begin operational_data;
       windspeed	4 25 22;	cut-in [m/s], cut-out [m/s], points [-] -- used if operational_data_file_wind is 0
-      genspeed	0 431.35;	min, max generator speed [rpm] !! UPDATED !!
+      genspeed	300 414.689;	min, max generator speed [rpm] !! UPDATED !! EDITED from 481 to 414 based on compute_gen_speed.py and min rotor speed
       gearratio	50;	gear ratio [-]
       minpitch	0;	min. pitch angle [deg]
-      opt_lambda	7.1;	optimal TSR [-] !! UPDATED !!
+      opt_lambda	7.2;	optimal TSR [-] !! UPDATED !!
       maxpow	10638.3;	rated aerodynamic power [kW]
       prvs_turbine	1;	1=pitch-regulated, variable-speed turbine
       operational_data_file_wind	1;	0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above

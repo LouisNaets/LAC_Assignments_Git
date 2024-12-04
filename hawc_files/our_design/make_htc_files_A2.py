@@ -38,8 +38,8 @@ if __name__ == '__main__':
                     opt_path='./hawc_files/our_design/data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
-                    opt_lambda=7.1,             #EDITED to new tsr
-                    genspeed=(0, 431.35))
+                    opt_lambda=7.2,             #EDITED to new tsr
+                    genspeed=(300, 414.689))
     
     ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
     # make flexible hawc2s file for new opt file
@@ -51,8 +51,8 @@ if __name__ == '__main__':
                     opt_path='./hawc_files/our_design/data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
-                    opt_lambda=7.1,              #EDITED to new tsr
-                    genspeed=(0, 431.35))
+                    opt_lambda=7.2,              #EDITED to new tsr
+                    genspeed=(300, 414.689))
     
     # make flexible hawc2s file (for A2)
     htc = MyHTC(ORIG_PATH)
@@ -62,5 +62,5 @@ if __name__ == '__main__':
                     append='_flex',
                     opt_path='./hawc_files/our_design/data/group7_3B_design_flex.opt',
                     minpitch=0,
-                    opt_lambda=7.1,              #EDITED to new tsr
-                    genspeed=(0, 431.35))
+                    opt_lambda=7.2,              #EDITED to new tsr
+                    genspeed=(300, 414.689))
