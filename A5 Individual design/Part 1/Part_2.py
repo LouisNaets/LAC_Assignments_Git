@@ -450,10 +450,44 @@ IA.t = IA.tc/100 * IA.chord  # Absolute Thickness [m]
 for i, tc in enumerate(IIIB.tc):
     IIIB.tc[i] = max(IIIB.tc[i], 24.1)
 
+class IIIB_old:
+    r = [2.90212426,  5.19441758,  7.48671089,  9.77900421, 12.07129752, 14.36359084,
+        16.65588415, 18.94817747, 21.24047078, 23.5327641,  25.82505741, 28.11735073,
+        30.40964404, 32.70193736, 34.99423067, 37.28652399, 39.5788173,  41.87111062,
+        44.16340394, 46.45569725, 48.74799057, 51.04028388, 53.3325772,  55.62487051,
+        57.91716383, 60.20945714, 62.50175046, 64.79404377, 67.08633709, 69.3786304,
+        71.67092372, 73.96321703, 76.25551035, 78.54780366, 80.84009698, 83.13239029,
+        85.42468361, 87.71697692, 90.00927024, 92.30156355]
+    r_hub = 2.902124261943796
+    chord = [5.38,       5.40538133, 5.47482628, 5.57828631, 5.70571284, 5.84705734,
+            5.99227125, 6.131306,   6.25411306, 6.35064385, 6.41084984, 6.42468245,
+            6.38209315, 6.27303337, 6.08745456, 5.81530817, 5.50176992, 5.21392439,
+            4.94467538, 4.68622051, 4.4357872,  4.20172229, 3.98796661, 3.79602934,
+            3.62562727, 3.47591189, 3.3462279,  3.22915912, 3.1173231, 3.009117,
+            2.90254684, 2.79498909, 2.68283787, 2.56097066, 2.42190719, 2.2543823,
+            2.04055663, 1.76594228, 1.45067737, 1.06219045]
+    twist = [20.,         20.,         20.,         20.,         20.,        20.,
+            20.,         20.,         18.94972259, 16.94682232, 15.12898532, 13.26486907,
+            11.22671454,  9.42046313,  7.76740382,  6.20428154,  4.96024216,  3.84448405,
+            2.93189924,  2.25217274,  1.65311479,  1.11666796,  0.6371801 ,  0.2107886,
+            -0.16642768, -0.49743719, -0.78367616, -1.03937973, -1.27826406, -1.50191676,
+            -1.71173393, -1.90894794, -2.09465046, -2.26981178, -2.43529709, -2.59188019,
+            -2.74025518, -2.88104633, -3.01481665, -3.14207511]
+    tc = [100.,          99.5304433,   95.23639162,  91.90377686,  87.51390825,
+            82.30927144,  76.40466078,  69.90220584,  62.93394767,  55.82232485,
+            49.2220652 ,  43.85105177,  39.79445208,  36.87847192,  34.75471126,
+            33.34815393,  32.38003118,  31.39147939,  30.37194105,  29.39908195,
+            28.51691007,  27.6942871,   26.91587568,  26.17597064,  25.46434731,
+            24.76899381,  24.0292181,   23.25621229,  22.52037975,  21.84453113,
+            21.25166392,  20.76919376,  20.35553495,  19.92672186,  19.49169657,
+            19.14951603,  18.91215829,  18.91215829,  18.91215829,  18.91215829]
+
+
 fig, axs = plt.subplots(3, 1, figsize=(10, 8))
 
 # Chord
 axs[0].plot(IA.r, IA.chord, label='DTU 10MW rotor')
+axs[0].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.chord, label='Old IIIB design')
 axs[0].plot(IIIB.r-IIIB.r_hub, IIIB.chord, label='New IIIB design')
 axs[0].set_ylabel("Chord [m]")
 axs[0].legend()
@@ -461,6 +495,7 @@ axs[0].grid(True, linestyle = ':')
 
 # Twist
 axs[1].plot(IA.twist_r, IA.twist, label='DTU 10MW rotor')
+axs[1].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.twist, label='Old IIIB design')
 axs[1].plot(IIIB.r-IIIB.r_hub, IIIB.twist, label='New IIIB design')
 axs[1].set_ylabel(r"Twist [°]")
 # axs[1].legend()
@@ -468,6 +503,7 @@ axs[1].grid(True, linestyle = ':')
 
 # Relative thickness
 axs[2].plot(IA.r, IA.tc, label='DTU 10MW rotor')
+axs[2].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.tc, label='Old IIIB design')
 axs[2].plot(IIIB.r-IIIB.r_hub, IIIB.tc, label='New IIIB design')
 axs[2].set_ylabel("Relative thickness [%]")
 axs[2].set_xlabel("Blade span [m]")
@@ -556,7 +592,10 @@ def plot_with_colormap(ax, x, y, label, cmap, idx, total_lines):
 #plot_with_colormap(axes[0, 1], r_R, np.rad2deg(theta_R), label=f'TSR = {TSR}', cmap=cm.viridis, idx=idx, total_lines=len(TSR_range))
 
 
-
+# Path for the (old) file
+ind_path = "./hawc_files/our_design/res_hawc2s/group7_3B_design_hawc2s_1wsp_u8000.ind"
+# Load the data
+ind_data_old = load_ind(ind_path)
 
 # Path for the file
 ind_path = "./hawc_files/individual_design/res_hawc2s/individual_design_hawc2s_1wsp_u8000.ind"
@@ -565,6 +604,8 @@ ind_data = load_ind(ind_path)
 
 IIIB.relative_t = IIIB.tc #np.array(IIIB.t/IIIB.chord)*100
 IIIB.relative_t_ind = np.interp(ind_data["s_m"], IIIB.r, IIIB.relative_t)
+
+IIIB_old.relative_t_ind = np.interp(ind_data_old["s_m"], IIIB_old.r, IIIB_old.tc)
 
 tc_plot_r = np.interp(tc_plot, IIIB.relative_t_ind, ind_data["s_m"]) #this is not correct yet
 
@@ -582,47 +623,53 @@ plt.rcParams.update({'axes.labelsize': 18, 'xtick.labelsize': 18, 'ytick.labelsi
 fig5, axes5 = plt.subplots(3, 2, figsize=(18, 12), dpi=500)
 
 axes5[0,0].plot(IIIB.tc, IIIB.cl, color = colors[0], label='Design $C_l$')
-axes5[0,0].plot(IIIB.relative_t_ind, ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
+axes5[0,0].plot(IIIB_old.relative_t_ind, ind_data_old["Cl"], color = colors[1], label='HAWC2S $C_l$ (Prev. design)')
+axes5[0,0].plot(IIIB.relative_t_ind, ind_data["Cl"], color = colors[2], label='HAWC2S $C_l$ (New design)')
 axes5[0,0].set_ylabel("$C_l$ [-]")
 axes5[0,0].set_xlim(0, 100)
 axes5[0,0].legend()
 axes5[0,0].grid(True, linestyle = ':')
 
 axes5[1,0].plot(IIIB.tc, IIIB.cl/IIIB.cd, color = colors[0], label='Design $C_l/C_d$')
-axes5[1,0].plot(IIIB.relative_t_ind, ind_data["Cl"]/ind_data["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$')
+axes5[1,0].plot(IIIB_old.relative_t_ind, ind_data_old["Cl"]/ind_data_old["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$ (Prev. design)')
+axes5[1,0].plot(IIIB.relative_t_ind, ind_data["Cl"]/ind_data["Cd"], color = colors[2], label='HAWC2S $C_l/C_d$')
 axes5[1,0].set_ylabel("$C_l/C_d$ [-]")
 axes5[1,0].set_xlim(0, 100)
-axes5[1,0].legend()
+#axes5[1,0].legend()
 axes5[1,0].grid(True, linestyle = ':')
 
 axes5[2,0].plot(IIIB.tc, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
-axes5[2,0].plot(IIIB.relative_t_ind, np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
+axes5[2,0].plot(IIIB_old.relative_t_ind, np.rad2deg(ind_data_old["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$ (Prev. design)')
+axes5[2,0].plot(IIIB.relative_t_ind, np.rad2deg(ind_data["aoa_rad"]), color = colors[2], label=r'HAWC2S $\alpha$')
 axes5[2,0].set_ylabel(r"$\alpha$ [°]")
 axes5[2,0].set_xlabel(r"Relative thickness [%]")
 axes5[2,0].set_xlim(0, 100)
-axes5[2,0].legend()
+#axes5[2,0].legend()
 axes5[2,0].grid(True, linestyle = ':')
 
 axes5[0,1].plot(IIIB.r-IIIB.r_hub, IIIB.cl, color = colors[0], label='Design $C_l$')
-axes5[0,1].plot(ind_data["s_m"], ind_data["Cl"], color = colors[1], label='HAWC2S $C_l$')
+axes5[0,1].plot(ind_data_old["s_m"], ind_data_old["Cl"], color = colors[1], label='HAWC2S $C_l$ (Prev. design)')
+axes5[0,1].plot(ind_data["s_m"], ind_data["Cl"], color = colors[2], label='HAWC2S $C_l$')
 axes5[0,1].set_ylabel("$C_l$ [-]")
 axes5[0,1].set_xlim(0, 100)
-axes5[0,1].legend()
+#axes5[0,1].legend()
 axes5[0,1].grid(True, linestyle = ':')
 
 axes5[1,1].plot(IIIB.r-IIIB.r_hub, IIIB.cl/IIIB.cd, color = colors[0], label='Design $C_l/C_d$')
-axes5[1,1].plot(ind_data["s_m"], ind_data["Cl"]/ind_data["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$')
+axes5[1,1].plot(ind_data_old["s_m"], ind_data_old["Cl"]/ind_data_old["Cd"], color = colors[1], label='HAWC2S $C_l/C_d$ (Prev. design)')
+axes5[1,1].plot(ind_data["s_m"], ind_data["Cl"]/ind_data["Cd"], color = colors[2], label='HAWC2S $C_l/C_d$')
 axes5[1,1].set_ylabel("$C_l/C_d$ [-]")
 axes5[1,1].set_xlim(0, 100)
-axes5[1,1].legend()
+#axes5[1,1].legend()
 axes5[1,1].grid(True, linestyle = ':')
 
 axes5[2,1].plot(IIIB.r-IIIB.r_hub, IIIB.aoa, color = colors[0], label=r'Design $\alpha$')
-axes5[2,1].plot(ind_data["s_m"], np.rad2deg(ind_data["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$')
+axes5[2,1].plot(ind_data_old["s_m"], np.rad2deg(ind_data_old["aoa_rad"]), color = colors[1], label=r'HAWC2S $\alpha$ (Prev. design)')
+axes5[2,1].plot(ind_data["s_m"], np.rad2deg(ind_data["aoa_rad"]), color = colors[2], label=r'HAWC2S $\alpha$')
 axes5[2,1].set_ylabel(r"$\alpha$ [°]")
 axes5[2,1].set_xlabel(r"Curvelinear radius [m]")
 axes5[2,1].set_xlim(0, 100)
-axes5[2,1].legend()
+#axes5[2,1].legend()
 axes5[2,1].grid(True, linestyle = ':')
 fig5.tight_layout()
 plt.savefig('A5 Individual design/Figures 1/3.1.svg', format='svg')
@@ -677,6 +724,7 @@ axes6[2,1].grid(True, linestyle = ':')
 
 # Save the figure
 fig6.tight_layout()
+plt.savefig('A5 Individual design/Figures 1/3.2.png', format='png')
 plt.savefig('A5 Individual design/Figures 1/3.2.svg', format='svg')
 
 plt.rcParams.update({'axes.labelsize': 14, 'xtick.labelsize': 14, 'ytick.labelsize': 14, 'legend.fontsize': 12})

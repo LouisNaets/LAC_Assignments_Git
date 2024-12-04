@@ -6,6 +6,7 @@ from sympy import symbols, Eq, solve
 from matplotlib import cm
 from lacbox.io import load_pwr, load_ind, load_inds, load_st, save_st
 from structural_scaling_example import scale_ST_data
+from sys import exit
 
 """
 Assignment 1: Aeroelastic Design part 2
@@ -401,6 +402,12 @@ plt.tight_layout()
 plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.png', format='png')
 plt.savefig('A1 Aeroelastic design/Figures/final_chord_twist_thickness.svg', format='svg')
 #plt.show()
+
+#print(IIIB.r)
+#print(IIIB.r_hub)
+#print(IIIB.chord)
+#print(IIIB.twist)
+#print(IIIB.tc)
 
 
 # %%
