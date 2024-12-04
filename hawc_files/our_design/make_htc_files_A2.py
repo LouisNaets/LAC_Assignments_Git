@@ -35,10 +35,10 @@ if __name__ == '__main__':
                     rigid=True,
                     gradient=False,
                     append='_compute_rigid_opt',
-                    opt_path='./data/dtu_10mw_rigid.opt',
+                    opt_path='./hawc_files/our_design/data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
-                    opt_lambda=7.5,
+                    opt_lambda=7.1,             #EDITED to new tsr
                     genspeed=(0, 431.35))
     
     ORIG_PATH = './hawc_files/our_design/_master/group7_3B_design.htc'
@@ -48,10 +48,10 @@ if __name__ == '__main__':
                     rigid=False,
                     gradient=False,
                     append='_compute_flex_opt',
-                    opt_path='./data/dtu_10mw_rigid.opt',
+                    opt_path='./hawc_files/our_design/data/dtu_10mw_rigid.opt',
                     compute_optimal_pitch_angle=True,
                     minpitch=0,
-                    opt_lambda=7.5,
+                    opt_lambda=7.1,              #EDITED to new tsr
                     genspeed=(0, 431.35))
     
     # make flexible hawc2s file (for A2)
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     rigid=False,
                     gradient=False,
                     append='_flex',
-                    opt_path='./data/group7_3B_design_flex.opt',
+                    opt_path='./hawc_files/our_design/data/group7_3B_design_flex.opt',
                     minpitch=0,
-                    opt_lambda=7.5,
+                    opt_lambda=7.1,              #EDITED to new tsr
                     genspeed=(0, 431.35))

@@ -298,8 +298,11 @@ fig3.tight_layout()
 fig4.tight_layout()
 fig1.savefig('A1 Aeroelastic design/Figures/design_functions_clcd.png', format='png')
 fig1.savefig('A1 Aeroelastic design/Figures/design_functions_clcd.svg', format='svg')
+fig2.savefig('A1 Aeroelastic design/Figures/chord_twist_thickness.png', format='png')
 fig2.savefig('A1 Aeroelastic design/Figures/chord_twist_thickness.svg', format='svg')
+fig3.savefig('A1 Aeroelastic design/Figures/aoa_cl_cd.png', format='png')
 fig3.savefig('A1 Aeroelastic design/Figures/aoa_cl_cd.svg', format='svg')
+fig4.savefig('A1 Aeroelastic design/Figures/CLT_CLP_a.png', format='png')
 fig4.savefig('A1 Aeroelastic design/Figures/CLT_CLP_a.svg', format='svg')
 
 # Design function 3 is chosen
@@ -778,6 +781,7 @@ class blade_st_dat:
 
 flex_blade_st_dat = blade_st_dat(Blade_flex_st_data)
 
+print('Part 4')
 '''FIGURE 4.1'''
 
 # Set up a 1x2 grid layout
@@ -801,9 +805,8 @@ plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures_part4/4.1.png', format='png')
 
 
-
 '''FIGURE 4.2'''
-print('Part 4')
+
 
 # Set up a 1x2 grid layout
 fig11, axes11 = plt.subplots(1, 2, figsize=(12, 4), dpi=500)
