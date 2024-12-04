@@ -339,7 +339,7 @@ plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.svg', format='svg')
 plt.savefig('A1 Aeroelastic design/Figures/CP_vs_TSR.png', format='png')
 
 # TSR 7.5 is chosen
-tsr = 7.0                 #EDITED choose TSR 7.0 instead of 7.5
+tsr = 7.3                 #EDITED choose TSR 7.0 instead of 7.5
 
 '''
 Step 8: Present your final chord, twist, and relative thickness distributions and compare to the original DTU 10MW rotor. 
