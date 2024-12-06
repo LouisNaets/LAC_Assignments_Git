@@ -211,7 +211,7 @@ fig, ax1 = plt.subplots(figsize=(12, 8))
 
 # --- Total Power Curve (Line Plot) on the left y-axis (ax1) ---
 ax1.plot(v_bins_DTU, power_mean_DTU* 1e-6, 'o-', color='indigo', label='Total Power Curve - DTU 10 MW')
-ax1.plot(v_bins_OURS, power_mean_OURS * 1e-6, 'o--', color='mediumpurple', label='Total Power Curve - Our Design')
+ax1.plot(v_bins_OURS, power_mean_OURS * 1e-6, 'o--', color='mediumpurple', label='Total Power Curve - Redesign')
 
 # Label and formatting for the left y-axis
 ax1.set_xlabel('Wind Speed [m/s]', fontsize=18)
@@ -220,7 +220,7 @@ ax1.tick_params(axis='y', labelcolor='darkorchid', labelsize=18)
 ax1.tick_params(axis='x', labelsize=18)
 
 ax1.plot(v_bins_DTU, bin_prop_DTU*100, 's-', color='indigo', label='Bin Probabilities - DTU 10 MW')
-ax1.plot(v_bins_OURS, bin_prop_OURS*100, 's--',color='mediumpurple', label='Bin Probabilities - Our design')
+ax1.plot(v_bins_OURS, bin_prop_OURS*100, 's--',color='mediumpurple', label='Bin Probabilities - Redesign')
 #ax1.set_ylabel('Bin Probability', color='purple', fontsize=18)
 
 # Create a secondary y-axis for weighted power (ax2)
@@ -228,7 +228,7 @@ ax2 = ax1.twinx()
 
 # --- Power Production per Wind Bin (Bar Plot) on the left y-axis (ax1) ---
 ax2.bar(v_bins_DTU, p_tot_DTU * 8670 * 1e-6, width=0.8, alpha=0.7, color='navy', label='Power Output - DTU 10 MW')
-ax2.bar(v_bins_OURS, p_tot_OURS * 8670 * 1e-6, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Our Design')
+ax2.bar(v_bins_OURS, p_tot_OURS * 8670 * 1e-6, width=0.8, alpha=0.7, color='skyblue', label='Power Output - Redesign')
 
 # Label and formatting for the right y-axis
 ax2.tick_params(axis='y', labelcolor='darkblue', labelsize=18)

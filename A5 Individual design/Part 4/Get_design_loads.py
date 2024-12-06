@@ -7,7 +7,7 @@ import statistics as stats
 from scipy.stats import weibull_min
 
 # Set constants and turbine parameters
-WTG = 'group7'  # Turbine model
+WTG = 'Redesign'  # Turbine model
 N_T = 630720000  # Total cycles over turbine lifetime
 n_eq = 10e6  # Equivalent cycles for 10-minute DEL
 
@@ -20,8 +20,8 @@ extreme_design_loads = {
     'ShftTrs': -20365.17 / 1.35,
     'OoPBRM': -72275.14,
     'IPBRM': 40770.71,
-    'EdgBRM': -53583.14,
-    'FlpBRM': 21464.92
+    'FlpBRM': -53583.14,
+    'EdgBRM': 21464.92
 }
 
 fatigue_design_loads = {
@@ -39,11 +39,11 @@ m_values = {
     'ShftTrs': 4, 'OoPBRM': 10, 'IPBRM': 10, 'EdgBRM': 10, 'FlpBRM': 10
 }
 
-if WTG == 'group7':
+if WTG == 'Redesign':
     U_ave = 7.5  # Average wind speed for Weibull distribution
     # analysis settings
-    HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-    STATS_PATH = './A4 Design Loads and AEP/Assignment/group7_turbB_stats.csv'  # path to mean steady stats
+    HAWC2S_PATH = './hawc_files/individual_design/data/individual_design_flex_minrotspd.opt'  # path to .pwr or .opt file
+    STATS_PATH = './A5 Individual design/Part 4/individual_design_turb_tcb_stats.csv'  # path to mean steady stats
     SUBFOLDER = 'tcb'  # Turbulence Class B
 
     # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
@@ -52,8 +52,8 @@ if WTG == 'group7':
 if WTG == 'DTU10MW':
     U_ave = 10  # Average wind speed for Weibull distribution
     # analysis settings
-    HAWC2S_PATH = './hawc_files\dtu_10mw\data\dtu_10mw_flex.opt'  # path to .pwr or .opt file
-    STATS_PATH = './A4 Design Loads and AEP\Assignment\dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
+    HAWC2S_PATH = './hawc_files/dtu_10mw/data/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
+    STATS_PATH = './A5 Individual design/Part 4/dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
     SUBFOLDER = 'tca'  # Turbulence Class A
 
     # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
@@ -76,9 +76,9 @@ CHAN_DESCS = {'TbFA': 'momentmx mbdy:tower nodenr:   1',
               'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
               'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
-              'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
-              'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped'
+              'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1'
+              #'EdgBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              #'FlpBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped'
               }
 
 # Weibull bin probabilities
@@ -161,12 +161,12 @@ for iplot, chan_id in enumerate(chan_ids):
     ax = axs[iplot]
     for wsp, max_val, min_val in zip(unique_wind_speeds, max_charval_per_wind, min_charval_per_wind):
         if max_val >= min_val:
-            ax.bar(wsp, min_val, width=0.5, color='r', alpha=1, label='HAWC2 min' if wsp == unique_wind_speeds[0] else "")
-            ax.bar(wsp, max_val, width=0.5, color='b', alpha=1, label='HAWC2 max' if wsp == unique_wind_speeds[0] else "")
+            ax.bar(wsp, max_val, width=0.5, color='navy', alpha=0.8, label='HAWC2 max' if wsp == unique_wind_speeds[0] else "")
+            ax.bar(wsp, min_val, width=0.5, color='skyblue', alpha=0.8, label='HAWC2 min' if wsp == unique_wind_speeds[0] else "")
         else:
-            ax.bar(wsp, max_val, width=0.5, color='b', alpha=1, label='HAWC2 max' if wsp == unique_wind_speeds[0] else "")
-            ax.bar(wsp, min_val, width=0.5, color='r', alpha=1, label='HAWC2 min' if wsp == unique_wind_speeds[0] else "")
-    ax.axhline(extreme_design_loads[chan_id], color='r', linestyle='--', label='DTU 10MW Extreme Design Load')
+            ax.bar(wsp, max_val, width=0.5, color='navy', alpha=0.8, label='HAWC2 max' if wsp == unique_wind_speeds[0] else "")
+            ax.bar(wsp, min_val, width=0.5, color='skyblue', alpha=0.8, label='HAWC2 min' if wsp == unique_wind_speeds[0] else "")
+    ax.axhline(extreme_design_loads[chan_id], color='tab:gray', linestyle='--', label='DTU 10MW Extreme Design Load')
     ax.set_title(chan_id)
     if iplot >= 6:
         ax.set_xlabel('Wind speed [m/s]')
@@ -190,7 +190,8 @@ for iplot, chan_id in enumerate(chan_ids):
     print(f"{chan_id}: Lifetime Fatigue Load = {lifetime_fatigue_load:.8f} kNm")
 
 fig.tight_layout()
-plt.savefig(f'./A4 Design Loads and AEP/Assignment/Figures/{WTG} Ultimate design_loads.png')
+plt.savefig(f'./A5 Individual design/Figures 4/{WTG} Ultimate design_loads.png')
+plt.savefig(f'./A5 Individual design/Figures 4/{WTG} Ultimate design_loads.svg')
 # plt.show()
 
 

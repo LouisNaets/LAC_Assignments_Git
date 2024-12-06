@@ -372,6 +372,7 @@ fig1.savefig('A5 Individual design/Figures 1/design_functions_clcd.svg', format=
 fig2.savefig('A5 Individual design/Figures 1/chord_twist_thickness.svg', format='svg')
 fig3.savefig('A5 Individual design/Figures 1/aoa_cl_cd.svg', format='svg')
 fig4.savefig('A5 Individual design/Figures 1/CLT_CLP_a.svg', format='svg')
+#fig4.savefig('A5 Individual design/Figures 1/CLT_CLP_a.png', format='png')
 
 # Design function 3 is chosen
 i_design = 2
@@ -380,29 +381,57 @@ i_design = 2
 Step 7: Find the design with tip-speed-ratio that maximizes CP
 '''
 
-tsr_range = np.arange(6, 10, 0.1)
+tsr_range = np.arange(6, 9, 0.05)
+tsr_range_alt = np.arange(7, 9, 0.05)
 IA.CP_store = np.zeros(len(tsr_range))
+IA.CT_store = np.zeros(len(tsr_range))
 IA.cl_des, IA.cd_des, IA.aoa_des, IA.tc_vals, IA.cl_vals, IA.cd_vals, IA.aoa_vals = get_design_functions(i_design)
 
 for i, tsr in enumerate(tsr_range):
     IA.chord, IA.tc, IA.twist, IA.cl, IA.cd, IA.aoa, IA.a, IA.CLT, IA.CLP, IA.CT, IA.CP = single_point_design(
         IA.r, IA.t, tsr, IA.R, IA.cl_des, IA.cd_des, IA.aoa_des, IA.chord_root, IA.chord_max, B)
     IA.CP_store[i] = IA.CP
+    IA.CT_store[i] = IA.CT
 
     print(f"tsr: {tsr}, CP: {IA.CP:1.4f}")
 
-# Plot the power coefficient
-plt.figure()
-plt.plot(tsr_range, IA.CP_store, linestyle = '-', marker = 'o')
-plt.axhline(y=max(IA.CP_store), color='grey', linestyle='--')
-plt.axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--')
-plt.xlabel("Tip-speed ratio (TSR) [-]")
-plt.ylabel(r"$C_p$ [-]")
-plt.grid(True, linestyle = ':')
+pwr_data_precise = load_pwr('./hawc_files/individual_design/res_hawc2s/individual_design_hawc2s_multitsr_precise.pwr')
+#print(pwr_data_precise)
+C_P_HAWC2S = pwr_data_precise["Cp"]
+
+fig, axs = plt.subplots(1, 2, figsize=(12, 5), dpi=500)
+
+# Access individual subplots from the `axs` array
+# Plot C_P as a function of TSR
+axs[0].plot(tsr_range, IA.CP_store, color='tab:blue', label='Single point design')
+axs[0].plot(tsr_range_alt, C_P_HAWC2S, color='tab:orange', label='HAWC2S')
+#axs[0].axhline(y=max(IA.CP_store), color='grey', linestyle='--')
+axs[0].axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--', label='Operating point')
+#axs[0].axhline(y=max(C_P_HAWC2S), color='dimgrey', linestyle=':')
+axs[0].axvline(x=tsr_range_alt[np.argmax(C_P_HAWC2S)], color='dimgrey', linestyle=':', label=f'Optimal $C_P$')
+axs[0].set_xlabel("Tip-speed ratio (TSR) [-]")
+axs[0].set_ylabel(r"$C_P$ [-]")
+axs[0].grid(True, linestyle=':')
+axs[0].legend(loc='best')
+axs[0].set_title(r"$C_P$ vs TSR")
+
+# Plot C_T as a function of TSR
+axs[1].plot(tsr_range, IA.CT_store, color='tab:blue', label='Single point design')
+axs[1].plot(tsr_range_alt, pwr_data_precise["Ct"], color='tab:orange', label='HAWC2S')
+axs[1].axvline(x=tsr_range[np.argmax(IA.CP_store)], color='grey', linestyle='--')
+axs[1].axvline(x=tsr_range_alt[np.argmax(C_P_HAWC2S)], color='dimgrey', linestyle=':')
+axs[1].set_xlabel("Tip-speed ratio (TSR) [-]")
+axs[1].set_ylabel(r"$C_T$ [-]")
+axs[1].grid(True, linestyle=':')
+#axs[1].legend(loc='best')
+axs[1].set_title(r"$C_T$ vs TSR")
+
 plt.tight_layout()
 plt.savefig('A5 Individual design/Figures 1/CP_vs_TSR.svg', format='svg')
 plt.savefig('A5 Individual design/Figures 1/CP_vs_TSR.png', format='png')
 
+
+exit()
 # TSR 7.15 is chosen
 tsr = 7.15
 

@@ -19,9 +19,11 @@ import statistics as stats
 plt.rcParams.update({'axes.labelsize': 12, 'xtick.labelsize': 12, 'ytick.labelsize': 12, 'legend.fontsize': 8, 'axes.titlesize': 15})
 
 # analysis settings
-HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-STATS_PATH = './A4 Design Loads and AEP/Assignment/group7_turbB_stats_ts.csv'  # path to mean steady stats
-STATS_PATH_DTU = './A4 Design Loads and AEP/Assignment/dtu_10mw_turb_stats.hdf5'
+HAWC2S_PATH = './hawc_files/individual_design/data/individual_design_flex_minrotspd.opt'  # path to .pwr or .opt file
+STATS_PATH = './A5 Individual design/Part 4/individual_design_turb_tcb_stats.csv'  # path to mean steady stats
+#HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
+#STATS_PATH = './A4 Design Loads and AEP/Assignment/group7_turbB_stats_ts.csv'  # path to mean steady stats
+STATS_PATH_DTU = './A5 Individual design/Part 4/dtu_10mw_turb_stats.hdf5'
 SUBFOLDER_our = 'tcb'
 SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
 
@@ -48,8 +50,10 @@ CHAN_DESCS = {'BldPit': 'pitch1 angle',  # dictionary used to identify which des
               'IPBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: hub1',
               'OoPHub': 'momentmx mbdy:hub1 nodenr:   1 coo: hub1',
               'IPHub': 'momentmy mbdy:hub1 nodenr:   1 coo: hub1',
-              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
-              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1',
+              'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1',
+              #'FlpBRM': 'momentmx mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
+              #'EdgBRM': 'momentmy mbdy:blade1 nodenr:   1 coo: blade1  blade1 root flped',
               'TowerClearance': 'min. distance bladetips tower'
               }
 
@@ -83,7 +87,7 @@ def combine_10min_DELs(DELs, m):
 df, wsps = load_stats(STATS_PATH, statstype='turb')
 df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype='turb')
 
-dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
+dfs = [[df, wsps, 0, 'Redesign'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
 
 # initialize the figure and axes
 fig, axs = plt.subplots(3, 3, figsize=(12, 8), clear=True, dpi=500)
@@ -144,5 +148,5 @@ axs[0, 0].legend()
 #fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
 fig.tight_layout()
 
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_DEL.svg', format='svg')
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/combined_DEL.png', format='png')
+plt.savefig('./A5 Individual design/Figures 4/combined_DEL.svg', format='svg')
+plt.savefig('./A5 Individual design/Figures 4/combined_DEL.png', format='png')
