@@ -487,7 +487,7 @@ fig, axs = plt.subplots(3, 1, figsize=(10, 8))
 
 # Chord
 axs[0].plot(IA.r, IA.chord, label='DTU 10MW rotor')
-axs[0].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.chord, label='Old IIIB design')
+axs[0].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.chord, label='Prev. IIIB design')
 axs[0].plot(IIIB.r-IIIB.r_hub, IIIB.chord, label='New IIIB design')
 axs[0].set_ylabel("Chord [m]")
 axs[0].legend()
@@ -495,7 +495,7 @@ axs[0].grid(True, linestyle = ':')
 
 # Twist
 axs[1].plot(IA.twist_r, IA.twist, label='DTU 10MW rotor')
-axs[1].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.twist, label='Old IIIB design')
+axs[1].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.twist, label='Prev. IIIB design')
 axs[1].plot(IIIB.r-IIIB.r_hub, IIIB.twist, label='New IIIB design')
 axs[1].set_ylabel(r"Twist [°]")
 # axs[1].legend()
@@ -503,7 +503,7 @@ axs[1].grid(True, linestyle = ':')
 
 # Relative thickness
 axs[2].plot(IA.r, IA.tc, label='DTU 10MW rotor')
-axs[2].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.tc, label='Old IIIB design')
+axs[2].plot(np.array(IIIB_old.r)-IIIB_old.r_hub, IIIB_old.tc, label='Prev. IIIB design')
 axs[2].plot(IIIB.r-IIIB.r_hub, IIIB.tc, label='New IIIB design')
 axs[2].set_ylabel("Relative thickness [%]")
 axs[2].set_xlabel("Blade span [m]")

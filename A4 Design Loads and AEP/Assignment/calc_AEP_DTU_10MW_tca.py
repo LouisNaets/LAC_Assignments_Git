@@ -129,6 +129,8 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar, winddist):
         h2_power_mean_turb = np.append(h2_power_mean_turb, mean)  
     print('Electric power:', h2_power_mean_turb/1e6)
     p_tot = h2_power_mean_turb*bin_prop
+
+    print('h2_power_mean_turb:', h2_power_mean_turb)
     R = 1
     P_tot_reliability = np.sum(p_tot) * R
     AEP = P_tot_reliability * 8760*1e-9
