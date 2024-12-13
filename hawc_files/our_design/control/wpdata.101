@@ -1,6 +1,8 @@
-  5 Wind speed [m/s]          Pitch [deg]   Trying thrust clipping
-             0.0             0.0
-            10.0             0.0
-            10.5             1.0
-            11.0             2.0
-            50.0             2.0
+  7 Wind speed [m/s]          Pitch [deg]   Trying thrust clipping
+            0.0             2.680706
+            4.0             2.680706
+            5.0             1.896366
+            6.0             0.862669
+            7.0             0.000078
+            8.0             0.000000
+            50.0            0.000000      

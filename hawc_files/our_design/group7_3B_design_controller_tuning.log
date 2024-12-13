@@ -13,28 +13,29 @@
  ***********************************************************************
 ________________________________________________________________________
   Log file output
-                                                       Time : 13:07:04
-                                                       Date : 25:10.2024
+                                                       Time : 12:37:19
+                                                       Date : 13:12.2024
 ________________________________________________________________________
- Opening main command file: .\group7_3B_design_controller_tuning.htc
- Current directory is C:\LAC_git\LAC_Assignments_Git\hawc_files\our_design
+ Opening main command file: 
+ hawc_files\our_design\group7_3B_design_controller_tuning.htc
+ Current directory is C:\git\LAC_Assignments_Git
  Reading data of main body : tower
- Succes opening ./data/DTU_10MW_RWT_Tower_st.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_Tower_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body tower commands read with succes
  Reading data of main body : towertop
- Succes opening ./data/DTU_10MW_RWT_Towertop_st.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_Towertop_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body towertop commands read with succes
  Reading data of main body : shaft
- Succes opening ./data/DTU_10MW_RWT_Shaft_st.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_Shaft_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body shaft commands read with succes
  Reading data of main body : hub1
- Succes opening ./data/DTU_10MW_RWT_Hub_st.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_Hub_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body hub1 commands read with succes
@@ -43,7 +44,7 @@ ________________________________________________________________________
  Reading data of main body : hub3
  Topologi main body hub3 commands read with succes
  Reading data of main body : blade1
- Succes opening ./data/group7_3B_design_Blade_st.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_Blade_st.dat
  timoschenko input commands read with succes
  topologi_c2def_inputs read with succes
  Topologi main body blade1 commands read with succes
@@ -79,8 +80,8 @@ Created folder: 'res_hawc2s'
  Initialization of structure
  Initializing of aero rotor...
  Initialization of rotor aerodynamics
- Succes opening ./data/group7_3B_design_ae.dat
- Succes opening ./data/DTU_10MW_RWT_pc.dat
+ Succes opening ./hawc_files/our_design/data/group7_3B_design_ae.dat
+ Succes opening ./hawc_files/our_design/data/DTU_10MW_RWT_pc.dat
  Initialization of rotor induction
  Initialization of wind
  Creating link between structure and aerodynamics
@@ -167,7 +168,7 @@ Processing computation no. 30 of 31
 Processing computation no. 31 of 31
  ...done
  iregions:           1          10          12          31
- maxpow [kW]:   10640.7700544249     
- maxgen [rpm]:   8.62700000000000     
+ maxpow [kW]:   10639.2448263866     
+ maxgen [rpm]:   8.29378000000000     
  Updating gains for controller!
  Continue log
