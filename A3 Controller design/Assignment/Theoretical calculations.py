@@ -52,7 +52,7 @@ print(intercept/KK2)
 
 
 '''Theoretical estimations'''
-txt_dict = load_ctrl_txt('hawc_files/our_design/res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
+txt_dict = load_ctrl_txt('res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
 
 eta = 1
 rho = 1.225
@@ -60,9 +60,9 @@ zeta = 0.7
 omega = np.array([0.05, 0.06])*(2*np.pi)
 I = txt_dict["Irotor_kg*m^2"]
 print(f'I: {I}')
-dQ_dOmega_0 = -1967.33604*1000
+dQ_dOmega_0 = -1189.71030  #Edited from -1967.33604*1000
 P_r = 10000000
-omega_r = 8.627*(2*np.pi)/60 #from RPM to rad/s
+omega_r = 8.29378*(2*np.pi)/60 #from RPM to rad/s   EDITED from 8.627 
 dQ_dOmega_op = -P_r/(omega_r**2)
 dQ_dtheta_0 = np.rad2deg(-1111.77678)*1000 #EDITED from -1185.59951 
 a_0 = KK2
@@ -86,7 +86,9 @@ print('{:.3e}'.format(k_P_p))
 k_I_p = (omega[1]**2 * I) / -dQ_dtheta_0
 print('{:.3e}'.format(k_I_p))
 
-print(dQ_dOmega_op)
+print(f'dQ_dOmega_op: {dQ_dOmega_op}')
+
+
 
 #Estimating k_P and k_I for C7
 zeta = 0.7

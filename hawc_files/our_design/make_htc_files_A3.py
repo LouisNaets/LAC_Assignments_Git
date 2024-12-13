@@ -64,7 +64,7 @@ if __name__ == '__main__':
     
     #Part 3 requires a new subfolder for saving htc files
     SAVE_HAWC2S_DIR = './hawc_files/our_design/htc'
-    cp_dict = load_ctrl_txt('./hawc_files/our_design/res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
+    cp_dict = load_ctrl_txt('./res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
     htc = MyHTC(ORIG_PATH)
     htc.make_step(save_dir=SAVE_HAWC2S_DIR,
                   append="_A3_part3",
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     for idx in range(1,7):
         htc = MyHTC(ORIG_PATH)
-        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         #print('DICTIONARY KEYS:\n---------------------')
         #[print(s) for s in ctrltune_dict.keys()]
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     for conditions in C7_list:
         idx = idx+1
         htc = MyHTC(ORIG_PATH)
-        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part3_C7_{conditions}.txt'
+        fname = f'./hawc_files/ our_design/res_hawc2s/group7_3B_design_A3_part3_C7_{conditions}.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         append_str = f'_A3_part3_C7_{idx}'
         htc.make_step(save_dir=SAVE_HAWC2S_DIR,
