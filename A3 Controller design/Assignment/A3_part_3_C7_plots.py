@@ -81,13 +81,13 @@ def extract_values_for_part_3_omit100(df):
     }
 
 df1 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C1.hdf5")
-df2 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_1.hdf5")
-df3 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_4.hdf5")
+df2 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.04_0.7.hdf5")
+df3 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.03_0.7.hdf5")
 df4 = df1
-df5 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_5.hdf5")
-df6 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_6.hdf5")
-df7 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_2.hdf5")
-df8 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_3.hdf5")
+df5 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.04_0.75.hdf5")
+df6 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.03_0.75.hdf5")
+df7 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.04_0.7.hdf5")
+df8 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.04_0.75.hdf5")
 
 c1 = extract_values_for_part_3_omit100(df1)
 c2 = extract_values_for_part_3_omit100(df2)
@@ -98,7 +98,7 @@ c6 = extract_values_for_part_3_omit100(df6)
 c7 = extract_values_for_part_3_omit100(df7)
 c8 = extract_values_for_part_3_omit100(df8)
 
-plot_wind_turbine_data(c1, c2, c3, "", '0.03', '0.02', '0.7')
-plot_wind_turbine_data(c4, c5, c6, "", '0.015', '0.0075', '0.7')
-plot_wind_turbine_data(c1, c7, c8, "", '0.03', '0.05', '0.8')
+plot_wind_turbine_data(c1, c2, c3, "", '0.04', '0.03', '0.7')
+plot_wind_turbine_data(c4, c5, c6, "", '0.04', '0.03', '0.75')
+plot_wind_turbine_data(c1, c7, c8, "", '0.7', '0.75', '0.4')
 plt.show()

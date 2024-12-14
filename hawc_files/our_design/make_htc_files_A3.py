@@ -61,10 +61,32 @@ if __name__ == '__main__':
                     compute_steady_states=True,
                     save_power=True,
                     compute_controller_input=True)
-    
+        
+    #Controller tuning for C7 (Part 3)
+    omega_C7 = [0.02, 0.03, 0.04, 0.02, 0.03, 0.04]
+    chi_C7 = [0.7, 0.7, 0.7, 0.75, 0.75, 0.75]
+    C7_list = ['0.02_0.7', '0.03_0.7', '0.04_0.7', '0.02_0.75', '0.03_0.75', '0.04_0.75']
+    for idx in range(0,6):
+        htc = MyHTC(ORIG_PATH)
+        append_str = f'_A3_part2_C_{C7_list[idx]}'
+        htc.make_hawc2s_ctrltune(SAVE_HAWC2S_DIR,
+                    rigid=False,
+                    gradient = True,
+                    append=append_str,
+                    opt_path='./hawc_files/our_design/data/group7_3B_design_flex.opt',
+                    opt_lambda=7.0,     #EDITED to 7.0 from 7.5
+                    genspeed=(300, 414.689), #EDITED to include min genspeed and updated gen speed previously:0,431.35
+                    constant_power=1,
+                    full_load=(omega_C7[idx], chi_C7[idx]),
+                    minpitch=101,   #EDITED to 101 from 0 for min genspeed
+                    compute_steady_states=True,
+                    save_power=True,
+                    compute_controller_input=True)
+       
+
     #Part 3 requires a new subfolder for saving htc files
     SAVE_HAWC2S_DIR = './hawc_files/our_design/htc'
-    cp_dict = load_ctrl_txt('./res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
+    cp_dict = load_ctrl_txt('./hawc_files/our_design/res_hawc2s/group7_3B_design_controller_tuning_ctrl_tuning.txt')
     htc = MyHTC(ORIG_PATH)
     htc.make_step(save_dir=SAVE_HAWC2S_DIR,
                   append="_A3_part3",
@@ -80,7 +102,7 @@ if __name__ == '__main__':
 
     for idx in range(1,7):
         htc = MyHTC(ORIG_PATH)
-        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
+        fname = f'./hawc_files/our_design/res_hawc2s/group7_3B_design_A3_part2_C{idx}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
         #print('DICTIONARY KEYS:\n---------------------')
         #[print(s) for s in ctrltune_dict.keys()]
@@ -96,16 +118,19 @@ if __name__ == '__main__':
                   shear_format=(3,0),
                   tower_shadow_method=0,
                   wind_ramp_abs=(0, 1862, 4, 25))
-        
-    C7_list = ['0.03_0.7', '0.03_0.8', '0.05_0.8', '0.02_0.7', '0.015_0.7', '0.0075_0.7']
+
+
+
+
+    C7_list = ['0.02_0.7', '0.03_0.7', '0.04_0.7', '0.02_0.75', '0.03_0.75', '0.04_0.75']
 
     idx = 0
     for conditions in C7_list:
         idx = idx+1
         htc = MyHTC(ORIG_PATH)
-        fname = f'./hawc_files/ our_design/res_hawc2s/group7_3B_design_A3_part3_C7_{conditions}.txt'
+        fname = f'./res_hawc2s/group7_3B_design_A3_part2_C_{conditions}_ctrl_tuning.txt'
         ctrltune_dict = load_ctrl_txt(fname)
-        append_str = f'_A3_part3_C7_{idx}'
+        append_str = f'_A3_part3_C7_{conditions}'
         htc.make_step(save_dir=SAVE_HAWC2S_DIR,
                   append=append_str,
                   cp_dict=ctrltune_dict, 
