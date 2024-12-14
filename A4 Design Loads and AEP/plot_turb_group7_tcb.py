@@ -19,7 +19,7 @@ import statistics as stats
 
 # analysis settings
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-STATS_PATH = './A4 Design Loads and AEP/Assignment/group7_turbB_stats_ts.csv'  # path to mean steady stats
+STATS_PATH = './A4 Design Loads and AEP/stats_files/group7_turbB_stats.csv'  # path to mean steady stats
 SUBFOLDER = 'tcb'  # which subfolder to plot: tca or tcb
 
 # turbine constants
@@ -135,5 +135,5 @@ axs[0, 0].legend()
 fig.suptitle(f'Case: Group 7 design - {SUBFOLDER}')
 fig.tight_layout()
 
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/group7_tcb_ts.svg', format='svg')
-plt.savefig('./A4 Design Loads and AEP/Assignment/Figures/group7_tcb_ts.png', format='png')
+plt.savefig('./A4 Design Loads and AEP/figures/group7_tcb.svg', format='svg')
+plt.savefig('./A4 Design Loads and AEP/figures/group7_tcb.png', format='png')
