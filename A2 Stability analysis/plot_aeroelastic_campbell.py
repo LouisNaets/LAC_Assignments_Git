@@ -9,7 +9,7 @@ from lacbox.io import load_st
 
 
 TURBINE_NAME = 'Redesigned IIIB climate turbine'
-CMB_PATH = './A2/group7_aeroelastic.cmb'
+CMB_PATH = './A2 Stability analysis/individual_design_aeroelastic.cmb'
 NMODES = 8  # number of modes to plot
 MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
               '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
@@ -26,6 +26,8 @@ color_marker_map = {
     (5, 6, 10): ('tab:green', ['o', 'x', '^']),   
     (7, 8, 9): ('tab:red', ['o', 'x', '^'])             
 }
+
+print(np.size(dfreqs,1))
 
 # initialize plot
 fig, axs = plt.subplots(1, 2, figsize=(9.5, 4), dpi=500)

@@ -150,10 +150,10 @@ def AEP_data(STATS_PATH, HAWC2S_PATH, SUBFOLDER, ubar, winddist):
 # analysis settings
 HAWC2S_PATH_DTU = './A4 Design Loads and AEP/dtu_10mw_flex_minrotspd.opt'  # path to .pwr or .opt file
 STATS_PATH_DTU = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'  # path to mean steady stats
-SUBFOLDER_DTU = 'tcb'  # which subfolder to plot: tca or tcb
+SUBFOLDER_DTU = 'tcb'  # which subfolder to plot: tca or tcb 'tcb
 
 HAWC2S_PATH_OURS = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
-STATS_PATH_OURS = './A4 Design Loads and AEP/stats_files/group7_turbB_stats_ts.csv'  # path to mean steady stats
+STATS_PATH_OURS = './A4 Design Loads and AEP/stats_files/group7_turbB_stats.csv'  # path to mean steady stats
 SUBFOLDER_OURS = ''  # which subfolder to plot: tca or tcb
 
 
