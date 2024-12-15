@@ -12,8 +12,8 @@ TURBINE_NAME = 'Redesigned IIIB climate turbine'
 CMB_PATH = './A2 Stability analysis/individual_design_aeroelastic.cmb'
 NMODES = 8  # number of modes to plot
 MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
-              '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
-              '1st edge SYM']
+              '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '1st edge SYM','2nd flap SYM'
+              ]
 OPT_PATH = None  # path to opt file, needed for P-harmonics
 
 # load campbell diagram
@@ -23,14 +23,14 @@ wsp, dfreqs, zetas = load_cmb(CMB_PATH, cmb_type='aeroelastic')
 color_marker_map = {
     (0, 1): ('tab:blue', ['o', 'x']), 
     (2, 3, 4): ('tab:orange', ['o', 'x', '^']),  
-    (5, 6, 10): ('tab:green', ['o', 'x', '^']),   
-    (7, 8, 9): ('tab:red', ['o', 'x', '^'])             
+    (5, 6, 9): ('tab:green', ['o', 'x', '^']),   
+    (7, 8, 10): ('tab:red', ['o', 'x', '^'])             
 }
 
 print(np.size(dfreqs,1))
 
 # initialize plot
-fig, axs = plt.subplots(1, 2, figsize=(9.5, 4), dpi=500)
+fig, axs = plt.subplots(1, 2, figsize=(9.5, 4), dpi=200)  #WAS 500
 
 # loop through modes
 NMODES = len(MODE_NAMES)
@@ -52,7 +52,7 @@ for i in range(NMODES):
     axs[1].plot(wsp, zetas[:, i], marker=m, label=MODE_NAMES[i], c=c, mfc='none', ms=5, linewidth=0.75, markeredgewidth=0.65)
 
 # load opt file, add P-harmonics?
-opt_path = './A2/group7_3B_design_flex.opt'
+opt_path = './hawc_files/our_design/data/group7_3B_design_flex.opt'
 flex_opt_data = np.loadtxt(opt_path, skiprows=1)
 
 class f_opt:
@@ -78,14 +78,15 @@ axs[1].legend(bbox_to_anchor=(1.02, 0.5), loc='center left')
 fig.suptitle(f'Aeroelastic Campbell diagram for {TURBINE_NAME}')
 fig.tight_layout()
 
-fig.savefig('A2/Figures/Campbell_aeroelastic.svg', format='svg')
-fig.savefig('A2/Figures/Campbell_aeroelastic.png', format='png')
+fig.savefig('A2 Stability Analysis/Figures/Campbell_aeroelastic.svg', format='svg')
+fig.savefig('A2 Stability Analysis/Figures/Campbell_aeroelastic.png', format='png')
+plt.show()
 
 nmodes = dfreqs.shape[1]  # get number of modes
 mode_names = [f'Mode {i}' for i in range(1, nmodes+1)]  # list of mode shape names
 
 # Path to the .amp file
-amp_path = './A2/group7_aeroelastic_amp.amp'
+amp_path = './A2 Stability Analysis/group7_aeroelastic_amp.amp'
 
 # Load the modal amplitudes
 amp_df = load_amp(amp_path)

@@ -16,7 +16,7 @@ from plot_amp_custom import plot_amp_rpm
 
 
 TURBINE_NAME = 'Redesigned IIIB climate turbine'
-CMB_PATH = './A2/group7_structural.cmb'
+CMB_PATH = './A2 Stability Analysis/individual_design_structural.cmb'
 MODE_NAMES = ['Tower side-side', 'Tower fore-aft', '1st flap BW', '1st flap FW', '1st flap SYM',
               '1st edge BW', '1st edge FW', '2nd flap BW', '2nd flap FW', '2nd flap SYM',
               '1st edge SYM']
@@ -110,8 +110,8 @@ ax.legend(bbox_to_anchor=(1.02, 0.5), loc='center left')
 fig.suptitle(f'Structural Campbell diagram for {TURBINE_NAME}')
 fig.tight_layout()
 
-fig.savefig('A2/Figures/Campbell_structural.svg', format='svg')
-fig.savefig('A2/Figures/Campbell_structural.png', format='png')
+fig.savefig('A2 Stability Analysis/Figures/Campbell_structural.svg', format='svg')
+fig.savefig('A2 Stability Analysis/Figures/Campbell_structural.png', format='png')
 
 nmodes = dfreqs.shape[1]  # get number of modes
 mode_names = [f'Mode {i}' for i in range(1, nmodes+1)]  # list of mode shape names

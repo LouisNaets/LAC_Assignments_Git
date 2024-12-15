@@ -22,6 +22,7 @@ plt.rcParams.update({'axes.labelsize': 12, 'xtick.labelsize': 12, 'ytick.labelsi
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
 STATS_PATH = './A4 Design Loads and AEP/stats_files/group7_turbB_stats.csv'  # path to mean steady stats
 STATS_PATH_DTU = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'
+STATS_PATH_OUR = './A4 Design Loads and AEP/stats_files/group7_turbB_stats_our.csv' # path to our results
 SUBFOLDER_our = 'tcb'
 SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
 
@@ -80,19 +81,21 @@ turb_ids = ['path', 'filename', 'subfolder', 'ichan', 'names', 'units', 'desc',
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
 df, wsps = load_stats(STATS_PATH, statstype='turb')
 df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype='turb')
+df_our, wsps = load_stats(STATS_PATH_OUR, statstype='turb')
 
-dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
+dfs = [[df_our, wsps, 0, 'old design'],[df_DTU, wsps_DTU, 1, 'DTU 10MW'],[df, wsps, 2, 'redesign']]
 
 # initialize the figure and axes
-fig, axs = plt.subplots(5, 3, figsize=(12, 10), clear=True, dpi=500)
+fig, axs = plt.subplots(5, 3, figsize=(12, 10), clear=True, dpi=200)
 
 # Set the opacity and marker size variables
 dot_opacity = 0.25  # Opacity for individual points
 dot_size = 7       # Size for individual points
 line_opacity = 1  # Opacity for the mean lines
 line_size = 40      # Size for mean points
-color_mean = ['tab:blue','tab:red']
-color_outer_bounds = ['cornflowerblue','lightcoral']
+color_mean = ['tab:blue','tab:red', 'tab:green']
+color_outer_bounds = ['cornflowerblue','lightcoral', 'lightgreen']
+
 
 for df, wsps, i, label_name in dfs:
     # Loop over each channel and plot the steady state with the theory line
@@ -101,6 +104,7 @@ for df, wsps, i, label_name in dfs:
         # Isolate the channel data
         chan_df = df.filter_channel(chan_id, CHAN_DESCS)
         chan_df_DTU = df_DTU.filter_channel(chan_id, CHAN_DESCS)
+        chan_df_our = df_our.filter_channel(chan_id, CHAN_DESCS)
 
         # Extract HAWC2 wind and the stats ('mean', 'min', 'max') for the channel
         h2_wind = np.array(chan_df['wsp'])
@@ -134,7 +138,48 @@ for df, wsps, i, label_name in dfs:
             ax.grid('on')
             ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
                 ylabel=f'{chan_id} [m]', xlim=[4, 25])
+            print(f'Min tower clearance: {min(HAWC2val_min_sorted)}')
+        elif chan_id == 'ElPow':
+                        # Individual 'mean' values with lower opacity and smaller markers
+            ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'mean' with higher opacity and larger markers
+            ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=color_mean[i], alpha=line_opacity, markersize=line_size, label=f'$μ_{{{label_name}}}$')#, label='Mean of means')
 
+            # Individual 'min' values
+            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'min'
+            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
+
+            # Individual 'max' values
+            ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'max'
+            ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size)#, label='Mean of max')
+
+            # Formatting the plot
+            ax.grid('on')
+            ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
+                ylabel=f'{chan_id} [W]', xlim=[4, 25])
+
+        elif chan_id == 'GenTrq':
+                        # Individual 'mean' values with lower opacity and smaller markers
+            ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'mean' with higher opacity and larger markers
+            ax.plot(unique_wind_speeds, mean_HAWC2val_per_wind, color=color_mean[i], alpha=line_opacity, markersize=line_size, label=f'$μ_{{{label_name}}}$')#, label='Mean of means')
+
+            # Individual 'min' values
+            ax.scatter(h2_wind_sorted, HAWC2val_min_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'min'
+            ax.plot(unique_wind_speeds, min_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size, label=f'$Min/Max_{{{label_name}}}$')#, label='Mean of min')
+
+            # Individual 'max' values
+            ax.scatter(h2_wind_sorted, HAWC2val_max_sorted, color=color_outer_bounds[i], alpha=dot_opacity, s=dot_size)
+            # Mean of 'max'
+            ax.plot(unique_wind_speeds, max_HAWC2val_per_wind, color=color_outer_bounds[i], alpha=line_opacity, markersize=line_size)#, label='Mean of max')
+
+            # Formatting the plot
+            ax.grid('on')
+            ax.set(xlabel='Wind speed [m/s]' if iplot > 8 else None,
+                ylabel=f'{chan_id} [Nm]', xlim=[4, 25])
         else:
             # Individual 'mean' values with lower opacity and smaller markers
             ax.scatter(h2_wind_sorted, HAWC2val_mean_sorted, color=color_mean[i], alpha=dot_opacity, s=dot_size)
@@ -158,8 +203,10 @@ for df, wsps, i, label_name in dfs:
 
 # Add legends and format the figure
 axs[0, 0].legend()
+
 #fig.suptitle(f'Case: Group 7 design - {SUBFOLDER_our}')
 fig.tight_layout()
 
 plt.savefig('./A4 Design Loads and AEP/figures/combined_turb_stats.svg', format='svg')
 plt.savefig('./A4 Design Loads and AEP/figures/combined_turb_stats.png', format='png')
+plt.show()

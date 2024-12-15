@@ -85,11 +85,11 @@ def extract_values_for_part_3_omit100(df):
         'time': time[mask]
     }
 
-df1 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C1.hdf5")
+df1 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C4.hdf5")
 df7 = ReadHAWC2("hawc_files/our_design/res/group7_3B_design_A3_part3_C7_0.04_0.75.hdf5")
 
 c1 = extract_values_for_part_3_omit100(df1)
 c7 = extract_values_for_part_3_omit100(df7)
 
-plot_wind_turbine_data(c1, c7, "", '0.03', '0.045', '0.7', 0)
+plot_wind_turbine_data(c1, c7, "", '0.04', '0.04', '0.7', 0)
 plt.show()

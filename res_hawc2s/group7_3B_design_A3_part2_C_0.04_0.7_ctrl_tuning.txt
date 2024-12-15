@@ -4,8 +4,8 @@ PI generator torque controller in region 2 (constant speed, variable power)
 I =   0.177938E+09 [kg*m^2]
 Kp =   0.782614E+08 [Nm/(rad/s)]
 Ki =   0.175618E+08 [Nm/rad]
-PI pitch angle controller in region 3 (constant speed, constant power)
-Kp =   0.120429E+01 [rad/(rad/s)]
+PI pitch angle controller in region 3 (constant speed, constant torque)
+Kp =   0.982873E+00 [rad/(rad/s)]
 Ki =   0.176445E+00 [rad/rad]
 K1 =       14.96180 [deg], K2 =      412.52449 [deg^2] (dq/dtheta =    -1111.77695 kNm/deg)
 Additional terms due to the Aerodynamic damping
