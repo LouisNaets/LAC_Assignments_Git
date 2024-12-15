@@ -31,6 +31,8 @@ class IA:
 class IIIB:
     I = 0.16
 
+
+
 '''
 Step 2: Rotor radius and rated wind speed for IIIB class
 '''
@@ -371,6 +373,7 @@ IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.tc_vals, IIIB.cl_vals, IIIB.cd_vals
 
 IIIB.chord, IIIB.tc, IIIB.twist, IIIB.cl, IIIB.cd, IIIB.aoa, IIIB.a, IIIB.CLT, IIIB.CLP, IIIB.CT, IIIB.CP = single_point_design(
         IIIB.r, IIIB.t, tsr, IIIB.R, IIIB.cl_des, IIIB.cd_des, IIIB.aoa_des, IIIB.chord_root, IIIB.chord_max, B)
+
 
 #EDITED adjusting the relative thickness to be at least 24.1% as per the assignment
 IIIB.tc = np.maximum(IIIB.tc, 24.1)

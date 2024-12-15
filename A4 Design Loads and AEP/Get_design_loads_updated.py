@@ -54,9 +54,9 @@ group7_data = load_design_data(group7_path, chan_ids, chan_descs)
 redesign_data = load_design_data(redesign_path, chan_ids, chan_descs)
 
 # Define a nice color scheme
-colors = ['indigo', 'mediumslateblue', 'skyblue']  # Matplotlib's viridis colormap
-color_dtu = colors[0]  # First color in viridis
-color_group7 = colors[1]  # Second color in viridis
+colors = ['tab:blue', 'tab:red', 'tab:green']  # Matplotlib's viridis colormap
+color_dtu = colors[1]  # First color in viridis
+color_group7 = colors[0]  # Second color in viridis
 color_redesign = colors[2]  # Third color in viridis
 
 # Plot comparisons
@@ -66,13 +66,20 @@ axs = axs.flatten()
 for i, chan_id in enumerate(chan_ids):
     ax = axs[i]
 
+    # Group7
+    ax.plot(group7_data[chan_id]['wind_speeds'], group7_data[chan_id]['max'], marker='s', linestyle='-', color=color_group7, label='old design Max')
+    ax.plot(group7_data[chan_id]['wind_speeds'], group7_data[chan_id]['min'], marker='s', linestyle='--', color=color_group7, label='old design Min')
+
     # DTU
     ax.plot(dtu_data[chan_id]['wind_speeds'], dtu_data[chan_id]['max'], marker='o', linestyle='-', color=color_dtu, label='DTU Max')
     ax.plot(dtu_data[chan_id]['wind_speeds'], dtu_data[chan_id]['min'], marker='o', linestyle='--', color=color_dtu, label='DTU Min')
-
-    # Group7
-    ax.plot(group7_data[chan_id]['wind_speeds'], group7_data[chan_id]['max'], marker='s', linestyle='-', color=color_group7, label='Group7 Max')
-    ax.plot(group7_data[chan_id]['wind_speeds'], group7_data[chan_id]['min'], marker='s', linestyle='--', color=color_group7, label='Group7 Min')
+    max = np.max(dtu_data[chan_id]['max'])
+    min = np.min(dtu_data[chan_id]['min'])
+    if np.abs(min) < max:
+        abs_max_dtu = max
+    else:
+        abs_max_dtu = min
+    ax.axhline(abs_max_dtu, color=color_dtu, linestyle=':', linewidth=1.5, label='DTU Max load')
 
     # Redesigned
     ax.plot(redesign_data[chan_id]['wind_speeds'], redesign_data[chan_id]['max'], marker='^', linestyle='-', color=color_redesign, label='Redesign Max')
@@ -82,9 +89,10 @@ for i, chan_id in enumerate(chan_ids):
     ax.set_xlabel('Wind Speed [m/s]', fontsize=12)
     ax.set_ylabel('Load [kNm]', fontsize=12)
     ax.grid(True)
-    ax.legend(fontsize=10)
+    
 
 # Adjust layout and save the figure
+axs[6].legend(fontsize=10, loc='center right')
 fig.tight_layout()
 plt.savefig('./A4 Design Loads and AEP/figures/comparison_design_loads_updated.png', format='png')
 plt.savefig('./A4 Design Loads and AEP/figures/comparison_design_loads_updated.svg', format='svg')

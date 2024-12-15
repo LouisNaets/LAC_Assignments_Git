@@ -22,6 +22,7 @@ plt.rcParams.update({'axes.labelsize': 12, 'xtick.labelsize': 12, 'ytick.labelsi
 HAWC2S_PATH = './hawc_files/our_design/data/group7_3B_design_flex.opt'  # path to .pwr or .opt file
 STATS_PATH = './A4 Design Loads and AEP/stats_files/group7_turbB_stats.csv'  # path to mean steady stats
 STATS_PATH_DTU = './A4 Design Loads and AEP/stats_files/dtu_10mw_turb_stats.hdf5'
+STATS_PATH_OURS = './A4 Design Loads and AEP/stats_files/group7_turbB_stats_our.csv'
 SUBFOLDER_our = 'tcb'
 SUBFOLDER_DTU = 'tca'  # which subfolder to plot: tca or tcb
 
@@ -82,8 +83,9 @@ def combine_10min_DELs(DELs, m):
 # load the HAWC2 data from the stats file. Isolate the simulations with no tilt.
 df, wsps = load_stats(STATS_PATH, statstype='turb')
 df_DTU, wsps_DTU = load_stats(STATS_PATH_DTU, subfolder=SUBFOLDER_DTU, statstype='turb')
+df_our, wsps = load_stats(STATS_PATH_OURS, statstype='turb')
 
-dfs = [[df, wsps, 0, 'Group 7'],[df_DTU, wsps_DTU, 1, 'DTU 10MW']]
+dfs = [[df_our, wsps, 0, 'old design'],[df_DTU, wsps_DTU, 1, 'DTU 10MW'],[df, wsps, 2, 'redesign']]
 
 # initialize the figure and axes
 fig, axs = plt.subplots(3, 3, figsize=(12, 8), clear=True, dpi=500)
@@ -93,8 +95,8 @@ dot_opacity = 0.25  # Opacity for individual points
 dot_size = 7       # Size for individual points
 line_opacity = 1  # Opacity for the mean lines
 line_size = 40      # Size for mean points
-color_mean = ['tab:blue','tab:red']
-color_outer_bounds = ['cornflowerblue','lightcoral']
+color_mean = ['tab:blue','tab:red','tab:green']
+color_outer_bounds = ['cornflowerblue','lightcoral','lightgreen']
 
 for df, wsps, i, label_name in dfs:
     # Loop over each channel and plot the steady state with the theory line
@@ -103,6 +105,7 @@ for df, wsps, i, label_name in dfs:
         # Isolate the channel data
         chan_df = df.filter_channel(chan_id, CHAN_DESCS)
         chan_df_DTU = df_DTU.filter_channel(chan_id, CHAN_DESCS)
+        chan_df_our = df_our.filter_channel(chan_id, CHAN_DESCS)
         Wohler_exponent = m_values[chan_id]
 
         # Extract HAWC2 wind and the stats ('delX') for the channel
